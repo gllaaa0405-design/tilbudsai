@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>TilbudsAI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #10233f;
+    }
+
+    header {
+      background: #0d2340;
+      color: white;
+      padding: 18px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #22c77a;
+    }
+
+    .profile {
+      background: #ffffff22;
+      padding: 9px 14px;
+      border-radius: 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 35px auto;
+      padding: 0 20px;
+    }
+
+    .welcome {
+      margin-bottom: 25px;
+    }
+
+    .welcome h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: #667085;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+    .card h2 {
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #667085;
+      margin-bottom: 18px;
+    }
+
+    button {
+      border: none;
+      background: #20bd72;
+      color: white;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #159e5d;
+    }
+
+    .blue {
+      background: #eaf2ff;
+    }
+
+    .green {
+      background: #e9fbf2;
+    }
+
+    .form-section {
+      display: none;
+      background: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+    .form-section h2 {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d5dce5;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .price-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .result {
+      display: none;
+      margin-top: 25px;
+      background: #f8fafc;
+      border: 1px solid #dce3eb;
+      border-radius: 15px;
+      padding: 25px;
+    }
+
+    .result h3 {
+      margin-bottom: 15px;
+    }
+
+    .quote {
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .total {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 15px;
+      color: #0d2340;
+    }
+
+    .success {
+      display: none;
+      margin-top: 15px;
+      padding: 15px;
+      background: #e9fbf2;
+      color: #087443;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .recent {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+    .recent-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 17px 0;
+      border-bottom: 1px solid #edf0f3;
+    }
+
+    .badge {
+      background: #e9fbf2;
+      color: #087443;
+      padding: 6px 10px;
+      border-radius: 15px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 700px) {
+      .grid,
+      .price-row {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding: 15px;
+      }
+
+      .container {
+        margin-top: 25px;
+      }
+
+      .welcome h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">🔨 Tilbuds<span>AI</span></div>
+  <div class="profile">KH</div>
+</header>
+
+<div class="container">
+
+  <div class="welcome">
+    <h1>Hei! 👋</h1>
+    <p>Lag profesjonelle tilbud på noen få sekunder.</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card green">
+      <h2>🔨 Nytt tilbud</h2>
+      <p>Beskriv jobben, så hjelper TilbudsAI deg med tilbudet.</p>
+      <button onclick="showForm()">Lag nytt tilbud →</button>
+    </div>
+
+    <div class="card blue">
+      <h2>💬 Kundemelding</h2>
+      <p>Lag en profesjonell melding til kunden.</p>
+      <button onclick="customerMessage()">Lag melding</button>
+    </div>
+
+  </div>
+
+  <div id="formSection" class="form-section">
+
+    <h2>Lag nytt tilbud</h2>
+
+    <label>Kundenavn</label>
+    <input id="customer" type="text" placeholder="F.eks. Ola Hansen">
+
+    <label>Beskriv jobben</label>
+    <textarea id="job"
+      placeholder="F.eks. Male stue og gang, ca. 55 m². To strøk. Kunden kjøper maling selv."></textarea>
+
+    <div class="price-row">
+
+      <div>
+        <label>Antall timer</label>
+        <input id="hours" type="number" placeholder="12">
+      </div>
+
+      <div>
+        <label>Timepris (kr)</label>
+        <input id="hourly" type="number" placeholder="750">
+      </div>
+
+    </div>
+
+    <br>
+
+    <button onclick="generateQuote()">🤖 Lag tilbud med AI</button>
+
+    <div id="result" class="result">
+
+      <h3>📄 Tilbud</h3>
+
+      <div class="quote">
+        <strong>Tilbud til:</strong>
+        <div id="quoteCustomer"></div>
+
+        <br>
+
+        <strong>Arbeidsbeskrivelse:</strong>
+        <div id="quoteJob"></div>
+
+        <br>
+
+        <strong>Arbeid:</strong>
+        <div id="quoteWork"></div>
+
+        <div class="total">
+          Totalt eks. mva: <span id="total"></span> kr
+        </div>
+      </div>
+
+      <button onclick="sendQuote()">📤 Send tilbud til kunde</button>
+
+      <div id="success" class="success">
+        ✅ Tilbudet er klart til å sendes!
+      </div>
+
+    </div>
+
+  </div>
+
+  <br>
+
+  <div class="recent">
+
+    <h2>Mine siste tilbud</h2>
+
+    <div class="recent-item">
+      <span>Maling av stue og gang</span>
+      <span class="badge">Sendt</span>
+    </div>
+
+    <div class="recent-item">
+      <span>Nytt bad</span>
+      <span class="badge">Utkast</span>
+    </div>
+
+    <div class="recent-item">
+      <span>Terrasse</span>
+      <span class="badge">Sendt</span>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+  function showForm() {
+    document.getElementById("formSection").style.display = "block";
+
+    window.scrollTo({
+      top: document.getElementById("formSection").offsetTop - 20,
+      behavior: "smooth"
+    });
+  }
+
+  function generateQuote() {
+
+    const customer =
+      document.getElementById("customer").value || "Kunden";
+
+    const job =
+      document.getElementById("job").value ||
+      "Arbeidet utføres i henhold til avtale.";
+
+    const hours =
+      Number(document.getElementById("hours").value) || 0;
+
+    const hourly =
+      Number(document.getElementById("hourly").value) || 0;
+
+    const total = hours * hourly;
+
+    document.getElementById("quoteCustomer").innerText = customer;
+
+    document.getElementById("quoteJob").innerText = job;
+
+    document.getElementById("quoteWork").innerText =
+      hours + " timer × " +
+      hourly.toLocaleString("no-NO") +
+      " kr";
+
+    document.getElementById("total").innerText =
+      total.toLocaleString("no-NO");
+
+    document.getElementById("result").style.display = "block";
+
+    document.getElementById("result").scrollIntoView({
+      behavior: "smooth"
+    });
+  }
+
+  function sendQuote() {
+
+    document.getElementById("success").style.display = "block";
+
+  }
+
+  function customerMessage() {
+
+    alert(
+      "Hei! Takk for forespørselen. " +
+      "Vi har sett på jobben og sender deg et tilbud så snart som mulig. " +
+      "Med vennlig hilsen TilbudsAI."
+    );
+
+  }
+
+</script>
+
+</body>
+</html>
