@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>TilbudsAI</title>
 
   <style>
@@ -34,7 +33,7 @@
     }
 
     .logo span {
-      color: #22c77a;
+      color: #20bd72;
     }
 
     .profile {
@@ -60,6 +59,7 @@
 
     .welcome p {
       color: #667085;
+      font-size: 18px;
     }
 
     .grid {
@@ -85,6 +85,14 @@
       margin-bottom: 18px;
     }
 
+    .green-card {
+      background: #e9fbf2;
+    }
+
+    .blue-card {
+      background: #eaf2ff;
+    }
+
     button {
       border: none;
       background: #20bd72;
@@ -100,34 +108,34 @@
       background: #159e5d;
     }
 
-    .blue {
-      background: #eaf2ff;
-    }
-
-    .green {
-      background: #e9fbf2;
-    }
-
     .form-section {
       display: none;
       background: white;
       border-radius: 18px;
       padding: 30px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+      margin-bottom: 30px;
     }
 
     .form-section h2 {
-      margin-bottom: 20px;
+      margin-bottom: 8px;
+      font-size: 27px;
+    }
+
+    .subtitle {
+      color: #667085;
+      margin-bottom: 25px;
     }
 
     label {
       display: block;
-      margin: 15px 0 7px;
+      margin: 16px 0 7px;
       font-weight: bold;
     }
 
     input,
-    textarea {
+    textarea,
+    select {
       width: 100%;
       padding: 14px;
       border: 1px solid #d5dce5;
@@ -137,39 +145,91 @@
     }
 
     textarea {
-      min-height: 150px;
+      min-height: 140px;
       resize: vertical;
     }
 
     .price-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 15px;
+    }
+
+    .generate {
+      margin-top: 25px;
+      width: 100%;
+      padding: 16px;
     }
 
     .result {
       display: none;
-      margin-top: 25px;
-      background: #f8fafc;
+      margin-top: 30px;
       border: 1px solid #dce3eb;
       border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .result-header {
+      background: #0d2340;
+      color: white;
+      padding: 20px;
+    }
+
+    .result-body {
       padding: 25px;
     }
 
-    .result h3 {
-      margin-bottom: 15px;
-    }
-
-    .quote {
-      line-height: 1.7;
+    .quote-title {
+      font-size: 25px;
+      font-weight: bold;
       margin-bottom: 20px;
     }
 
-    .total {
-      font-size: 24px;
-      font-weight: bold;
+    .quote-section {
+      margin-bottom: 22px;
+      line-height: 1.6;
+    }
+
+    .quote-section strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
       margin-top: 15px;
-      color: #0d2340;
+    }
+
+    .price-table td {
+      padding: 10px 5px;
+      border-bottom: 1px solid #edf0f3;
+    }
+
+    .price-table td:last-child {
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .total-row td {
+      font-size: 21px;
+      border-bottom: none;
+      padding-top: 18px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .secondary {
+      background: #e9eef5;
+      color: #10233f;
+    }
+
+    .secondary:hover {
+      background: #dce3eb;
     }
 
     .success {
@@ -189,9 +249,14 @@
       box-shadow: 0 5px 20px rgba(0,0,0,0.06);
     }
 
+    .recent h2 {
+      margin-bottom: 10px;
+    }
+
     .recent-item {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 17px 0;
       border-bottom: 1px solid #edf0f3;
     }
@@ -220,7 +285,11 @@
       }
 
       .welcome h1 {
-        font-size: 26px;
+        font-size: 27px;
+      }
+
+      .buttons {
+        flex-direction: column;
       }
     }
   </style>
@@ -242,13 +311,13 @@
 
   <div class="grid">
 
-    <div class="card green">
+    <div class="card green-card">
       <h2>🔨 Nytt tilbud</h2>
-      <p>Beskriv jobben, så hjelper TilbudsAI deg med tilbudet.</p>
+      <p>Beskriv jobben og beregn et komplett tilbud.</p>
       <button onclick="showForm()">Lag nytt tilbud →</button>
     </div>
 
-    <div class="card blue">
+    <div class="card blue-card">
       <h2>💬 Kundemelding</h2>
       <p>Lag en profesjonell melding til kunden.</p>
       <button onclick="customerMessage()">Lag melding</button>
@@ -259,9 +328,21 @@
   <div id="formSection" class="form-section">
 
     <h2>Lag nytt tilbud</h2>
+    <p class="subtitle">
+      Fyll inn informasjonen under. TilbudsAI beregner totalprisen automatisk.
+    </p>
 
     <label>Kundenavn</label>
     <input id="customer" type="text" placeholder="F.eks. Ola Hansen">
+
+    <label>Type jobb</label>
+    <select id="jobType">
+      <option value="Malerarbeid">Malerarbeid</option>
+      <option value="Snekkerarbeid">Snekkerarbeid</option>
+      <option value="Elektrikerarbeid">Elektrikerarbeid</option>
+      <option value="Rørleggerarbeid">Rørleggerarbeid</option>
+      <option value="Annet">Annet</option>
+    </select>
 
     <label>Beskriv jobben</label>
     <textarea id="job"
@@ -271,54 +352,98 @@
 
       <div>
         <label>Antall timer</label>
-        <input id="hours" type="number" placeholder="12">
+        <input id="hours" type="number" min="0" placeholder="12">
       </div>
 
       <div>
         <label>Timepris (kr)</label>
-        <input id="hourly" type="number" placeholder="750">
+        <input id="hourly" type="number" min="0" placeholder="750">
+      </div>
+
+      <div>
+        <label>Materialer (kr)</label>
+        <input id="materials" type="number" min="0" placeholder="2500">
       </div>
 
     </div>
 
-    <br>
-
-    <button onclick="generateQuote()">🤖 Lag tilbud med AI</button>
+    <button class="generate" onclick="generateQuote()">
+      🤖 Lag profesjonelt tilbud
+    </button>
 
     <div id="result" class="result">
 
-      <h3>📄 Tilbud</h3>
-
-      <div class="quote">
-        <strong>Tilbud til:</strong>
-        <div id="quoteCustomer"></div>
-
-        <br>
-
-        <strong>Arbeidsbeskrivelse:</strong>
-        <div id="quoteJob"></div>
-
-        <br>
-
-        <strong>Arbeid:</strong>
-        <div id="quoteWork"></div>
-
-        <div class="total">
-          Totalt eks. mva: <span id="total"></span> kr
-        </div>
+      <div class="result-header">
+        <h2>TilbudsAI</h2>
+        <p>Profesjonelt tilbud</p>
       </div>
 
-      <button onclick="sendQuote()">📤 Send tilbud til kunde</button>
+      <div class="result-body">
 
-      <div id="success" class="success">
-        ✅ Tilbudet er klart til å sendes!
+        <div class="quote-title">
+          TILBUD
+        </div>
+
+        <div class="quote-section">
+          <strong>Kunde</strong>
+          <div id="quoteCustomer"></div>
+        </div>
+
+        <div class="quote-section">
+          <strong>Type jobb</strong>
+          <div id="quoteType"></div>
+        </div>
+
+        <div class="quote-section">
+          <strong>Arbeidsbeskrivelse</strong>
+          <div id="quoteJob"></div>
+        </div>
+
+        <table class="price-table">
+
+          <tr>
+            <td>Arbeid</td>
+            <td id="workPrice"></td>
+          </tr>
+
+          <tr>
+            <td>Materialer</td>
+            <td id="materialPrice"></td>
+          </tr>
+
+          <tr>
+            <td>Sum eks. mva.</td>
+            <td id="beforeVat"></td>
+          </tr>
+
+          <tr>
+            <td>Mva. (25 %)</td>
+            <td id="vat"></td>
+          </tr>
+
+          <tr class="total-row">
+            <td>Totalt inkl. mva.</td>
+            <td id="total"></td>
+          </tr>
+
+        </table>
+
+        <div class="buttons">
+          <button onclick="sendQuote()">📤 Send tilbud</button>
+          <button class="secondary" onclick="window.print()">
+            🖨️ Skriv ut / lagre PDF
+          </button>
+        </div>
+
+        <div id="success" class="success">
+          ✅ Tilbudet er klart til å sendes til kunden!
+        </div>
+
       </div>
 
     </div>
 
   </div>
-
-  <br>
 
   <div class="recent">
 
@@ -345,66 +470,109 @@
 
 <script>
 
-  function showForm() {
-    document.getElementById("formSection").style.display = "block";
+function showForm() {
 
-    window.scrollTo({
-      top: document.getElementById("formSection").offsetTop - 20,
-      behavior: "smooth"
-    });
-  }
+  const form = document.getElementById("formSection");
 
-  function generateQuote() {
+  form.style.display = "block";
 
-    const customer =
-      document.getElementById("customer").value || "Kunden";
+  form.scrollIntoView({
+    behavior: "smooth"
+  });
 
-    const job =
-      document.getElementById("job").value ||
-      "Arbeidet utføres i henhold til avtale.";
+}
 
-    const hours =
-      Number(document.getElementById("hours").value) || 0;
+function money(number) {
 
-    const hourly =
-      Number(document.getElementById("hourly").value) || 0;
+  return number.toLocaleString("no-NO", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + " kr";
 
-    const total = hours * hourly;
+}
 
-    document.getElementById("quoteCustomer").innerText = customer;
+function generateQuote() {
 
-    document.getElementById("quoteJob").innerText = job;
+  const customer =
+    document.getElementById("customer").value.trim() || "Kunden";
 
-    document.getElementById("quoteWork").innerText =
-      hours + " timer × " +
-      hourly.toLocaleString("no-NO") +
-      " kr";
+  const jobType =
+    document.getElementById("jobType").value;
 
-    document.getElementById("total").innerText =
-      total.toLocaleString("no-NO");
+  const job =
+    document.getElementById("job").value.trim() ||
+    "Arbeidet utføres i henhold til avtale.";
 
-    document.getElementById("result").style.display = "block";
+  const hours =
+    Number(document.getElementById("hours").value) || 0;
 
-    document.getElementById("result").scrollIntoView({
-      behavior: "smooth"
-    });
-  }
+  const hourly =
+    Number(document.getElementById("hourly").value) || 0;
 
-  function sendQuote() {
+  const materials =
+    Number(document.getElementById("materials").value) || 0;
 
-    document.getElementById("success").style.display = "block";
+  const work = hours * hourly;
 
-  }
+  const beforeVat = work + materials;
 
-  function customerMessage() {
+  const vat = beforeVat * 0.25;
 
-    alert(
-      "Hei! Takk for forespørselen. " +
-      "Vi har sett på jobben og sender deg et tilbud så snart som mulig. " +
-      "Med vennlig hilsen TilbudsAI."
-    );
+  const total = beforeVat + vat;
 
-  }
+  document.getElementById("quoteCustomer").innerText =
+    customer;
+
+  document.getElementById("quoteType").innerText =
+    jobType;
+
+  document.getElementById("quoteJob").innerText =
+    job;
+
+  document.getElementById("workPrice").innerText =
+    money(work);
+
+  document.getElementById("materialPrice").innerText =
+    money(materials);
+
+  document.getElementById("beforeVat").innerText =
+    money(beforeVat);
+
+  document.getElementById("vat").innerText =
+    money(vat);
+
+  document.getElementById("total").innerText =
+    money(total);
+
+  document.getElementById("result").style.display =
+    "block";
+
+  document.getElementById("success").style.display =
+    "none";
+
+  document.getElementById("result").scrollIntoView({
+    behavior: "smooth"
+  });
+
+}
+
+function sendQuote() {
+
+  document.getElementById("success").style.display =
+    "block";
+
+}
+
+function customerMessage() {
+
+  alert(
+    "Hei! Takk for forespørselen.\n\n" +
+    "Vi har sett på jobben og sender deg et tilbud " +
+    "så snart som mulig.\n\n" +
+    "Med vennlig hilsen\nTilbudsAI"
+  );
+
+}
 
 </script>
 
