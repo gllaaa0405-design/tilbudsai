@@ -28,7 +28,7 @@
     }
 
     .logo {
-      font-size: 25px;
+      font-size: 26px;
       font-weight: bold;
     }
 
@@ -38,12 +38,12 @@
 
     .profile {
       background: #ffffff22;
-      padding: 9px 14px;
+      padding: 9px 15px;
       border-radius: 20px;
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1000px;
       margin: 35px auto;
       padding: 0 20px;
     }
@@ -62,64 +62,16 @@
       font-size: 18px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-      margin-bottom: 30px;
-    }
-
     .card {
-      background: white;
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
-    }
-
-    .card h2 {
-      margin-bottom: 8px;
-    }
-
-    .card p {
-      color: #667085;
-      margin-bottom: 18px;
-    }
-
-    .green-card {
-      background: #e9fbf2;
-    }
-
-    .blue-card {
-      background: #eaf2ff;
-    }
-
-    button {
-      border: none;
-      background: #20bd72;
-      color: white;
-      padding: 13px 20px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #159e5d;
-    }
-
-    .form-section {
-      display: none;
       background: white;
       border-radius: 18px;
       padding: 30px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.06);
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
-    .form-section h2 {
+    .card h2 {
       margin-bottom: 8px;
-      font-size: 27px;
     }
 
     .subtitle {
@@ -149,15 +101,30 @@
       resize: vertical;
     }
 
-    .price-row {
+    .row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
     }
 
+    button {
+      border: none;
+      background: #20bd72;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #159e5d;
+    }
+
     .generate {
-      margin-top: 25px;
       width: 100%;
+      margin-top: 25px;
       padding: 16px;
     }
 
@@ -172,25 +139,24 @@
     .result-header {
       background: #0d2340;
       color: white;
-      padding: 20px;
+      padding: 22px;
     }
 
     .result-body {
-      padding: 25px;
+      padding: 28px;
     }
 
-    .quote-title {
-      font-size: 25px;
-      font-weight: bold;
-      margin-bottom: 20px;
+    .result-body h2 {
+      font-size: 28px;
+      margin-bottom: 25px;
     }
 
-    .quote-section {
+    .section {
       margin-bottom: 22px;
       line-height: 1.6;
     }
 
-    .quote-section strong {
+    .section strong {
       display: block;
       margin-bottom: 5px;
     }
@@ -198,11 +164,11 @@
     .price-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 15px;
+      margin-top: 25px;
     }
 
     .price-table td {
-      padding: 10px 5px;
+      padding: 12px 5px;
       border-bottom: 1px solid #edf0f3;
     }
 
@@ -211,13 +177,13 @@
       font-weight: bold;
     }
 
-    .total-row td {
-      font-size: 21px;
+    .total td {
+      font-size: 22px;
       border-bottom: none;
-      padding-top: 18px;
+      padding-top: 20px;
     }
 
-    .buttons {
+    .actions {
       display: flex;
       gap: 12px;
       margin-top: 25px;
@@ -249,14 +215,9 @@
       box-shadow: 0 5px 20px rgba(0,0,0,0.06);
     }
 
-    .recent h2 {
-      margin-bottom: 10px;
-    }
-
     .recent-item {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       padding: 17px 0;
       border-bottom: 1px solid #edf0f3;
     }
@@ -271,25 +232,51 @@
     }
 
     @media (max-width: 700px) {
-      .grid,
-      .price-row {
+      .row {
         grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
       }
 
       header {
         padding: 15px;
       }
 
-      .container {
-        margin-top: 25px;
-      }
-
       .welcome h1 {
         font-size: 27px;
       }
+    }
 
-      .buttons {
-        flex-direction: column;
+    @media print {
+      header,
+      .welcome,
+      .form-card,
+      .recent,
+      .actions,
+      .success {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      .container {
+        margin: 0;
+        max-width: none;
+      }
+
+      .result {
+        display: block !important;
+        border: none;
+      }
+
+      .result-header {
+        color: black;
+        background: white;
+        border-bottom: 2px solid #10233f;
       }
     }
   </style>
@@ -309,60 +296,67 @@
     <p>Lag profesjonelle tilbud på noen få sekunder.</p>
   </div>
 
-  <div class="grid">
+  <div class="card form-card">
 
-    <div class="card green-card">
-      <h2>🔨 Nytt tilbud</h2>
-      <p>Beskriv jobben og beregn et komplett tilbud.</p>
-      <button onclick="showForm()">Lag nytt tilbud →</button>
-    </div>
+    <h2>🔨 Lag nytt tilbud</h2>
 
-    <div class="card blue-card">
-      <h2>💬 Kundemelding</h2>
-      <p>Lag en profesjonell melding til kunden.</p>
-      <button onclick="customerMessage()">Lag melding</button>
-    </div>
-
-  </div>
-
-  <div id="formSection" class="form-section">
-
-    <h2>Lag nytt tilbud</h2>
     <p class="subtitle">
-      Fyll inn informasjonen under. TilbudsAI beregner totalprisen automatisk.
+      Fyll inn informasjonen om jobben.
     </p>
 
     <label>Kundenavn</label>
-    <input id="customer" type="text" placeholder="F.eks. Ola Hansen">
+    <input
+      id="customer"
+      type="text"
+      placeholder="F.eks. Ola Hansen"
+    >
 
     <label>Type jobb</label>
     <select id="jobType">
-      <option value="Malerarbeid">Malerarbeid</option>
-      <option value="Snekkerarbeid">Snekkerarbeid</option>
-      <option value="Elektrikerarbeid">Elektrikerarbeid</option>
-      <option value="Rørleggerarbeid">Rørleggerarbeid</option>
-      <option value="Annet">Annet</option>
+      <option>Malerarbeid</option>
+      <option>Snekkerarbeid</option>
+      <option>Elektrikerarbeid</option>
+      <option>Rørleggerarbeid</option>
+      <option>Gartnerarbeid</option>
+      <option>Annet</option>
     </select>
 
     <label>Beskriv jobben</label>
-    <textarea id="job"
-      placeholder="F.eks. Male stue og gang, ca. 55 m². To strøk. Kunden kjøper maling selv."></textarea>
+    <textarea
+      id="job"
+      placeholder="F.eks. Male stue og gang, ca. 55 m², to strøk."
+    ></textarea>
 
-    <div class="price-row">
+    <div class="row">
 
       <div>
         <label>Antall timer</label>
-        <input id="hours" type="number" min="0" placeholder="12">
+        <input
+          id="hours"
+          type="number"
+          min="0"
+          placeholder="12"
+        >
       </div>
 
       <div>
         <label>Timepris (kr)</label>
-        <input id="hourly" type="number" min="0" placeholder="750">
+        <input
+          id="hourly"
+          type="number"
+          min="0"
+          placeholder="750"
+        >
       </div>
 
       <div>
         <label>Materialer (kr)</label>
-        <input id="materials" type="number" min="0" placeholder="2500">
+        <input
+          id="materials"
+          type="number"
+          min="0"
+          placeholder="2500"
+        >
       </div>
 
     </div>
@@ -371,74 +365,80 @@
       🤖 Lag profesjonelt tilbud
     </button>
 
-    <div id="result" class="result">
+  </div>
 
-      <div class="result-header">
-        <h2>TilbudsAI</h2>
-        <p>Profesjonelt tilbud</p>
+  <div id="result" class="result">
+
+    <div class="result-header">
+      <h2>🔨 TilbudsAI</h2>
+      <p>Profesjonelt tilbud</p>
+    </div>
+
+    <div class="result-body">
+
+      <h2>TILBUD</h2>
+
+      <div class="section">
+        <strong>Kunde:</strong>
+        <span id="quoteCustomer"></span>
       </div>
 
-      <div class="result-body">
+      <div class="section">
+        <strong>Type jobb:</strong>
+        <span id="quoteType"></span>
+      </div>
 
-        <div class="quote-title">
-          TILBUD
-        </div>
+      <div class="section">
+        <strong>Arbeidsbeskrivelse:</strong>
+        <span id="quoteJob"></span>
+      </div>
 
-        <div class="quote-section">
-          <strong>Kunde</strong>
-          <div id="quoteCustomer"></div>
-        </div>
+      <table class="price-table">
 
-        <div class="quote-section">
-          <strong>Type jobb</strong>
-          <div id="quoteType"></div>
-        </div>
+        <tr>
+          <td>Arbeid</td>
+          <td id="workPrice"></td>
+        </tr>
 
-        <div class="quote-section">
-          <strong>Arbeidsbeskrivelse</strong>
-          <div id="quoteJob"></div>
-        </div>
+        <tr>
+          <td>Materialer</td>
+          <td id="materialPrice"></td>
+        </tr>
 
-        <table class="price-table">
+        <tr>
+          <td>Sum eks. mva.</td>
+          <td id="beforeVat"></td>
+        </tr>
 
-          <tr>
-            <td>Arbeid</td>
-            <td id="workPrice"></td>
-          </tr>
+        <tr>
+          <td>Mva. (25 %)</td>
+          <td id="vat"></td>
+        </tr>
 
-          <tr>
-            <td>Materialer</td>
-            <td id="materialPrice"></td>
-          </tr>
+        <tr class="total">
+          <td>Totalt inkl. mva.</td>
+          <td id="total"></td>
+        </tr>
 
-          <tr>
-            <td>Sum eks. mva.</td>
-            <td id="beforeVat"></td>
-          </tr>
+      </table>
 
-          <tr>
-            <td>Mva. (25 %)</td>
-            <td id="vat"></td>
-          </tr>
+      <div class="actions">
 
-          <tr class="total-row">
-            <td>Totalt inkl. mva.</td>
-            <td id="total"></td>
-          </tr>
+        <button onclick="sendQuote()">
+          📤 Send tilbud
+        </button>
 
-        </table>
+        <button
+          class="secondary"
+          onclick="window.print()"
+        >
+          📄 Lagre som PDF
+        </button>
 
-        <div class="buttons">
-          <button onclick="sendQuote()">📤 Send tilbud</button>
-          <button class="secondary" onclick="window.print()">
-            🖨️ Skriv ut / lagre PDF
-          </button>
-        </div>
+      </div>
 
-        <div id="success" class="success">
-          ✅ Tilbudet er klart til å sendes til kunden!
-        </div>
-
+      <div id="success" class="success">
+        ✅ Tilbudet er klart til å sendes til kunden!
       </div>
 
     </div>
@@ -470,18 +470,6 @@
 
 <script>
 
-function showForm() {
-
-  const form = document.getElementById("formSection");
-
-  form.style.display = "block";
-
-  form.scrollIntoView({
-    behavior: "smooth"
-  });
-
-}
-
 function money(number) {
 
   return number.toLocaleString("no-NO", {
@@ -494,14 +482,15 @@ function money(number) {
 function generateQuote() {
 
   const customer =
-    document.getElementById("customer").value.trim() || "Kunden";
+    document.getElementById("customer").value.trim()
+    || "Kunden";
 
   const jobType =
     document.getElementById("jobType").value;
 
   const job =
-    document.getElementById("job").value.trim() ||
-    "Arbeidet utføres i henhold til avtale.";
+    document.getElementById("job").value.trim()
+    || "Arbeidet utføres i henhold til avtale.";
 
   const hours =
     Number(document.getElementById("hours").value) || 0;
@@ -560,17 +549,6 @@ function sendQuote() {
 
   document.getElementById("success").style.display =
     "block";
-
-}
-
-function customerMessage() {
-
-  alert(
-    "Hei! Takk for forespørselen.\n\n" +
-    "Vi har sett på jobben og sender deg et tilbud " +
-    "så snart som mulig.\n\n" +
-    "Med vennlig hilsen\nTilbudsAI"
-  );
 
 }
 
