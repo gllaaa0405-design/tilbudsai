@@ -1,4 +1,5 @@
 export default async function handler(request, response) {
+
   if (request.method !== "POST") {
     return response.status(405).json({
       error: "Method not allowed"
@@ -6,6 +7,7 @@ export default async function handler(request, response) {
   }
 
   try {
+
     const {
       customer,
       jobType,
@@ -15,10 +17,11 @@ export default async function handler(request, response) {
       materials
     } = request.body;
 
+
     const prompt = `
 Du er TilbudsAI, en profesjonell tilbudsassistent for norske håndverkere.
 
-Lag en kort og profesjonell tekst til et tilbud basert på informasjonen under.
+Lag en kort, profesjonell og hyggelig tilbudstekst basert på informasjonen under.
 
 Kunde: ${customer || "Kunden"}
 Type jobb: ${jobType || "Annet"}
@@ -27,39 +30,54 @@ Antall timer: ${hours || 0}
 Timepris: ${hourly || 0} kr
 Materialer: ${materials || 0} kr
 
-Skriv:
-1. En profesjonell beskrivelse av arbeidet.
-2. En kort tekst om hva tilbudet inkluderer.
-3. En kort og profesjonell avslutning til kunden.
+Skriv teksten med disse tre delene:
 
-Ikke finn på ekstra arbeid, priser eller materialer som ikke er oppgitt.
-Svar på norsk.
+1. Beskrivelse av arbeidet
+2. Hva tilbudet inkluderer
+3. En kort og profesjonell avslutning til kunden
+
+VIKTIG:
+- Ikke skriv noen priser.
+- Ikke skriv totalsum.
+- Ikke skriv MVA.
+- Ikke beregn eller gjenta timepris.
+- Ikke finn på ekstra arbeid eller materialer.
+- Prisene vises separat i tilbudet.
+- Svar på norsk.
 `;
+
 
     const openaiResponse = await fetch(
       "https://api.openai.com/v1/responses",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
         },
+
         body: JSON.stringify({
-          model: "gpt-5.6-luna",
+          model: "gpt-5-mini",
           input: prompt
         })
       }
     );
 
+
     const data = await openaiResponse.json();
 
+
     if (!openaiResponse.ok) {
+
       console.error(data);
 
       return response.status(500).json({
         error: "OpenAI request failed"
       });
+
     }
+
 
     const text =
       data.output
@@ -68,15 +86,20 @@ Svar på norsk.
         ?.map(item => item.text)
         ?.join("\n") || "";
 
+
     return response.status(200).json({
       text
     });
 
+
   } catch (error) {
+
     console.error(error);
 
     return response.status(500).json({
       error: "Server error"
     });
+
   }
+
 }
