@@ -79,418 +79,17 @@
       margin-bottom: 25px;
     }
 
-    label {
-      display: block;
-      margin: 16px 0 7px;
-      font-weight: bold;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #d5dce5;
-      border-radius: 10px;
-      font-size: 16px;
-      font-family: inherit;
-    }
-
-    textarea {
-      min-height: 140px;
-      resize: vertical;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-    }
-
-    button {
-      border: none;
-      background: #20bd72;
-      color: white;
-      padding: 14px 20px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #159e5d;
-    }
-
-    .generate {
-      width: 100%;
-      margin-top: 25px;
-      padding: 16px;
-    }
-
-    .result {
-      display: none;
-      margin-top: 30px;
-      border: 1px solid #dce3eb;
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    .result-header {
-      background: #0d2340;
-      color: white;
-      padding: 22px;
-    }
-
-    .result-body {
-      padding: 28px;
-    }
-
-    .result-body h2 {
-      font-size: 28px;
-      margin-bottom: 25px;
-    }
-
-    .section {
-      margin-bottom: 22px;
-      line-height: 1.6;
-    }
-
-    .section strong {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .price-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 25px;
-    }
-
-    .price-table td {
-      padding: 12px 5px;
-      border-bottom: 1px solid #edf0f3;
-    }
-
-    .price-table td:last-child {
-      text-align: right;
-      font-weight: bold;
-    }
-
-    .total td {
-      font-size: 22px;
-      border-bottom: none;
-      padding-top: 20px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 25px;
-    }
-
-    .secondary {
-      background: #e9eef5;
-      color: #10233f;
-    }
-
-    .secondary:hover {
-      background: #dce3eb;
-    }
-
-    .success {
-      display: none;
-      margin-top: 15px;
-      padding: 15px;
-      background: #e9fbf2;
-      color: #087443;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-
-    .recent {
-      background: white;
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
-    }
-
-    .recent-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 17px 0;
-      border-bottom: 1px solid #edf0f3;
-    }
-
-    .badge {
-      background: #e9fbf2;
-      color: #087443;
-      padding: 6px 10px;
-      border-radius: 15px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    @media (max-width: 700px) {
-      .row {
-        grid-template-columns: 1fr;
-      }
-
-      .actions {
-        flex-direction: column;
-      }
-
-      header {
-        padding: 15px;
-      }
-
-      .welcome h1 {
-        font-size: 27px;
-      }
-    }
-
-    @media print {
-      header,
-      .welcome,
-      .form-card,
-      .recent,
-      .actions,
-      .success {
-        display: none !important;
-      }
-
-      body {
-        background: white;
-      }
-
-      .container {
-        margin: 0;
-        max-width: none;
-      }
-
-      .result {
-        display: block !important;
-        border: none;
-      }
-
-      .result-header {
-        color: black;
-        background: white;
-        border-bottom: 2px solid #10233f;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-<header>
-  <div class="logo">🔨 Tilbuds<span>AI</span></div>
-  <div class="profile">KH</div>
-</header>
-
-<div class="container">
-
-  <div class="welcome">
-    <h1>Hei! 👋</h1>
-    <p>Lag profesjonelle tilbud på noen få sekunder.</p>
-  </div>
-
-  <div class="card form-card">
-
-    <h2>🔨 Lag nytt tilbud</h2>
-
-    <p class="subtitle">
-      Fyll inn informasjonen om jobben.
-    </p>
-
-    <label>Kundenavn</label>
-    <input
-      id="customer"
-      type="text"
-      placeholder="F.eks. Ola Hansen"
-    >
-
-    <label>Type jobb</label>
-    <select id="jobType">
-      <option>Malerarbeid</option>
-      <option>Snekkerarbeid</option>
-      <option>Elektrikerarbeid</option>
-      <option>Rørleggerarbeid</option>
-      <option>Gartnerarbeid</option>
-      <option>Annet</option>
-    </select>
-
-    <label>Beskriv jobben</label>
-    <textarea
-      id="job"
-      placeholder="F.eks. Male stue og gang, ca. 55 m², to strøk."
-    ></textarea>
-
-    <div class="row">
-
-      <div>
-        <label>Antall timer</label>
-        <input
-          id="hours"
-          type="number"
-          min="0"
-          placeholder="12"
-        >
-      </div>
-
-      <div>
-        <label>Timepris (kr)</label>
-        <input
-          id="hourly"
-          type="number"
-          min="0"
-          placeholder="750"
-        >
-      </div>
-
-      <div>
-        <label>Materialer (kr)</label>
-        <input
-          id="materials"
-          type="number"
-          min="0"
-          placeholder="2500"
-        >
-      </div>
-
-    </div>
-
-    <button class="generate" onclick="generateQuote()">
-      🤖 Lag profesjonelt tilbud
-    </button>
-
-  </div>
-
-  <div id="result" class="result">
-
-    <div class="result-header">
-      <h2>🔨 TilbudsAI</h2>
-      <p>Profesjonelt tilbud</p>
-    </div>
-
-    <div class="result-body">
-
-      <h2>TILBUD</h2>
-
-      <div class="section">
-        <strong>Kunde:</strong>
-        <span id="quoteCustomer"></span>
-      </div>
-
-      <div class="section">
-        <strong>Type jobb:</strong>
-        <span id="quoteType"></span>
-      </div>
-
-      <div class="section">
-        <strong>Arbeidsbeskrivelse:</strong>
-        <span id="quoteJob"></span>
-      </div>
-
-      <table class="price-table">
-
-        <tr>
-          <td>Arbeid</td>
-          <td id="workPrice"></td>
-        </tr>
-
-        <tr>
-          <td>Materialer</td>
-          <td id="materialPrice"></td>
-        </tr>
-
-        <tr>
-          <td>Sum eks. mva.</td>
-          <td id="beforeVat"></td>
-        </tr>
-
-        <tr>
-          <td>Mva. (25 %)</td>
-          <td id="vat"></td>
-        </tr>
-
-        <tr class="total">
-          <td>Totalt inkl. mva.</td>
-          <td id="total"></td>
-        </tr>
-
-      </table>
-
-      <div class="actions">
-
-        <button onclick="sendQuote()">
-          📤 Send tilbud
-        </button>
-
-        <button
-          class="secondary"
-          onclick="window.print()"
-        >
-          📄 Lagre som PDF
-        </button>
-
-      </div>
-
-      <div id="success" class="success">
-        ✅ Tilbudet er klart til å sendes til kunden!
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="recent">
-
-    <h2>Mine siste tilbud</h2>
-
-    <div class="recent-item">
-      <span>Maling av stue og gang</span>
-      <span class="badge">Sendt</span>
-    </div>
-
-    <div class="recent-item">
-      <span>Nytt bad</span>
-      <span class="badge">Utkast</span>
-    </div>
-
-    <div class="recent-item">
-      <span>Terrasse</span>
-      <span class="badge">Sendt</span>
-    </div>
-
-  </div>
-
-</div>
-
-<script>
-
-function money(number) {
-
-  return number.toLocaleString("no-NO", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }) + " kr";
-
-}
-
-function generateQuote() {
+  async function generateQuote() {
 
   const customer =
-    document.getElementById("customer").value.trim()
-    || "Kunden";
+    document.getElementById("customer").value.trim() || "Kunden";
 
   const jobType =
     document.getElementById("jobType").value;
 
   const job =
-    document.getElementById("job").value.trim()
-    || "Arbeidet utføres i henhold til avtale.";
+    document.getElementById("job").value.trim() ||
+    "Arbeidet utføres i henhold til avtale.";
 
   const hours =
     Number(document.getElementById("hours").value) || 0;
@@ -502,47 +101,78 @@ function generateQuote() {
     Number(document.getElementById("materials").value) || 0;
 
   const work = hours * hourly;
-
   const beforeVat = work + materials;
-
   const vat = beforeVat * 0.25;
-
   const total = beforeVat + vat;
 
-  document.getElementById("quoteCustomer").innerText =
-    customer;
+  const button = document.querySelector(".generate");
 
-  document.getElementById("quoteType").innerText =
-    jobType;
+  button.innerText = "🤖 Lager tilbud...";
+  button.disabled = true;
 
-  document.getElementById("quoteJob").innerText =
-    job;
+  try {
 
-  document.getElementById("workPrice").innerText =
-    money(work);
+    const aiResponse = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        customer,
+        jobType,
+        job,
+        hours,
+        hourly,
+        materials
+      })
+    });
 
-  document.getElementById("materialPrice").innerText =
-    money(materials);
+    const data = await aiResponse.json();
 
-  document.getElementById("beforeVat").innerText =
-    money(beforeVat);
+    if (!aiResponse.ok) {
+      throw new Error(data.error || "AI-feil");
+    }
 
-  document.getElementById("vat").innerText =
-    money(vat);
+    document.getElementById("quoteCustomer").innerText = customer;
+    document.getElementById("quoteType").innerText = jobType;
 
-  document.getElementById("total").innerText =
-    money(total);
+    document.getElementById("quoteJob").innerText =
+      data.text || job;
 
-  document.getElementById("result").style.display =
-    "block";
+    document.getElementById("workPrice").innerText =
+      money(work);
 
-  document.getElementById("success").style.display =
-    "none";
+    document.getElementById("materialPrice").innerText =
+      money(materials);
 
-  document.getElementById("result").scrollIntoView({
-    behavior: "smooth"
-  });
+    document.getElementById("beforeVat").innerText =
+      money(beforeVat);
 
+    document.getElementById("vat").innerText =
+      money(vat);
+
+    document.getElementById("total").innerText =
+      money(total);
+
+    document.getElementById("result").style.display = "block";
+    document.getElementById("success").style.display = "none";
+
+    document.getElementById("result").scrollIntoView({
+      behavior: "smooth"
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Kunne ikke koble til AI. Prøv igjen.");
+
+  } finally {
+
+    button.innerText = "🤖 Lag profesjonelt tilbud";
+    button.disabled = false;
+
+  }
 }
 
 function sendQuote() {
