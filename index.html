@@ -639,13 +639,90 @@
     }
 
 
-    function sendQuote() {
+    async function sendQuote() {
 
-      document.getElementById(
-        "success"
-      ).style.display = "block";
+  const customerEmail = prompt(
+    "Skriv inn kundens e-postadresse:"
+  );
 
+  if (!customerEmail) {
+    return;
+  }
+
+  const customer =
+    document.getElementById("customer").value.trim() || "Kunden";
+
+  const jobType =
+    document.getElementById("jobType").value;
+
+  const job =
+    document.getElementById("job").value.trim();
+
+  const hours =
+    Number(document.getElementById("hours").value) || 0;
+
+  const hourly =
+    Number(document.getElementById("hourly").value) || 0;
+
+  const materials =
+    Number(document.getElementById("materials").value) || 0;
+
+  const total =
+    (hours * hourly + materials) * 1.25;
+
+
+  try {
+
+    const response = await fetch("/api/send", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        customerEmail,
+        customer,
+        jobType,
+        job,
+        hours,
+        hourly,
+        materials,
+        total
+      })
+
+    });
+
+
+    const data = await response.json();
+
+
+    if (!response.ok) {
+      throw new Error(data.error || "Kunne ikke sende");
     }
+
+
+    document.getElementById(
+      "success"
+    ).style.display = "block";
+
+    document.getElementById(
+      "success"
+    ).innerText = "✅ Tilbudet er sendt på e-post!";
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Kunne ikke sende tilbudet akkurat nå. Prøv igjen."
+    );
+
+  }
+
+}
 
 
     function savePDF() {
