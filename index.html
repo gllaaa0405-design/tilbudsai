@@ -436,7 +436,14 @@
         <strong>Kunde</strong>
         <span id="quoteCustomer"></span>
       </div>
-
+<div class="section">
+  <strong>Kundens e-post</strong>
+  <input
+    type="email"
+    id="customerEmail"
+    placeholder="kundens@email.no"
+  >
+</div>
       <div class="section">
         <strong>Type jobb</strong>
         <span id="quoteType"></span>
@@ -702,13 +709,13 @@ document.getElementById("quoteDate").innerText =
     }
 
 
-    async function sendQuote() {
+async function sendQuote() {
 
-  const customerEmail = prompt(
-    "Skriv inn kundens e-postadresse:"
-  );
+  const customerEmail =
+    document.getElementById("customerEmail").value.trim();
 
   if (!customerEmail) {
+    alert("Skriv inn kundens e-postadresse først.");
     return;
   }
 
@@ -733,7 +740,6 @@ document.getElementById("quoteDate").innerText =
   const total =
     (hours * hourly + materials) * 1.25;
 
-
   try {
 
     const response = await fetch("/api/send", {
@@ -757,23 +763,16 @@ document.getElementById("quoteDate").innerText =
 
     });
 
-
     const data = await response.json();
-
 
     if (!response.ok) {
       throw new Error(data.error || "Kunne ikke sende");
     }
 
+    document.getElementById("success").style.display = "block";
 
-    document.getElementById(
-      "success"
-    ).style.display = "block";
-
-    document.getElementById(
-      "success"
-    ).innerText = "✅ Tilbudet er sendt på e-post!";
-
+    document.getElementById("success").innerText =
+      "✅ Tilbudet er sendt på e-post!";
 
   } catch (error) {
 
@@ -786,7 +785,6 @@ document.getElementById("quoteDate").innerText =
   }
 
 }
-
 
     function savePDF() {
 
