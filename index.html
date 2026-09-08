@@ -277,6 +277,55 @@
         display: block !important;
       }
     }
+    @media print {
+  body {
+    background: white !important;
+    padding: 0 !important;
+  }
+
+  .container {
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  button,
+  input,
+  select,
+  textarea,
+  .form-section {
+    display: none !important;
+  }
+
+  .quote-section {
+    display: block !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  .quote-section h2 {
+    font-size: 28px !important;
+    margin-bottom: 25px !important;
+  }
+
+  .quote-section p {
+    line-height: 1.6 !important;
+  }
+
+  .price-row {
+    font-size: 16px !important;
+  }
+
+  .total {
+    font-size: 22px !important;
+    font-weight: bold !important;
+  }
+
+  #success {
+    display: none !important;
+  }
+}
   </style>
 </head>
 
