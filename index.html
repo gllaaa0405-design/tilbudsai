@@ -426,6 +426,10 @@
 
       <div class="quote-header">
         <h2>📄 Tilbud</h2>
+        <div class="quote-meta">
+  <strong>Tilbudsnummer:</strong> <span id="quoteNumber"></span><br>
+  <strong>Dato:</strong> <span id="quoteDate"></span>
+</div>
       </div>
 
       <div class="section">
@@ -530,7 +534,17 @@
       const customer =
         document.getElementById("customer").value.trim()
         || "Kunden";
+const quoteNumber =
+  "TA-" + Date.now().toString().slice(-6);
 
+const quoteDate =
+  new Date().toLocaleDateString("nb-NO");
+
+document.getElementById("quoteNumber").innerText =
+  quoteNumber;
+
+document.getElementById("quoteDate").innerText =
+  quoteDate;
       const jobType =
         document.getElementById("jobType").value;
 
