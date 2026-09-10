@@ -1,2240 +1,1848 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>TilbudsAI</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      color: #10233f;
-    }
-
-    header {
-      background: #0d2340;
-      color: white;
-      padding: 18px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 26px;
-      font-weight: bold;
-    }
-
-    .logo span {
-      color: #20bd72;
-    }
-
-    .profile {
-      background: #ffffff22;
-      padding: 9px 15px;
-      border-radius: 20px;
-      cursor: pointer;
-    }
-
-    .profile:hover {
-      background: #ffffff33;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 35px auto;
-      padding: 0 20px;
-    }
-
-    .welcome {
-      margin-bottom: 25px;
-    }
-
-    .welcome h1 {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .welcome p {
-      color: #667085;
-      font-size: 18px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 30px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
-      margin-bottom: 25px;
-    }
-
-    .card h2 {
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      color: #667085;
-      margin-bottom: 25px;
-    }
-
-    .field {
-      margin-bottom: 18px;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 7px;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #d0d5dd;
-      border-radius: 10px;
-      font-size: 16px;
-      font-family: Arial, sans-serif;
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-    }
-
-    .generate {
-      width: 100%;
-      border: none;
-      background: #20bd72;
-      color: white;
-      padding: 16px;
-      border-radius: 12px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .generate:hover {
-      opacity: 0.9;
-    }
-
-    .generate:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
-
-    .quote {
-      display: none;
-    }
-
-    .quote-header {
-      border-bottom: 2px solid #eef2f6;
-      padding-bottom: 18px;
-      margin-bottom: 20px;
-    }
-
-    .quote-header h2 {
-      font-size: 25px;
-    }
-
-    .quote-meta {
-      margin-top: 12px;
-      color: #667085;
-      line-height: 1.7;
-    }
-
-    .section {
-      margin-bottom: 20px;
-    }
-
-    .section strong {
-      display: block;
-      margin-bottom: 7px;
-    }
-
-    .price-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid #eef2f6;
-    }
-
-    .total {
-      font-size: 24px;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      padding-top: 18px;
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 25px;
-    }
-
-    .action-button {
-      border: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .send {
-      background: #0d2340;
-      color: white;
-    }
-
-    .pdf {
-      background: #eef2f6;
-      color: #10233f;
-    }
-
-    .success {
-      display: none;
-      margin-top: 15px;
-      padding: 12px;
-      background: #e8f8ef;
-      color: #16834d;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    .recent {
-      margin-top: 25px;
-    }
-
-    .recent-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid #eef2f6;
-    }
-
-    .empty {
-      color: #667085;
-    }
-
-    /* KONTOVINDU */
-
-    .account-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(13, 35, 64, 0.55);
-      z-index: 1000;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    .account-box {
-      width: 100%;
-      max-width: 650px;
-      margin: 40px auto;
-      background: white;
-      border-radius: 20px;
-      padding: 30px;
-      position: relative;
-      box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-    }
-
-    .account-close {
-      position: absolute;
-      right: 20px;
-      top: 15px;
-      border: none;
-      background: none;
-      font-size: 28px;
-      cursor: pointer;
-      color: #667085;
-    }
-
-    .account-title {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
-
-    .account-subtitle {
-      color: #667085;
-      margin-bottom: 25px;
-    }
-
-    .role-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-
-    .role-button {
-      border: 2px solid #eef2f6;
-      background: white;
-      padding: 22px 15px;
-      border-radius: 15px;
-      cursor: pointer;
-      font-size: 17px;
-      font-weight: bold;
-    }
-
-    .role-button:hover {
-      border-color: #20bd72;
-      background: #f5fff9;
-    }
-
-    .account-form {
-      display: none;
-    }
-
-    .account-form h3 {
-      margin-bottom: 20px;
-    }
-
-    .save-profile {
-      width: 100%;
-      border: none;
-      background: #20bd72;
-      color: white;
-      padding: 15px;
-      border-radius: 12px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 5px;
-    }
-
-    .save-profile:hover {
-      opacity: 0.9;
-    }
-
-    .saved-profile {
-      display: none;
-      background: #f5f7fa;
-      border-radius: 15px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-
-    .saved-profile h3 {
-      margin-bottom: 15px;
-    }
-
-    .saved-profile p {
-      margin-bottom: 8px;
-    }
-
-    .change-profile {
-      margin-top: 15px;
-      border: none;
-      background: #0d2340;
-      color: white;
-      padding: 11px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .logout-profile {
-      margin-top: 10px;
-      margin-left: 8px;
-      border: none;
-      background: #eef2f6;
-      color: #10233f;
-      padding: 11px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 700px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .actions {
-        grid-template-columns: 1fr;
-      }
-
-      .role-buttons {
-        grid-template-columns: 1fr;
-      }
-
-      header {
-        padding: 15px 20px;
-      }
-
-      .container {
-        margin: 20px auto;
-      }
-
-      .card {
-        padding: 20px;
-      }
-
-      .welcome h1 {
-        font-size: 27px;
-      }
-
-      .account-box {
-        margin: 10px auto;
-        padding: 22px;
-      }
-    }
-
-    @media print {
-      header,
-      .welcome,
-      .form-card,
-      .recent,
-      .actions,
-      .success,
-      .account-overlay,
-      #customerEmail {
-        display: none !important;
-      }
-
-      body {
-        background: white;
-      }
-
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 0;
-      }
-
-      .card {
-        box-shadow: none;
-        padding: 0;
-      }
-
-      .quote {
-        display: block !important;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TilbudsAI – tjenester og jobber</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --blue:#09264a;
+  --green:#19b974;
+  --bg:#f4f7fb;
+  --text:#102a43;
+  --muted:#66788f;
+  --border:#e1e8f0;
+  --white:#fff;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+header{
+  background:white;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.nav{
+  max-width:1150px;
+  margin:auto;
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+  color:var(--blue);
+  margin-right:auto;
+}
+
+.logo span{
+  color:var(--green);
+}
+
+.nav button{
+  border:0;
+  background:transparent;
+  color:var(--blue);
+  padding:10px 12px;
+  border-radius:10px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.nav button:hover{
+  background:#eef3f8;
+}
+
+.accountBtn{
+  background:var(--blue)!important;
+  color:white!important;
+}
+
+main{
+  max-width:1150px;
+  margin:auto;
+  padding:25px 18px 80px;
+}
+
+.hero{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:45px 30px;
+  margin-bottom:20px;
+  box-shadow:0 8px 30px #09264a12;
+}
+
+.hero h1{
+  margin:0;
+  color:var(--blue);
+  font-size:clamp(36px,6vw,60px);
+  line-height:1;
+}
+
+.hero p{
+  color:var(--muted);
+  font-size:19px;
+  line-height:1.6;
+  max-width:720px;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.btn{
+  border:0;
+  border-radius:11px;
+  padding:13px 18px;
+  font-weight:850;
+  cursor:pointer;
+  font-size:15px;
+}
+
+.primary{
+  background:var(--green);
+  color:white;
+}
+
+.dark{
+  background:var(--blue);
+  color:white;
+}
+
+.light{
+  background:#edf2f7;
+  color:var(--blue);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 5px 20px #09264a0a;
+}
+
+.card h2,
+.card h3{
+  margin-top:0;
+  color:var(--blue);
+}
+
+.muted{
+  color:var(--muted);
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  border:1px solid #d3dde8;
+  border-radius:10px;
+  padding:13px;
+  font:inherit;
+  margin:6px 0 14px;
+  background:white;
+}
+
+textarea{
+  resize:vertical;
+}
+
+label{
+  display:block;
+  font-weight:800;
+  font-size:14px;
+  margin-top:5px;
+}
+
+.formGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+.tag{
+  display:inline-block;
+  padding:5px 9px;
+  background:#e5f8ef;
+  color:#087c4b;
+  border-radius:20px;
+  margin:3px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.jobCard{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.meta{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#071b32aa;
+  z-index:100;
+  padding:18px;
+  overflow:auto;
+}
+
+.modal{
+  max-width:700px;
+  margin:30px auto;
+  background:white;
+  border-radius:20px;
+  padding:25px;
+  position:relative;
+}
+
+.close{
+  position:absolute;
+  right:14px;
+  top:12px;
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:50%;
+  background:#edf2f7;
+  cursor:pointer;
+  font-size:22px;
+}
+
+.messageList{
+  max-height:350px;
+  overflow:auto;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:12px;
+}
+
+.message{
+  background:#edf2f7;
+  padding:10px 13px;
+  border-radius:13px;
+  margin:7px;
+  max-width:80%;
+}
+
+.message.mine{
+  margin-left:auto;
+  background:#dff6eb;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:35px;
+}
+
+.profileHeader{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.avatar{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:var(--blue);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  font-weight:900;
+}
+
+@media(max-width:760px){
+
+  .grid,
+  .formGrid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .nav button:not(.accountBtn){
+    display:none;
+  }
+
+  .hero{
+    padding:32px 20px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
+<header>
 
-  <header>
-    <div class="logo">🔨 Tilbuds<span>AI</span></div>
+<div class="nav">
 
-    <div
-      class="profile"
-      onclick="openAccount()"
-    >
-      Min konto
-    </div>
-  </header>
+  <div class="logo">
+    🔨 Tilbuds<span>AI</span>
+  </div>
 
+  <button onclick="showHome()">
+    🏠 Forside
+  </button>
 
-  <!-- HOVEDINNHOLD -->
+  <button onclick="showJobs()">
+    📢 Jobber
+  </button>
 
-  <main class="container">
+  <button onclick="showProviders()">
+    👷 Tjenester
+  </button>
 
-    <div class="welcome">
-      <h1>Lag profesjonelle tilbud på sekunder</h1>
-      <p>
-        Fyll inn jobben – TilbudsAI skriver tilbudet for deg.
-      </p>
-    </div>
-
-<!-- LEGG UT JOBB -->
-
-<div class="card">
-
-  <h2>🏠 Trenger du en tjeneste?</h2>
-
-  <p class="subtitle">
-    Legg ut jobben din og la lokale tjenesteleverandører kontakte deg.
-  </p>
+  <button onclick="showMessages()">
+    💬 Meldinger
+  </button>
 
   <button
-    class="generate"
-    onclick="openJobForm()"
+    class="accountBtn"
+    onclick="showAccount()"
   >
-    📢 Legg ut en jobb
+    👤 Min konto
   </button>
 
 </div>
 
-    <!-- NYTT TILBUD -->
+</header>
 
-    <div class="card form-card">
 
-      <h2>Nytt tilbud</h2>
+<main id="app"></main>
 
-      <p class="subtitle">
-        Skriv inn informasjonen om kunden og jobben.
+
+<div
+  class="overlay"
+  id="overlay"
+  onclick="outsideClose(event)"
+>
+
+<div
+  class="modal"
+  id="modal"
+></div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   DEMO DATABASE
+   ========================= */
+
+let currentUser =
+  JSON.parse(
+    localStorage.getItem("tilbudsaiUser") || "null"
+  );
+
+let profiles =
+  JSON.parse(
+    localStorage.getItem("tilbudsaiProfiles") || "[]"
+  );
+
+let jobs =
+  JSON.parse(
+    localStorage.getItem("tilbudsaiJobs") || "[]"
+  );
+
+let conversations =
+  JSON.parse(
+    localStorage.getItem("tilbudsaiMessages") || "[]"
+  );
+
+
+/* =========================
+   HJELPEFUNKSJONER
+   ========================= */
+
+function escapeHTML(value){
+
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function openModal(){
+
+  document
+    .getElementById("overlay")
+    .style.display="block";
+
+}
+
+
+function closeModal(){
+
+  document
+    .getElementById("overlay")
+    .style.display="none";
+
+}
+
+
+function outsideClose(event){
+
+  if(event.target.id==="overlay"){
+    closeModal();
+  }
+
+}
+
+
+/* =========================
+   FORSIDE
+   ========================= */
+
+function showHome(){
+
+  document.getElementById("app").innerHTML=`
+
+    <section class="hero">
+
+      <h1>
+        Finn riktig hjelp.
+        <br>
+        Eller finn nye kunder.
+      </h1>
+
+      <p>
+        TilbudsAI gjør det enkelt å koble
+        mennesker som trenger tjenester med
+        dyktige tjenesteleverandører.
       </p>
-
-      <div class="field">
-
-        <label for="customer">
-          Kundenavn
-        </label>
-
-        <input
-          id="customer"
-          type="text"
-          placeholder="F.eks. Ola Hansen"
-        >
-
-      </div>
-
-
-      <div class="field">
-
-        <label for="jobType">
-          Type jobb
-        </label>
-
-        <select id="jobType">
-
-          <option>
-            Malerarbeid
-          </option>
-
-          <option>
-            Snekkerarbeid
-          </option>
-
-          <option>
-            Elektrikerarbeid
-          </option>
-
-          <option>
-            Rørleggerarbeid
-          </option>
-
-          <option>
-            Gartnerarbeid
-          </option>
-
-          <option>
-            Annet
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="field">
-
-        <label for="job">
-          Beskrivelse av jobben
-        </label>
-
-        <textarea
-          id="job"
-          placeholder="F.eks. Male stue og gang, ca. 55 m², to strøk."
-        ></textarea>
-
-      </div>
-
-
-      <div class="grid">
-
-        <div class="field">
-
-          <label for="hours">
-            Timer
-          </label>
-
-          <input
-            id="hours"
-            type="number"
-            min="0"
-            placeholder="12"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="hourly">
-            Timepris (kr)
-          </label>
-
-          <input
-            id="hourly"
-            type="number"
-            min="0"
-            placeholder="750"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="materials">
-            Materialer (kr)
-          </label>
-
-          <input
-            id="materials"
-            type="number"
-            min="0"
-            placeholder="2500"
-          >
-
-        </div>
-
-      </div>
-
-
-      <button
-        class="generate"
-        onclick="generateQuote()"
-      >
-        🤖 Lag profesjonelt tilbud
-      </button>
-
-    </div>
-
-
-    <!-- TILBUD -->
-
-    <div
-      class="card quote"
-      id="result"
-    >
-
-      <div class="quote-header">
-
-        <h2>
-          📄 Tilbud
-        </h2>
-
-        <div class="quote-meta">
-
-          <strong>
-            Tilbudsnummer:
-          </strong>
-
-          <span id="quoteNumber"></span>
-
-          <br>
-
-          <strong>
-            Dato:
-          </strong>
-
-          <span id="quoteDate"></span>
-
-        </div>
-
-      </div>
-
-
-      <div class="section">
-
-        <strong>
-          Kunde
-        </strong>
-
-        <span id="quoteCustomer"></span>
-
-      </div>
-
-
-      <div class="section">
-
-        <strong>
-          Type jobb
-        </strong>
-
-        <span id="quoteType"></span>
-
-      </div>
-
-
-      <div class="section">
-
-        <strong>
-          Arbeidsbeskrivelse
-        </strong>
-
-        <span id="quoteJob"></span>
-
-      </div>
-
-
-      <div class="section">
-
-        <strong>
-          Kundens e-post
-        </strong>
-
-        <input
-          type="email"
-          id="customerEmail"
-          placeholder="kundens@email.no"
-        >
-
-      </div>
-
-
-      <div class="section">
-
-        <strong>
-          Arbeid
-        </strong>
-
-        <div class="price-row">
-
-          <span>
-            Arbeid
-          </span>
-
-          <span id="workPrice">
-            0 kr
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div class="section">
-
-        <strong>
-          Materialer
-        </strong>
-
-        <div class="price-row">
-
-          <span>
-            Materialer
-          </span>
-
-          <span id="materialPrice">
-            0 kr
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div class="section">
-
-        <div class="price-row">
-
-          <span>
-            Sum eks. MVA
-          </span>
-
-          <span id="beforeVat">
-            0 kr
-          </span>
-
-        </div>
-
-
-        <div class="price-row">
-
-          <span>
-            MVA 25 %
-          </span>
-
-          <span id="vat">
-            0 kr
-          </span>
-
-        </div>
-
-
-        <div class="total">
-
-          <span>
-            Total inkl. MVA
-          </span>
-
-          <span id="total">
-            0 kr
-          </span>
-
-        </div>
-
-      </div>
-
 
       <div class="actions">
 
         <button
-          class="action-button send"
-          onclick="sendQuote()"
+          class="btn primary"
+          onclick="openJobForm()"
         >
-          📤 Send tilbud
+          📢 Jeg trenger en tjeneste
         </button>
-
 
         <button
-          class="action-button pdf"
-          onclick="savePDF()"
+          class="btn dark"
+          onclick="showProviders()"
         >
-          📄 Lagre som PDF
+          👷 Jeg tilbyr tjenester
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <div class="grid">
+
+      <div class="card">
+
+        <h2>🏠 Trenger du hjelp?</h2>
+
+        <p class="muted">
+          Legg ut en jobb og la relevante
+          tjenesteleverandører kontakte deg.
+        </p>
+
+        <button
+          class="btn primary"
+          onclick="openJobForm()"
+        >
+          Legg ut jobb
         </button>
 
       </div>
 
 
-      <div
-        class="success"
-        id="success"
-      >
-        ✅ Tilbudet er klart til å sendes!
+      <div class="card">
+
+        <h2>👷 Tilbyr du tjenester?</h2>
+
+        <p class="muted">
+          Lag en profil, vis hva du kan
+          og finn nye kunder.
+        </p>
+
+        <button
+          class="btn dark"
+          onclick="showAccount()"
+        >
+          Lag leverandørprofil
+        </button>
+
+      </div>
+
+
+      <div class="card">
+
+        <h2>🤖 AI-hjelp</h2>
+
+        <p class="muted">
+          AI hjelper deg med å skrive
+          gode annonser og profesjonelle tilbud.
+        </p>
+
+        <button
+          class="btn light"
+          onclick="alert('AI-funksjonen kobles inn her.')"
+        >
+          Bruk AI
+        </button>
+
       </div>
 
     </div>
 
+  `;
 
-    <!-- SISTE TILBUD -->
+}
 
-    <div class="card recent">
 
-      <h2>
-        Mine siste tilbud
-      </h2>
+/* =========================
+   JOBBER
+   ========================= */
 
-      <p class="subtitle">
-        Dine siste tilbud vises her.
-      </p>
+function showJobs(){
 
-      <div class="recent-item">
+  document.getElementById("app").innerHTML=`
 
-        <span>
-          Ingen tilbud ennå
-        </span>
+    <div class="actions"
+         style="justify-content:space-between">
 
-        <span class="empty">
-          –
-        </span>
+      <div>
+
+        <h2>📢 Jobber</h2>
+
+        <p class="muted">
+          Finn jobber som trenger hjelp.
+        </p>
 
       </div>
-
-    </div>
-
-  </main>
-
-
-  <!-- KONTO -->
-
-  <div
-    class="account-overlay"
-    id="accountOverlay"
-    onclick="closeAccountOutside(event)"
-  >
-
-    <div class="account-box">
 
       <button
-        class="account-close"
-        onclick="closeAccount()"
+        class="btn primary"
+        onclick="openJobForm()"
       >
-        ×
+        📢 Legg ut jobb
       </button>
 
-
-      <h2 class="account-title">
-        Min konto
-      </h2>
-
-      <p class="account-subtitle">
-        Velg hvordan du vil bruke TilbudsAI.
-      </p>
+    </div>
 
 
-      <!-- VALG AV ROLLE -->
+    <div class="card">
 
-      <div
-        class="role-buttons"
-        id="roleButtons"
+      <input
+        id="jobSearch"
+        placeholder="Søk etter maling, flytting, Oslo..."
+        oninput="renderJobs()"
       >
-
-        <button
-          class="role-button"
-          onclick="showProviderForm()"
-        >
-          🔨<br>
-          Jeg tilbyr tjenester
-        </button>
-
-
-        <button
-          class="role-button"
-          onclick="showCustomerForm()"
-        >
-          🏠<br>
-          Jeg trenger en tjeneste
-        </button>
-
-      </div>
-
-
-      <!-- TJENESTELEVERANDØR -->
-
-      <div
-        class="account-form"
-        id="providerForm"
-      >
-
-        <h3>
-          🔨 Tjenesteleverandør
-        </h3>
-
-
-        <div class="field">
-
-          <label for="providerName">
-            Navn
-          </label>
-
-          <input
-            id="providerName"
-            type="text"
-            placeholder="Ditt navn"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="providerCompany">
-            Bedrift
-          </label>
-
-          <input
-            id="providerCompany"
-            type="text"
-            placeholder="Bedriftsnavn"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="providerLocation">
-            Hvor holder du til?
-          </label>
-
-          <input
-            id="providerLocation"
-            type="text"
-            placeholder="F.eks. Oslo"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="providerServices">
-            Hvilke tjenester tilbyr du?
-          </label>
-
-          <textarea
-            id="providerServices"
-            placeholder="F.eks. maling, sparkling og tapetsering"
-          ></textarea>
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="providerPhone">
-            Telefonnummer
-          </label>
-
-          <input
-            id="providerPhone"
-            type="tel"
-            placeholder="Telefonnummer"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="providerEmail">
-            E-post
-          </label>
-
-          <input
-            id="providerEmail"
-            type="email"
-            placeholder="din@email.no"
-          >
-
-        </div>
-
-
-        <button
-          class="save-profile"
-          onclick="saveProviderProfile()"
-        >
-          ✅ Lagre tjenesteprofil
-        </button>
-
-      </div>
-
-
-      <!-- KUNDE -->
-
-      <div
-        class="account-form"
-        id="customerForm"
-      >
-
-        <h3>
-          🏠 Kunde
-        </h3>
-
-
-        <div class="field">
-
-          <label for="buyerName">
-            Navn
-          </label>
-
-          <input
-            id="buyerName"
-            type="text"
-            placeholder="Ditt navn"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="buyerLocation">
-            Hvor bor du?
-          </label>
-
-          <input
-            id="buyerLocation"
-            type="text"
-            placeholder="F.eks. Oslo"
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="buyerService">
-            Hva slags tjeneste trenger du?
-          </label>
-
-          <textarea
-            id="buyerService"
-            placeholder="F.eks. male stuen og gangen"
-          ></textarea>
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="buyerEmail">
-            E-post
-          </label>
-
-          <input
-            id="buyerEmail"
-            type="email"
-            placeholder="din@email.no"
-          >
-
-        </div>
-
-
-        <button
-          class="save-profile"
-          onclick="saveCustomerProfile()"
-        >
-          ✅ Lagre kundeprofil
-        </button>
-
-      </div>
-
-
-      <!-- LAGRET PROFIL -->
-
-      <div
-        class="saved-profile"
-        id="savedProfile"
-      >
-
-        <h3>
-          Din profil
-        </h3>
-
-        <div id="savedProfileContent"></div>
-
-
-        <button
-          class="change-profile"
-          onclick="changeProfile()"
-        >
-          ✏️ Endre profil
-        </button>
-
-
-        <button
-          class="logout-profile"
-          onclick="deleteProfile()"
-        >
-          Slett profil
-        </button>
-
-      </div>
 
     </div>
 
-  </div>
 
+    <div
+      id="jobList"
+      class="grid"
+      style="margin-top:16px"
+    ></div>
 
-  <script>
+  `;
 
-    /* =========================
-       PENGER
-    ========================= */
+  renderJobs();
 
-    function money(number) {
+}
 
-      return new Intl.NumberFormat("nb-NO", {
-        style: "currency",
-        currency: "NOK",
-        maximumFractionDigits: 0
-      }).format(number);
 
-    }
+function renderJobs(){
 
+  const list =
+    document.getElementById("jobList");
 
-    /* =========================
-       LAG TILBUD
-    ========================= */
+  if(!list) return;
 
-    async function generateQuote() {
 
-      const customer =
-        document.getElementById("customer").value.trim()
-        || "Kunden";
+  const search =
+    (
+      document.getElementById("jobSearch")?.value || ""
+    ).toLowerCase();
 
 
-      const jobType =
-        document.getElementById("jobType").value;
+  const filtered =
+    jobs.filter(function(job){
 
+      return (
+        job.title +
+        " " +
+        job.location +
+        " " +
+        job.category +
+        " " +
+        job.description
+      )
+      .toLowerCase()
+      .includes(search);
 
-      const job =
-        document.getElementById("job").value.trim()
-        || "Arbeidet utføres i henhold til avtale.";
+    });
 
 
-      const hours =
-        Number(document.getElementById("hours").value)
-        || 0;
+  if(filtered.length===0){
 
+    list.innerHTML=`
 
-      const hourly =
-        Number(document.getElementById("hourly").value)
-        || 0;
+      <div class="card empty">
 
+        Ingen jobber funnet ennå.
 
-      const materials =
-        Number(document.getElementById("materials").value)
-        || 0;
+      </div>
 
+    `;
 
-      const work =
-        hours * hourly;
+    return;
 
-
-      const beforeVat =
-        work + materials;
-
-
-      const vat =
-        beforeVat * 0.25;
-
-
-      const total =
-        beforeVat + vat;
-
-
-      const button =
-        document.querySelector(".generate");
-
-
-      button.innerText =
-        "🤖 Lager tilbud...";
-
-
-      button.disabled =
-        true;
-
-
-      try {
-
-        const aiResponse =
-          await fetch("/api/generate", {
-
-            method: "POST",
-
-            headers: {
-              "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-              customer,
-              jobType,
-              job,
-              hours,
-              hourly,
-              materials
-            })
-
-          });
-
-
-        const data =
-          await aiResponse.json();
-
-
-        if (!aiResponse.ok) {
-
-          throw new Error(
-            data.error || "AI-feil"
-          );
-
-        }
-
-
-        /* TILBUDSNUMMER */
-
-        const quoteNumber =
-          "TA-" +
-          Date.now()
-            .toString()
-            .slice(-6);
-
-
-        /* DATO */
-
-        const quoteDate =
-          new Date()
-            .toLocaleDateString("nb-NO");
-
-
-        document.getElementById(
-          "quoteNumber"
-        ).innerText =
-          quoteNumber;
-
-
-        document.getElementById(
-          "quoteDate"
-        ).innerText =
-          quoteDate;
-
-
-        /* KUNDE */
-
-        document.getElementById(
-          "quoteCustomer"
-        ).innerText =
-          customer;
-
-
-        /* JOBBTYPE */
-
-        document.getElementById(
-          "quoteType"
-        ).innerText =
-          jobType;
-
-
-        /* BESKRIVELSE */
-
-        const quoteJob =
-          document.getElementById(
-            "quoteJob"
-          );
-
-
-        quoteJob.style.whiteSpace =
-          "pre-line";
-
-
-        quoteJob.innerText =
-          job +
-          "\n\n" +
-          "🤖 AI-generert tilbudstekst:\n\n" +
-          (
-            data.text ||
-            "Ingen AI-tekst mottatt."
-          );
-
-
-        /* PRISER */
-
-        document.getElementById(
-          "workPrice"
-        ).innerText =
-          money(work);
-
-
-        document.getElementById(
-          "materialPrice"
-        ).innerText =
-          money(materials);
-
-
-        document.getElementById(
-          "beforeVat"
-        ).innerText =
-          money(beforeVat);
-
-
-        document.getElementById(
-          "vat"
-        ).innerText =
-          money(vat);
-
-
-        document.getElementById(
-          "total"
-        ).innerText =
-          money(total);
-
-
-        /* VIS TILBUD */
-
-        document.getElementById(
-          "result"
-        ).style.display =
-          "block";
-
-
-        document.getElementById(
-          "success"
-        ).style.display =
-          "none";
-
-
-        document.getElementById(
-          "result"
-        ).scrollIntoView({
-          behavior: "smooth"
-        });
-
-
-      } catch (error) {
-
-        console.error(error);
-
-
-        alert(
-          "Kunne ikke koble til AI akkurat nå. Prøv igjen."
-        );
-
-      } finally {
-
-        button.innerText =
-          "🤖 Lag profesjonelt tilbud";
-
-
-        button.disabled =
-          false;
-
-      }
-
-    }
-
-
-    /* =========================
-       SEND TILBUD PÅ E-POST
-    ========================= */
-
-    async function sendQuote() {
-
-      const customerEmail =
-        document
-          .getElementById("customerEmail")
-          .value
-          .trim();
-
-
-      if (!customerEmail) {
-
-        alert(
-          "Skriv inn kundens e-postadresse først."
-        );
-
-        return;
-
-      }
-
-
-      const customer =
-        document
-          .getElementById("customer")
-          .value
-          .trim()
-        || "Kunden";
-
-
-      const jobType =
-        document
-          .getElementById("jobType")
-          .value;
-
-
-      const job =
-        document
-          .getElementById("job")
-          .value
-          .trim();
-
-
-      const hours =
-        Number(
-          document
-            .getElementById("hours")
-            .value
-        ) || 0;
-
-
-      const hourly =
-        Number(
-          document
-            .getElementById("hourly")
-            .value
-        ) || 0;
-
-
-      const materials =
-        Number(
-          document
-            .getElementById("materials")
-            .value
-        ) || 0;
-
-
-      const total =
-        (hours * hourly + materials)
-        * 1.25;
-
-
-      try {
-
-        const response =
-          await fetch("/api/send", {
-
-            method: "POST",
-
-            headers: {
-              "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-
-              customerEmail,
-              customer,
-              jobType,
-              job,
-              hours,
-              hourly,
-              materials,
-              total
-
-            })
-
-          });
-
-
-        const data =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            data.error ||
-            "Kunne ikke sende"
-          );
-
-        }
-
-
-        document.getElementById(
-          "success"
-        ).style.display =
-          "block";
-
-
-        document.getElementById(
-          "success"
-        ).innerText =
-          "✅ Tilbudet er sendt på e-post!";
-
-
-      } catch (error) {
-
-        console.error(error);
-
-
-        alert(
-          "Kunne ikke sende tilbudet akkurat nå. Prøv igjen."
-        );
-
-      }
-
-    }
-
-
-    /* =========================
-       PDF
-    ========================= */
-
-function openJobForm() {
-
-  const oldForm = document.getElementById("jobFormCard");
-
-  if (oldForm) {
-    oldForm.remove();
   }
 
-  const card = document.createElement("div");
 
-  card.id = "jobFormCard";
-  card.className = "card";
+  list.innerHTML =
+    filtered.map(function(job){
 
-  card.innerHTML = `
+      return `
+
+        <article class="card jobCard">
+
+          <h3>
+            🏠 ${escapeHTML(job.title)}
+          </h3>
+
+          <div class="meta">
+            📍 ${escapeHTML(job.location)}
+            ·
+            📅 ${escapeHTML(job.date)}
+          </div>
+
+          <div>
+
+            <span class="tag">
+              ${escapeHTML(job.category)}
+            </span>
+
+          </div>
+
+          <p>
+            ${escapeHTML(job.description)}
+          </p>
+
+          <button
+            class="btn primary"
+            onclick="openJob('${job.id}')"
+          >
+            Se jobb
+          </button>
+
+        </article>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================
+   LEGG UT JOBB
+   ========================= */
+
+function openJobForm(){
+
+  if(!currentUser){
+
+    openLogin("For å legge ut en jobb må du opprette konto eller logge inn.");
+
+    return;
+
+  }
+
+
+  document.getElementById("modal").innerHTML=`
+
+    <button
+      class="close"
+      onclick="closeModal()"
+    >
+      ×
+    </button>
+
     <h2>📢 Legg ut en jobb</h2>
 
-    <p class="subtitle">
-      Fortell hva du trenger hjelp med.
+    <p class="muted">
+      Beskriv hva du trenger hjelp med.
     </p>
 
-    <form id="realJobForm">
 
-      <label>Hva trenger du hjelp med?</label>
-      <input
-        type="text"
-        id="jobTitle"
-        placeholder="F.eks. Maling av stue"
-        required
-      >
+    <form id="jobForm">
 
-      <label>Hvor skal jobben gjøres?</label>
-      <input
-        type="text"
-        id="jobLocation"
-        placeholder="F.eks. Oslo"
-        required
-      >
+      <div class="formGrid">
 
-      <label>Beskriv jobben</label>
-      <textarea
-        id="jobDescription"
-        placeholder="Beskriv hva som skal gjøres..."
-        rows="4"
-        required
-      ></textarea>
+        <div>
 
-      <label>Når ønsker du jobben utført?</label>
-      <input
-        type="text"
-        id="jobDate"
-        placeholder="F.eks. Så snart som mulig"
-        required
-      >
+          <label>
+            Hva trenger du hjelp med?
+          </label>
+
+          <input
+            id="jobTitle"
+            placeholder="F.eks. Male stue og gang"
+            required
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Hvor?
+          </label>
+
+          <input
+            id="jobLocation"
+            placeholder="F.eks. Oslo"
+            required
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Kategori
+          </label>
+
+          <select id="jobCategory">
+
+            <option>Maling</option>
+            <option>Elektriker</option>
+            <option>Rørlegger</option>
+            <option>Renhold</option>
+            <option>Flytting</option>
+            <option>Bygg</option>
+            <option>Hage</option>
+            <option>Annet</option>
+
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Når?
+          </label>
+
+          <input
+            id="jobDate"
+            placeholder="F.eks. Så snart som mulig"
+          >
+
+        </div>
+
+
+        <div class="full">
+
+          <label>
+            Beskriv jobben
+          </label>
+
+          <textarea
+            id="jobDescription"
+            rows="5"
+            placeholder="Fortell hva som skal gjøres..."
+            required
+          ></textarea>
+
+        </div>
+
+      </div>
+
 
       <button
+        class="btn primary"
         type="submit"
-        class="generate"
       >
-        📢 Legg ut jobben
+        📢 Publiser jobb
       </button>
 
     </form>
+
   `;
 
-  const main = document.querySelector("main");
 
-  main.insertBefore(card, main.firstElementChild);
+  document
+    .getElementById("jobForm")
+    .onsubmit=function(event){
 
-  document.getElementById("realJobForm").addEventListener("submit", function(event) {
+      event.preventDefault();
 
-    event.preventDefault();
 
-    const job = {
-      title: document.getElementById("jobTitle").value,
-      location: document.getElementById("jobLocation").value,
-      description: document.getElementById("jobDescription").value,
-      date: document.getElementById("jobDate").value
+      const job={
+
+        id:
+          Date.now().toString(),
+
+        owner:
+          currentUser.id,
+
+        title:
+          document.getElementById("jobTitle").value,
+
+        location:
+          document.getElementById("jobLocation").value,
+
+        category:
+          document.getElementById("jobCategory").value,
+
+        date:
+          document.getElementById("jobDate").value,
+
+        description:
+          document.getElementById("jobDescription").value,
+
+        created:
+          new Date().toISOString()
+
+      };
+
+
+      jobs.unshift(job);
+
+
+      localStorage.setItem(
+        "tilbudsaiJobs",
+        JSON.stringify(jobs)
+      );
+
+
+      closeModal();
+
+      showJobs();
+
     };
 
-    localStorage.setItem(
-      "tilbudsaiJob",
-      JSON.stringify(job)
+
+  openModal();
+
+}
+
+
+/* =========================
+   SE JOBB
+   ========================= */
+
+function openJob(id){
+
+  const job =
+    jobs.find(
+      function(x){
+        return x.id===id;
+      }
     );
 
-    showJob(job);
-  });
-}
+
+  if(!job) return;
 
 
-function showJob(job) {
+  const owner =
+    profiles.find(
+      function(p){
+        return p.id===job.owner;
+      }
+    );
 
-  const form = document.getElementById("jobFormCard");
 
-  if (form) {
-    form.remove();
-  }
-
-  const card = document.createElement("div");
-
-  card.id = "postedJob";
-  card.className = "card";
-
-  card.innerHTML = `
-    <h2>📢 Jobben din</h2>
-
-    <p><strong>🏠 ${escapeHTML(job.title)}</strong></p>
-
-    <p>📍 ${escapeHTML(job.location)}</p>
-
-    <p>📝 ${escapeHTML(job.description)}</p>
-
-    <p>📅 ${escapeHTML(job.date)}</p>
-
-    <p style="color:#22c55e;font-weight:bold;">
-      ✅ Jobben er lagt ut
-    </p>
+  document.getElementById("modal").innerHTML=`
 
     <button
-      class="generate"
-      onclick="openJobForm()"
+      class="close"
+      onclick="closeModal()"
     >
-      ✏️ Endre jobb
+      ×
     </button>
+
+    <h2>
+      🏠 ${escapeHTML(job.title)}
+    </h2>
+
+    <p class="meta">
+      📍 ${escapeHTML(job.location)}
+      ·
+      📅 ${escapeHTML(job.date)}
+    </p>
+
+    <span class="tag">
+      ${escapeHTML(job.category)}
+    </span>
+
+    <p>
+      ${escapeHTML(job.description)}
+    </p>
+
+    <hr>
+
+    <h3>
+      💬 Interessert i jobben?
+    </h3>
+
+    ${
+      currentUser
+
+      ?
+
+      `
+
+      <textarea
+        id="interestMessage"
+        rows="4"
+        placeholder="Hei! Jeg er interessert i å hjelpe med denne jobben..."
+      ></textarea>
+
+      <button
+        class="btn primary"
+        onclick="sendMessage(
+          '${job.owner}',
+          '${job.id}'
+        )"
+      >
+        📨 Send melding til kunden
+      </button>
+
+      `
+
+      :
+
+      `
+
+      <button
+        class="btn primary"
+        onclick="openLogin('Logg inn for å kontakte kunden.')"
+      >
+        🔐 Logg inn for å kontakte kunden
+      </button>
+
+      `
+
+    }
+
   `;
 
-  const main = document.querySelector("main");
 
-  main.insertBefore(
-    card,
-    main.firstElementChild
-  );
+  openModal();
+
 }
 
 
-function loadPostedJob() {
+/* =========================
+   TJENESTELEVERANDØRER
+   ========================= */
 
-  const savedJob = localStorage.getItem("tilbudsaiJob");
+function showProviders(){
 
-  if (!savedJob) {
+  document.getElementById("app").innerHTML=`
+
+    <h2>👷 Finn tjenesteleverandører</h2>
+
+    <p class="muted">
+      Finn folk og bedrifter som tilbyr tjenester.
+    </p>
+
+
+    <div class="card">
+
+      <input
+        id="providerSearch"
+        placeholder="Søk etter maler, elektriker, Oslo..."
+        oninput="renderProviders()"
+      >
+
+    </div>
+
+
+    <div
+      id="providerList"
+      class="grid"
+      style="margin-top:16px"
+    ></div>
+
+  `;
+
+  renderProviders();
+
+}
+
+
+function renderProviders(){
+
+  const list =
+    document.getElementById("providerList");
+
+  if(!list) return;
+
+
+  const search =
+    (
+      document.getElementById("providerSearch")?.value || ""
+    ).toLowerCase();
+
+
+  const providersList =
+    profiles.filter(function(profile){
+
+      return (
+        profile.role==="provider" &&
+        (
+          profile.name +
+          " " +
+          profile.company +
+          " " +
+          profile.location +
+          " " +
+          profile.services +
+          " " +
+          profile.description
+        )
+        .toLowerCase()
+        .includes(search)
+      );
+
+    });
+
+
+  if(!providersList.length){
+
+    list.innerHTML=`
+
+      <div class="card empty">
+
+        Ingen tjenesteleverandører funnet ennå.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    providersList.map(function(profile){
+
+      return `
+
+        <article class="card">
+
+          <div class="profileHeader">
+
+            <div class="avatar">
+              👷
+            </div>
+
+            <div>
+
+              <h3 style="margin-bottom:3px">
+                ${escapeHTML(profile.name)}
+              </h3>
+
+              <div class="muted">
+                ${escapeHTML(profile.company || "")}
+              </div>
+
+            </div>
+
+          </div>
+
+          <p>
+            📍 ${escapeHTML(profile.location)}
+          </p>
+
+          <p>
+            ${escapeHTML(profile.description || "Tilbyr tjenester på TilbudsAI.")}
+          </p>
+
+          <div>
+
+            ${
+              (profile.services || "")
+              .split(",")
+              .filter(Boolean)
+              .map(function(service){
+
+                return `
+                  <span class="tag">
+                    ${escapeHTML(service.trim())}
+                  </span>
+                `;
+
+              })
+              .join("")
+
+            }
+
+          </div>
+
+          <button
+            class="btn primary"
+            onclick="contactProvider('${profile.id}')"
+          >
+            💬 Kontakt
+          </button>
+
+        </article>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================
+   KONTAKT LEVERANDØR
+   ========================= */
+
+function contactProvider(id){
+
+  if(!currentUser){
+
+    openLogin("Logg inn for å kontakte en tjenesteleverandør.");
+
+    return;
+
+  }
+
+
+  document.getElementById("modal").innerHTML=`
+
+    <button
+      class="close"
+      onclick="closeModal()"
+    >
+      ×
+    </button>
+
+    <h2>💬 Send melding</h2>
+
+    <textarea
+      id="providerMessage"
+      rows="5"
+      placeholder="Skriv meldingen din..."
+    ></textarea>
+
+    <button
+      class="btn primary"
+      onclick="sendMessage('${id}',null)"
+    >
+      📨 Send melding
+    </button>
+
+  `;
+
+
+  openModal();
+
+}
+
+
+/* =========================
+   MELDINGER
+   ========================= */
+
+function sendMessage(receiver,jobId){
+
+  const field =
+    document.getElementById(
+      jobId
+        ? "interestMessage"
+        : "providerMessage"
+    );
+
+
+  const text =
+    field?.value.trim();
+
+
+  if(!text){
+
+    alert("Skriv en melding først.");
+
+    return;
+
+  }
+
+
+  conversations.push({
+
+    id:
+      Date.now().toString(),
+
+    sender:
+      currentUser.id,
+
+    receiver:
+      receiver,
+
+    job:
+      jobId,
+
+    text:
+      text,
+
+    time:
+      new Date().toISOString()
+
+  });
+
+
+  localStorage.setItem(
+    "tilbudsaiMessages",
+    JSON.stringify(conversations)
+  );
+
+
+  closeModal();
+
+  alert("✅ Meldingen er sendt!");
+
+  showMessages();
+
+}
+
+
+function showMessages(){
+
+  if(!currentUser){
+
+    openLogin("Logg inn for å se meldingene dine.");
+
+    return;
+
+  }
+
+
+  document.getElementById("app").innerHTML=`
+
+    <h2>💬 Meldinger</h2>
+
+    <p class="muted">
+      Her kan kunder og tjenesteleverandører kommunisere.
+    </p>
+
+    <div
+      id="messageArea"
+    ></div>
+
+  `;
+
+
+  renderMessages();
+
+}
+
+
+function renderMessages(){
+
+  const area =
+    document.getElementById("messageArea");
+
+  if(!area) return;
+
+
+  const mine =
+    conversations.filter(function(message){
+
+      return (
+        message.sender===currentUser.id ||
+        message.receiver===currentUser.id
+      );
+
+    });
+
+
+  if(!mine.length){
+
+    area.innerHTML=`
+
+      <div class="card empty">
+
+        Ingen meldinger ennå.
+
+        <br><br>
+
+        Finn en jobb eller tjenesteleverandør
+        for å starte en samtale.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const grouped={};
+
+
+  mine.forEach(function(message){
+
+    const other =
+      message.sender===currentUser.id
+        ? message.receiver
+        : message.sender;
+
+
+    if(!grouped[other]){
+      grouped[other]=[];
+    }
+
+
+    grouped[other].push(message);
+
+  });
+
+
+  area.innerHTML =
+    Object.keys(grouped)
+    .map(function(other){
+
+      const otherProfile =
+        profiles.find(
+          function(p){
+            return p.id===other;
+          }
+        );
+
+
+      return `
+
+        <div class="card"
+             style="margin-bottom:16px">
+
+          <h3>
+            💬 ${
+              escapeHTML(
+                otherProfile?.name ||
+                "Bruker"
+              )
+            }
+          </h3>
+
+          <div class="messageList">
+
+            ${
+              grouped[other]
+              .map(function(message){
+
+                return `
+
+                  <div class="
+                    message
+                    ${
+                      message.sender===currentUser.id
+                        ? "mine"
+                        : ""
+                    }
+                  ">
+
+                    ${escapeHTML(message.text)}
+
+                  </div>
+
+                `;
+
+              })
+              .join("")
+
+            }
+
+          </div>
+
+
+          <textarea
+            id="reply_${other}"
+            rows="2"
+            placeholder="Skriv et svar..."
+          ></textarea>
+
+
+          <button
+            class="btn primary"
+            onclick="reply('${other}')"
+          >
+            Send
+          </button>
+
+        </div>
+
+      `;
+
+    })
+    .join("");
+
+}
+
+
+function reply(receiver){
+
+  const field =
+    document.getElementById(
+      "reply_"+receiver
+    );
+
+
+  const text =
+    field?.value.trim();
+
+
+  if(!text){
     return;
   }
 
-  try {
 
-    const job = JSON.parse(savedJob);
+  conversations.push({
 
-    showJob(job);
+    id:
+      Date.now().toString(),
 
-  } catch (error) {
+    sender:
+      currentUser.id,
 
-    console.error("Kunne ikke laste jobb:", error);
+    receiver:
+      receiver,
 
-  }
+    job:
+      null,
+
+    text:
+      text,
+
+    time:
+      new Date().toISOString()
+
+  });
+
+
+  localStorage.setItem(
+    "tilbudsaiMessages",
+    JSON.stringify(conversations)
+  );
+
+
+  showMessages();
+
 }
 
 
-window.addEventListener(
-  "DOMContentLoaded",
-  loadPostedJob
-);
-    
-    function savePDF() {
+/* =========================
+   KONTO
+   ========================= */
 
-      window.print();
+function showAccount(){
 
-    }
+  if(!currentUser){
 
+    openLogin(
+      "Opprett konto eller logg inn for å bruke TilbudsAI."
+    );
 
-    /* =========================
-       MIN KONTO
-    ========================= */
+    return;
 
-    function openAccount() {
-
-      document.getElementById(
-        "accountOverlay"
-      ).style.display =
-        "block";
+  }
 
 
-      loadSavedProfile();
-
-    }
-
-
-    function closeAccount() {
-
-      document.getElementById(
-        "accountOverlay"
-      ).style.display =
-        "none";
-
-    }
-
-
-    function closeAccountOutside(event) {
-
-      if (
-        event.target.id ===
-        "accountOverlay"
-      ) {
-
-        closeAccount();
-
+  const profile =
+    profiles.find(
+      function(p){
+        return p.id===currentUser.id;
       }
-
-    }
-
-
-    /* =========================
-       ROLLEVALG
-    ========================= */
-
-    function showProviderForm() {
-
-      document.getElementById(
-        "roleButtons"
-      ).style.display =
-        "none";
+    );
 
 
-      document.getElementById(
-        "providerForm"
-      ).style.display =
-        "block";
+  document.getElementById("modal").innerHTML=`
+
+    <button
+      class="close"
+      onclick="closeModal()"
+    >
+      ×
+    </button>
+
+    <h2>👤 Min profil</h2>
+
+    <form id="profileForm">
+
+      <label>
+        Jeg er
+      </label>
+
+      <select id="role">
+
+        <option
+          value="customer"
+          ${profile?.role==="customer"?"selected":""}
+        >
+          🏠 Kunde
+        </option>
+
+        <option
+          value="provider"
+          ${profile?.role==="provider"?"selected":""}
+        >
+          👷 Tjenesteleverandør
+        </option>
+
+      </select>
 
 
-      document.getElementById(
-        "customerForm"
-      ).style.display =
-        "none";
+      <label>
+        Navn
+      </label>
 
-    }
-
-
-    function showCustomerForm() {
-
-      document.getElementById(
-        "roleButtons"
-      ).style.display =
-        "none";
+      <input
+        id="name"
+        value="${escapeHTML(profile?.name)}"
+        required
+      >
 
 
-      document.getElementById(
-        "customerForm"
-      ).style.display =
-        "block";
+      <label>
+        Firma
+      </label>
+
+      <input
+        id="company"
+        value="${escapeHTML(profile?.company)}"
+        placeholder="Firmanavn hvis du har"
+      >
 
 
-      document.getElementById(
-        "providerForm"
-      ).style.display =
-        "none";
+      <label>
+        Sted
+      </label>
 
-    }
+      <input
+        id="location"
+        value="${escapeHTML(profile?.location)}"
+        placeholder="Oslo"
+      >
 
 
-    /* =========================
-       LAGRE TJENESTELEVERANDØR
-    ========================= */
+      <label>
+        Telefon
+      </label>
 
-    function saveProviderProfile() {
+      <input
+        id="phone"
+        value="${escapeHTML(profile?.phone)}"
+        placeholder="Telefonnummer"
+      >
 
-      const profile = {
 
-        type: "provider",
+      <label>
+        Hvilke tjenester tilbyr du?
+      </label>
+
+      <input
+        id="services"
+        value="${escapeHTML(profile?.services)}"
+        placeholder="Maling, snekring, flytting"
+      >
+
+
+      <label>
+        Om deg
+      </label>
+
+      <textarea
+        id="description"
+        rows="4"
+        placeholder="Fortell litt om deg..."
+      >${escapeHTML(profile?.description)}</textarea>
+
+
+      <button
+        class="btn primary"
+        type="submit"
+      >
+        💾 Lagre profil
+      </button>
+
+    </form>
+
+
+    <button
+      class="btn light"
+      style="margin-top:10px"
+      onclick="logout()"
+    >
+      Logg ut
+    </button>
+
+  `;
+
+
+  document
+    .getElementById("profileForm")
+    .onsubmit=function(event){
+
+      event.preventDefault();
+
+
+      const newProfile={
+
+        id:
+          currentUser.id,
+
+        role:
+          document.getElementById("role").value,
 
         name:
-          document
-            .getElementById("providerName")
-            .value
-            .trim(),
+          document.getElementById("name").value,
 
         company:
-          document
-            .getElementById("providerCompany")
-            .value
-            .trim(),
+          document.getElementById("company").value,
 
         location:
-          document
-            .getElementById("providerLocation")
-            .value
-            .trim(),
-
-        services:
-          document
-            .getElementById("providerServices")
-            .value
-            .trim(),
+          document.getElementById("location").value,
 
         phone:
-          document
-            .getElementById("providerPhone")
-            .value
-            .trim(),
+          document.getElementById("phone").value,
 
-        email:
-          document
-            .getElementById("providerEmail")
-            .value
-            .trim()
+        services:
+          document.getElementById("services").value,
+
+        description:
+          document.getElementById("description").value
 
       };
 
 
-      if (
-        !profile.name ||
-        !profile.company ||
-        !profile.email
-      ) {
-
-        alert(
-          "⚠️ Du må fylle inn navn, bedrift og e-post."
+      const index =
+        profiles.findIndex(
+          function(p){
+            return p.id===currentUser.id;
+          }
         );
 
-        return;
+
+      if(index>=0){
+
+        profiles[index]=newProfile;
+
+      }else{
+
+        profiles.push(newProfile);
 
       }
 
 
       localStorage.setItem(
-        "tilbudsaiProfile",
-        JSON.stringify(profile)
+        "tilbudsaiProfiles",
+        JSON.stringify(profiles)
       );
 
 
-      alert(
-        "✅ Tjenesteprofilen er lagret!"
-      );
+      closeModal();
 
+      alert("✅ Profilen er lagret!");
 
-      loadSavedProfile();
+    };
 
-    }
 
+  openModal();
 
-    /* =========================
-       LAGRE KUNDE
-    ========================= */
+}
 
-    function saveCustomerProfile() {
 
-      const profile = {
+/* =========================
+   LOGIN
+   ========================= */
 
-        type: "customer",
+function openLogin(message=""){
 
-        name:
-          document
-            .getElementById("buyerName")
-            .value
-            .trim(),
+  document.getElementById("modal").innerHTML=`
 
-        location:
-          document
-            .getElementById("buyerLocation")
-            .value
-            .trim(),
+    <button
+      class="close"
+      onclick="closeModal()"
+    >
+      ×
+    </button>
 
-        service:
-          document
-            .getElementById("buyerService")
-            .value
-            .trim(),
+    <h2>👤 TilbudsAI-konto</h2>
 
-        email:
-          document
-            .getElementById("buyerEmail")
-            .value
-            .trim()
+    <p class="muted">
+      ${escapeHTML(message)}
+    </p>
 
-      };
+    <label>
+      Navn
+    </label>
 
+    <input
+      id="loginName"
+      placeholder="Ditt navn"
+    >
 
-      if (
-        !profile.name ||
-        !profile.email
-      ) {
 
-        alert(
-          "⚠️ Du må fylle inn navn og e-post."
-        );
+    <label>
+      E-post
+    </label>
 
-        return;
+    <input
+      id="loginEmail"
+      type="email"
+      placeholder="din@email.no"
+    >
 
-      }
 
+    <button
+      class="btn primary"
+      onclick="createAccount()"
+    >
+      Opprett konto
+    </button>
 
-      localStorage.setItem(
-        "tilbudsaiProfile",
-        JSON.stringify(profile)
-      );
+  `;
 
 
-      alert(
-        "✅ Kundeprofilen er lagret!"
-      );
+  openModal();
 
+}
 
-      loadSavedProfile();
 
-    }
+function createAccount(){
 
+  const name =
+    document.getElementById("loginName")
+      .value.trim();
 
-    /* =========================
-       VIS LAGRET PROFIL
-    ========================= */
 
-    function loadSavedProfile() {
+  const email =
+    document.getElementById("loginEmail")
+      .value.trim();
 
-      const saved =
-        localStorage.getItem(
-          "tilbudsaiProfile"
-        );
 
+  if(!name || !email){
 
-      if (!saved) {
+    alert(
+      "Fyll inn navn og e-post."
+    );
 
-        document.getElementById(
-          "roleButtons"
-        ).style.display =
-          "grid";
+    return;
 
+  }
 
-        document.getElementById(
-          "providerForm"
-        ).style.display =
-          "none";
 
+  currentUser={
 
-        document.getElementById(
-          "customerForm"
-        ).style.display =
-          "none";
+    id:
+      "user_"+Date.now(),
 
+    name:
+      name,
 
-        document.getElementById(
-          "savedProfile"
-        ).style.display =
-          "none";
+    email:
+      email
 
+  };
 
-        return;
 
-      }
+  localStorage.setItem(
+    "tilbudsaiUser",
+    JSON.stringify(currentUser)
+  );
 
 
-      const profile =
-        JSON.parse(saved);
+  closeModal();
 
+  alert(
+    "✅ Konto opprettet!"
+  );
 
-      document.getElementById(
-        "roleButtons"
-      ).style.display =
-        "none";
+  showAccount();
 
+}
 
-      document.getElementById(
-        "providerForm"
-      ).style.display =
-        "none";
 
+function logout(){
 
-      document.getElementById(
-        "customerForm"
-      ).style.display =
-        "none";
+  currentUser=null;
 
+  localStorage.removeItem(
+    "tilbudsaiUser"
+  );
 
-      document.getElementById(
-        "savedProfile"
-      ).style.display =
-        "block";
+  closeModal();
 
+  showHome();
 
-      let html = "";
+}
 
 
-      if (
-        profile.type ===
-        "provider"
-      ) {
+/* =========================
+   START
+   ========================= */
 
-        html =
+showHome();
 
-          "<p>👤 <strong>Navn:</strong> " +
-          escapeHTML(profile.name) +
-          "</p>" +
-
-          "<p>🏢 <strong>Bedrift:</strong> " +
-          escapeHTML(profile.company) +
-          "</p>" +
-
-          "<p>📍 <strong>Sted:</strong> " +
-          escapeHTML(profile.location) +
-          "</p>" +
-
-          "<p>🔨 <strong>Tjenester:</strong> " +
-          escapeHTML(profile.services) +
-          "</p>" +
-
-          "<p>📞 <strong>Telefon:</strong> " +
-          escapeHTML(profile.phone) +
-          "</p>" +
-
-          "<p>📧 <strong>E-post:</strong> " +
-          escapeHTML(profile.email) +
-          "</p>";
-
-      } else {
-
-        html =
-
-          "<p>👤 <strong>Navn:</strong> " +
-          escapeHTML(profile.name) +
-          "</p>" +
-
-          "<p>📍 <strong>Sted:</strong> " +
-          escapeHTML(profile.location) +
-          "</p>" +
-
-          "<p>🏠 <strong>Trenger:</strong> " +
-          escapeHTML(profile.service) +
-          "</p>" +
-
-          "<p>📧 <strong>E-post:</strong> " +
-          escapeHTML(profile.email) +
-          "</p>";
-
-      }
-
-
-      document.getElementById(
-        "savedProfileContent"
-      ).innerHTML =
-        html;
-
-    }
-
-
-    /* =========================
-       ENDRE PROFIL
-    ========================= */
-
-    function changeProfile() {
-
-      const saved =
-        localStorage.getItem(
-          "tilbudsaiProfile"
-        );
-
-
-      if (!saved) {
-        return;
-      }
-
-
-      const profile =
-        JSON.parse(saved);
-
-
-      document.getElementById(
-        "savedProfile"
-      ).style.display =
-        "none";
-
-
-      if (
-        profile.type ===
-        "provider"
-      ) {
-
-        document.getElementById(
-          "roleButtons"
-        ).style.display =
-          "none";
-
-
-        document.getElementById(
-          "providerForm"
-        ).style.display =
-          "block";
-
-
-        document.getElementById(
-          "providerName"
-        ).value =
-          profile.name || "";
-
-
-        document.getElementById(
-          "providerCompany"
-        ).value =
-          profile.company || "";
-
-
-        document.getElementById(
-          "providerLocation"
-        ).value =
-          profile.location || "";
-
-
-        document.getElementById(
-          "providerServices"
-        ).value =
-          profile.services || "";
-
-
-        document.getElementById(
-          "providerPhone"
-        ).value =
-          profile.phone || "";
-
-
-        document.getElementById(
-          "providerEmail"
-        ).value =
-          profile.email || "";
-
-      } else {
-
-        document.getElementById(
-          "roleButtons"
-        ).style.display =
-          "none";
-
-
-        document.getElementById(
-          "customerForm"
-        ).style.display =
-          "block";
-
-
-        document.getElementById(
-          "buyerName"
-        ).value =
-          profile.name || "";
-
-
-        document.getElementById(
-          "buyerLocation"
-        ).value =
-          profile.location || "";
-
-
-        document.getElementById(
-          "buyerService"
-        ).value =
-          profile.service || "";
-
-
-        document.getElementById(
-          "buyerEmail"
-        ).value =
-          profile.email || "";
-
-      }
-
-    }
-
-
-    /* =========================
-       SLETT PROFIL
-    ========================= */
-
-    function deleteProfile() {
-
-      const confirmDelete =
-        confirm(
-          "Er du sikker på at du vil slette profilen?"
-        );
-
-
-      if (!confirmDelete) {
-        return;
-      }
-
-
-      localStorage.removeItem(
-        "tilbudsaiProfile"
-      );
-
-
-      alert(
-        "Profilen er slettet."
-      );
-
-
-      loadSavedProfile();
-
-    }
-
-
-    /* =========================
-       SIKKER TEKST
-    ========================= */
-
-    function escapeHTML(value) {
-
-      return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-    }
-
-  </script>
+</script>
 
 </body>
 </html>
