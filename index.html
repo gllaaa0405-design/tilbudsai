@@ -333,8 +333,7 @@
 
   <header>
     <div class="logo">🔨 Tilbuds<span>AI</span></div>
-    <div class="profile">Min konto</div>
-  </header>
+    <div class="profile" onclick="openAccount()">Min konto</div>
 
   <main class="container">
 
@@ -791,7 +790,14 @@ async function sendQuote() {
       window.print();
 
     }
-
+function openAccount() {
+  alert(
+    "Velkommen til TilbudsAI!\n\n" +
+    "🔨 Jeg tilbyr tjenester\n" +
+    "🏠 Jeg trenger en tjeneste"
+  );
+}
+    
   </script>
 
 </body>
