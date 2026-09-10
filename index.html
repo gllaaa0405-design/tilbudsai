@@ -1526,60 +1526,166 @@
        PDF
     ========================= */
 
-    function openJobForm() {
+function openJobForm() {
 
-  const title = prompt(
-    "Hva trenger du hjelp med?"
-  );
+  const oldForm = document.getElementById("jobFormCard");
 
-  if (!title) {
-    return;
+  if (oldForm) {
+    oldForm.remove();
   }
 
-  const location = prompt(
-    "Hvor skal jobben gjøres?"
-  );
+  const card = document.createElement("div");
 
-  if (!location) {
-    return;
+  card.id = "jobFormCard";
+  card.className = "card";
+
+  card.innerHTML = `
+    <h2>📢 Legg ut en jobb</h2>
+
+    <p class="subtitle">
+      Fortell hva du trenger hjelp med.
+    </p>
+
+    <form id="realJobForm">
+
+      <label>Hva trenger du hjelp med?</label>
+      <input
+        type="text"
+        id="jobTitle"
+        placeholder="F.eks. Maling av stue"
+        required
+      >
+
+      <label>Hvor skal jobben gjøres?</label>
+      <input
+        type="text"
+        id="jobLocation"
+        placeholder="F.eks. Oslo"
+        required
+      >
+
+      <label>Beskriv jobben</label>
+      <textarea
+        id="jobDescription"
+        placeholder="Beskriv hva som skal gjøres..."
+        rows="4"
+        required
+      ></textarea>
+
+      <label>Når ønsker du jobben utført?</label>
+      <input
+        type="text"
+        id="jobDate"
+        placeholder="F.eks. Så snart som mulig"
+        required
+      >
+
+      <button
+        type="submit"
+        class="generate"
+      >
+        📢 Legg ut jobben
+      </button>
+
+    </form>
+  `;
+
+  const main = document.querySelector("main");
+
+  main.insertBefore(card, main.firstElementChild);
+
+  document.getElementById("realJobForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const job = {
+      title: document.getElementById("jobTitle").value,
+      location: document.getElementById("jobLocation").value,
+      description: document.getElementById("jobDescription").value,
+      date: document.getElementById("jobDate").value
+    };
+
+    localStorage.setItem(
+      "tilbudsaiJob",
+      JSON.stringify(job)
+    );
+
+    showJob(job);
+  });
+}
+
+
+function showJob(job) {
+
+  const form = document.getElementById("jobFormCard");
+
+  if (form) {
+    form.remove();
   }
 
-  const description = prompt(
-    "Beskriv jobben kort:"
-  );
+  const card = document.createElement("div");
 
-  if (!description) {
-    return;
-  }
+  card.id = "postedJob";
+  card.className = "card";
 
-  const date = prompt(
-    "Når ønsker du at jobben skal gjøres?"
-  );
+  card.innerHTML = `
+    <h2>📢 Jobben din</h2>
 
-  if (!date) {
-    return;
-  }
+    <p><strong>🏠 ${escapeHTML(job.title)}</strong></p>
 
-  const job = {
-    title: title,
-    location: location,
-    description: description,
-    date: date
-  };
+    <p>📍 ${escapeHTML(job.location)}</p>
 
-  localStorage.setItem(
-    "tilbudsaiJob",
-    JSON.stringify(job)
-  );
+    <p>📝 ${escapeHTML(job.description)}</p>
 
-  alert(
-    "✅ Jobben er lagt ut!\n\n" +
-    "🏠 " + title + "\n" +
-    "📍 " + location + "\n" +
-    "📝 " + description + "\n" +
-    "📅 " + date
+    <p>📅 ${escapeHTML(job.date)}</p>
+
+    <p style="color:#22c55e;font-weight:bold;">
+      ✅ Jobben er lagt ut
+    </p>
+
+    <button
+      class="generate"
+      onclick="openJobForm()"
+    >
+      ✏️ Endre jobb
+    </button>
+  `;
+
+  const main = document.querySelector("main");
+
+  main.insertBefore(
+    card,
+    main.firstElementChild
   );
 }
+
+
+function loadPostedJob() {
+
+  const savedJob = localStorage.getItem("tilbudsaiJob");
+
+  if (!savedJob) {
+    return;
+  }
+
+  try {
+
+    const job = JSON.parse(savedJob);
+
+    showJob(job);
+
+  } catch (error) {
+
+    console.error("Kunne ikke laste jobb:", error);
+
+  }
+}
+
+
+window.addEventListener(
+  "DOMContentLoaded",
+  loadPostedJob
+);
     
     function savePDF() {
 
