@@ -527,11 +527,155 @@ Bruk AI
 
 function aiInfo(){
 
-alert(
-"🤖 AI-funksjonen din er klar i backend.\n\n" +
-"Neste steg er å koble den inn i " +
-"jobb- og tilbudsskjemaene."
-);
+  modal.innerHTML = `
+
+    <button
+      class="close"
+      onclick="closeM()"
+    >
+      ×
+    </button>
+
+    <h2>🤖 TilbudsAI</h2>
+
+    <p class="muted">
+      Skriv kort hva jobben gjelder, så skriver AI-en
+      en profesjonell tekst for deg.
+    </p>
+
+    <label>
+      Hva skal gjøres?
+    </label>
+
+    <textarea
+      id="aiJob"
+      rows="6"
+      placeholder="F.eks. Male stue og gang, ca. 55 m², to strøk."
+    ></textarea>
+
+    <button
+      class="btn primary"
+      id="aiButton"
+      onclick="runAI()"
+    >
+      🤖 Lag tekst med AI
+    </button>
+
+    <div
+      id="aiResult"
+      style="
+        margin-top:20px;
+        padding:16px;
+        background:#f4f7fb;
+        border-radius:12px;
+        display:none;
+        white-space:pre-line;
+      "
+    ></div>
+
+  `;
+
+  openM();
+
+}
+
+
+async function runAI(){
+
+  const text =
+    document
+      .getElementById("aiJob")
+      .value
+      .trim();
+
+  if(!text){
+
+    alert("Skriv først hva jobben gjelder.");
+
+    return;
+
+  }
+
+  const button =
+    document.getElementById("aiButton");
+
+  const result =
+    document.getElementById("aiResult");
+
+  button.disabled = true;
+  button.innerText = "🤖 AI skriver...";
+
+  try{
+
+    const response =
+      await fetch("/api/generate",{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+          customer:"Kunden",
+          jobType:"Tjeneste",
+          job:text,
+          hours:0,
+          hourly:0,
+          materials:0
+
+        })
+
+      });
+
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error || "AI-feil"
+      );
+
+    }
+
+
+    result.style.display = "block";
+
+    result.innerHTML = `
+
+      <strong>🤖 AI-generert tekst</strong>
+
+      <br><br>
+
+      ${escapeHTML(
+        data.text ||
+        "Ingen tekst mottatt."
+      )}
+
+    `;
+
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Kunne ikke koble til AI akkurat nå. Prøv igjen."
+    );
+
+
+  }finally{
+
+    button.disabled = false;
+
+    button.innerText =
+      "🤖 Lag tekst med AI";
+
+  }
 
 }
 
