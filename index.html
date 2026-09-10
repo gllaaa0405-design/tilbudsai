@@ -793,6 +793,7 @@ async function sendQuote() {
      } 
 
 function openAccount() {
+
   const choice = prompt(
     "Velkommen til TilbudsAI!\n\n" +
     "🔨 Skriv 1 hvis du tilbyr tjenester\n" +
@@ -800,16 +801,48 @@ function openAccount() {
   );
 
   if (choice === "1") {
+
+    const name = prompt("Hva heter du?");
+    const company = prompt("Hva heter bedriften din?");
+    const location = prompt("Hvor holder du til?");
+    const services = prompt("Hvilke tjenester tilbyr du?");
+    const phone = prompt("Telefonnummer:");
+    const email = prompt("E-postadresse:");
+
+    if (!name || !company || !email) {
+      alert("⚠️ Du må fylle inn navn, bedrift og e-post.");
+      return;
+    }
+
     alert(
-      "🔨 Tjenesteleverandør\n\n" +
-      "Her skal du kunne opprette en profil og motta jobbforespørsler."
+      "✅ Profil klar!\n\n" +
+      "👤 " + name + "\n" +
+      "🏢 " + company + "\n" +
+      "📍 " + location + "\n" +
+      "🔨 " + services + "\n" +
+      "📞 " + phone + "\n" +
+      "📧 " + email
     );
   }
 
   if (choice === "2") {
+
+    const name = prompt("Hva heter du?");
+    const location = prompt("Hvor bor du?");
+    const service = prompt("Hva slags tjeneste trenger du?");
+    const email = prompt("E-postadresse:");
+
+    if (!name || !email) {
+      alert("⚠️ Du må fylle inn navn og e-post.");
+      return;
+    }
+
     alert(
-      "🏠 Kunde\n\n" +
-      "Her skal du kunne finne tjenester og sende jobbforespørsler."
+      "✅ Kundeprofil klar!\n\n" +
+      "👤 " + name + "\n" +
+      "📍 " + location + "\n" +
+      "🏠 Trenger: " + service + "\n" +
+      "📧 " + email
     );
   }
 }
