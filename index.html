@@ -6,46 +6,44 @@
 <title>TilbudsAI – tjenester og jobber</title>
 
 <style>
-*{box-sizing:border-box}
-
 :root{
-  --blue:#09264a;
-  --green:#19b974;
+  --navy:#09264a;
+  --green:#18bd73;
   --bg:#f4f7fb;
-  --text:#102a43;
-  --muted:#66788f;
-  --border:#e1e8f0;
-  --white:#fff;
+  --muted:#61738d;
+  --border:#e2e9f1;
 }
+
+*{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:system-ui,-apple-system,Segoe UI,sans-serif;
   background:var(--bg);
-  color:var(--text);
+  color:#102a43;
 }
 
 header{
-  background:white;
+  background:#fff;
   border-bottom:1px solid var(--border);
   position:sticky;
   top:0;
-  z-index:20;
+  z-index:10;
 }
 
 .nav{
   max-width:1150px;
   margin:auto;
-  padding:14px 18px;
+  padding:15px 18px;
   display:flex;
+  gap:10px;
   align-items:center;
-  gap:8px;
 }
 
 .logo{
-  font-size:25px;
+  font-size:24px;
   font-weight:900;
-  color:var(--blue);
+  color:var(--navy);
   margin-right:auto;
 }
 
@@ -53,67 +51,72 @@ header{
   color:var(--green);
 }
 
-.nav button{
+nav{
+  display:flex;
+  gap:4px;
+}
+
+nav button,
+.profile{
   border:0;
   background:transparent;
-  color:var(--blue);
   padding:10px 12px;
-  border-radius:10px;
   font-weight:800;
   cursor:pointer;
+  color:var(--navy);
 }
 
-.nav button:hover{
-  background:#eef3f8;
-}
-
-.accountBtn{
-  background:var(--blue)!important;
-  color:white!important;
+.profile{
+  background:var(--navy);
+  color:white;
+  border-radius:11px;
 }
 
 main{
   max-width:1150px;
   margin:auto;
-  padding:25px 18px 80px;
+  padding:25px 18px 70px;
+}
+
+.hero,
+.card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 8px 28px #102a4310;
 }
 
 .hero{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:45px 30px;
+  padding:42px 30px;
   margin-bottom:20px;
-  box-shadow:0 8px 30px #09264a12;
 }
 
 .hero h1{
+  font-size:clamp(34px,6vw,58px);
+  line-height:1.02;
   margin:0;
-  color:var(--blue);
-  font-size:clamp(36px,6vw,60px);
-  line-height:1;
+  color:var(--navy);
 }
 
 .hero p{
-  color:var(--muted);
   font-size:19px;
-  line-height:1.6;
+  color:var(--muted);
   max-width:720px;
 }
 
 .actions{
   display:flex;
-  flex-wrap:wrap;
   gap:10px;
+  flex-wrap:wrap;
 }
 
 .btn{
   border:0;
   border-radius:11px;
-  padding:13px 18px;
+  padding:12px 17px;
   font-weight:850;
   cursor:pointer;
-  font-size:15px;
 }
 
 .primary{
@@ -122,33 +125,19 @@ main{
 }
 
 .dark{
-  background:var(--blue);
+  background:var(--navy);
   color:white;
 }
 
-.light{
+.soft{
   background:#edf2f7;
-  color:var(--blue);
+  color:var(--navy);
 }
 
 .grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:16px;
-}
-
-.card{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:22px;
-  box-shadow:0 5px 20px #09264a0a;
-}
-
-.card h2,
-.card h3{
-  margin-top:0;
-  color:var(--blue);
 }
 
 .muted{
@@ -159,140 +148,112 @@ input,
 textarea,
 select{
   width:100%;
-  border:1px solid #d3dde8;
-  border-radius:10px;
   padding:13px;
+  border:1px solid #d6e0ea;
+  border-radius:10px;
   font:inherit;
   margin:6px 0 14px;
-  background:white;
-}
-
-textarea{
-  resize:vertical;
 }
 
 label{
-  display:block;
   font-weight:800;
-  font-size:14px;
-  margin-top:5px;
-}
-
-.formGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.full{
-  grid-column:1/-1;
+  font-size:13px;
 }
 
 .tag{
   display:inline-block;
   padding:5px 9px;
-  background:#e5f8ef;
-  color:#087c4b;
-  border-radius:20px;
+  border-radius:99px;
+  background:#e9f8f1;
+  color:#087b4c;
   margin:3px;
   font-size:12px;
   font-weight:800;
 }
 
-.jobCard{
+.job{
   display:flex;
   flex-direction:column;
   gap:8px;
 }
 
 .meta{
+  font-size:13px;
   color:var(--muted);
-  font-size:14px;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:30px;
 }
 
 .overlay{
   display:none;
   position:fixed;
   inset:0;
-  background:#071b32aa;
-  z-index:100;
+  background:#061a2aaa;
+  z-index:30;
   padding:18px;
   overflow:auto;
 }
 
 .modal{
-  max-width:700px;
-  margin:30px auto;
+  max-width:720px;
   background:white;
   border-radius:20px;
-  padding:25px;
+  padding:24px;
+  margin:35px auto;
   position:relative;
 }
 
 .close{
   position:absolute;
-  right:14px;
+  right:15px;
   top:12px;
-  width:36px;
-  height:36px;
   border:0;
   border-radius:50%;
-  background:#edf2f7;
-  cursor:pointer;
+  width:36px;
+  height:36px;
   font-size:22px;
+  cursor:pointer;
 }
 
-.messageList{
-  max-height:350px;
+.formgrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+.messages{
+  max-height:360px;
   overflow:auto;
   border:1px solid var(--border);
   border-radius:12px;
   padding:10px;
-  margin-bottom:12px;
 }
 
-.message{
-  background:#edf2f7;
-  padding:10px 13px;
-  border-radius:13px;
+.bubble{
+  background:#eef3f8;
+  padding:10px 12px;
+  border-radius:12px;
   margin:7px;
-  max-width:80%;
+  max-width:82%;
 }
 
-.message.mine{
+.mine{
   margin-left:auto;
   background:#dff6eb;
 }
 
-.empty{
-  text-align:center;
-  color:var(--muted);
-  padding:35px;
-}
-
-.profileHeader{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
-.avatar{
-  width:55px;
-  height:55px;
-  border-radius:50%;
-  background:var(--blue);
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:25px;
-  font-weight:900;
-}
-
-@media(max-width:760px){
+@media(max-width:750px){
 
   .grid,
-  .formGrid{
+  .formgrid{
     grid-template-columns:1fr;
   }
 
@@ -300,12 +261,12 @@ label{
     grid-column:auto;
   }
 
-  .nav button:not(.accountBtn){
+  nav button{
     display:none;
   }
 
   .hero{
-    padding:32px 20px;
+    padding:30px 20px;
   }
 }
 </style>
@@ -317,32 +278,36 @@ label{
 
 <div class="nav">
 
-  <div class="logo">
-    🔨 Tilbuds<span>AI</span>
-  </div>
+<div class="logo">
+🔨 Tilbuds<span>AI</span>
+</div>
 
-  <button onclick="showHome()">
-    🏠 Forside
-  </button>
+<nav>
 
-  <button onclick="showJobs()">
-    📢 Jobber
-  </button>
+<button onclick="home()">
+🏠 Forside
+</button>
 
-  <button onclick="showProviders()">
-    👷 Tjenester
-  </button>
+<button onclick="jobs()">
+📢 Jobber
+</button>
 
-  <button onclick="showMessages()">
-    💬 Meldinger
-  </button>
+<button onclick="providers()">
+👷 Tjenester
+</button>
 
-  <button
-    class="accountBtn"
-    onclick="showAccount()"
-  >
-    👤 Min konto
-  </button>
+<button onclick="messages()">
+💬 Meldinger
+</button>
+
+</nav>
+
+<button
+class="profile"
+onclick="account()"
+>
+👤 Min profil
+</button>
 
 </div>
 
@@ -353,14 +318,14 @@ label{
 
 
 <div
-  class="overlay"
-  id="overlay"
-  onclick="outsideClose(event)"
+class="overlay"
+id="ov"
+onclick="if(event.target===this)closeM()"
 >
 
 <div
-  class="modal"
-  id="modal"
+class="modal"
+id="modal"
 ></div>
 
 </div>
@@ -369,1478 +334,1529 @@ label{
 <script>
 
 /* =========================
-   DEMO DATABASE
-   ========================= */
+   LOKAL DEMO-DATABASE
+========================= */
 
-let currentUser =
-  JSON.parse(
-    localStorage.getItem("tilbudsaiUser") || "null"
-  );
+let user =
+JSON.parse(
+localStorage.getItem("tilbudsaiUser") || "null"
+);
 
 let profiles =
-  JSON.parse(
-    localStorage.getItem("tilbudsaiProfiles") || "[]"
-  );
+JSON.parse(
+localStorage.getItem("tilbudsaiProfiles") || "[]"
+);
 
-let jobs =
-  JSON.parse(
-    localStorage.getItem("tilbudsaiJobs") || "[]"
-  );
+let jobsData =
+JSON.parse(
+localStorage.getItem("tilbudsaiJobs") || "[]"
+);
 
-let conversations =
-  JSON.parse(
-    localStorage.getItem("tilbudsaiMessages") || "[]"
-  );
+let messagesData =
+JSON.parse(
+localStorage.getItem("tilbudsaiMessages") || "[]"
+);
 
 
 /* =========================
-   HJELPEFUNKSJONER
-   ========================= */
+   APP
+========================= */
 
-function escapeHTML(value){
+const app =
+document.getElementById("app");
 
-  return String(value || "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+const ov =
+document.getElementById("ov");
 
-}
+const modal =
+document.getElementById("modal");
 
 
-function openModal(){
+/* =========================
+   SIKKER TEKST
+========================= */
 
-  document
-    .getElementById("overlay")
-    .style.display="block";
+function e(value){
 
-}
-
-
-function closeModal(){
-
-  document
-    .getElementById("overlay")
-    .style.display="none";
+return String(value ?? "")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
 
-function outsideClose(event){
+/* =========================
+   MODAL
+========================= */
 
-  if(event.target.id==="overlay"){
-    closeModal();
-  }
+function openM(){
+
+ov.style.display="block";
+
+}
+
+function closeM(){
+
+ov.style.display="none";
+
+modal.innerHTML="";
 
 }
 
 
 /* =========================
    FORSIDE
-   ========================= */
+========================= */
 
-function showHome(){
+function home(){
 
-  document.getElementById("app").innerHTML=`
+app.innerHTML=`
 
-    <section class="hero">
+<section class="hero">
 
-      <h1>
-        Finn riktig hjelp.
-        <br>
-        Eller finn nye kunder.
-      </h1>
+<h1>
+Finn riktig hjelp.
+<br>
+Eller finn nye kunder.
+</h1>
 
-      <p>
-        TilbudsAI gjør det enkelt å koble
-        mennesker som trenger tjenester med
-        dyktige tjenesteleverandører.
-      </p>
+<p>
+TilbudsAI kobler mennesker som trenger
+tjenester med dyktige tjenesteleverandører.
+</p>
 
-      <div class="actions">
+<div class="actions">
 
-        <button
-          class="btn primary"
-          onclick="openJobForm()"
-        >
-          📢 Jeg trenger en tjeneste
-        </button>
+<button
+class="btn primary"
+onclick="jobForm()"
+>
+📢 Jeg trenger en tjeneste
+</button>
 
-        <button
-          class="btn dark"
-          onclick="showProviders()"
-        >
-          👷 Jeg tilbyr tjenester
-        </button>
+<button
+class="btn dark"
+onclick="providers()"
+>
+👷 Jeg tilbyr tjenester
+</button>
 
-      </div>
+<button
+class="btn soft"
+onclick="jobs()"
+>
+🔎 Finn jobber
+</button>
 
-    </section>
+</div>
 
-
-    <div class="grid">
-
-      <div class="card">
-
-        <h2>🏠 Trenger du hjelp?</h2>
-
-        <p class="muted">
-          Legg ut en jobb og la relevante
-          tjenesteleverandører kontakte deg.
-        </p>
-
-        <button
-          class="btn primary"
-          onclick="openJobForm()"
-        >
-          Legg ut jobb
-        </button>
-
-      </div>
+</section>
 
 
-      <div class="card">
+<div class="grid">
 
-        <h2>👷 Tilbyr du tjenester?</h2>
+<div class="card">
 
-        <p class="muted">
-          Lag en profil, vis hva du kan
-          og finn nye kunder.
-        </p>
+<h2>🏠 Kunde</h2>
 
-        <button
-          class="btn dark"
-          onclick="showAccount()"
-        >
-          Lag leverandørprofil
-        </button>
+<p>
+Legg ut en jobb, motta henvendelser
+og velg riktig leverandør.
+</p>
 
-      </div>
+<button
+class="btn primary"
+onclick="jobForm()"
+>
+Legg ut jobb
+</button>
+
+</div>
 
 
-      <div class="card">
+<div class="card">
 
-        <h2>🤖 AI-hjelp</h2>
+<h2>👷 Tjenesteleverandør</h2>
 
-        <p class="muted">
-          AI hjelper deg med å skrive
-          gode annonser og profesjonelle tilbud.
-        </p>
+<p>
+Lag profil, vis tjenestene dine
+og finn nye kunder.
+</p>
 
-        <button
-          class="btn light"
-          onclick="alert('AI-funksjonen kobles inn her.')"
-        >
-          Bruk AI
-        </button>
+<button
+class="btn dark"
+onclick="account()"
+>
+Lag profil
+</button>
 
-      </div>
+</div>
 
-    </div>
 
-  `;
+<div class="card">
+
+<h2>🤖 TilbudsAI</h2>
+
+<p>
+AI skal hjelpe med annonser,
+tilbud og profesjonell tekst.
+</p>
+
+<button
+class="btn soft"
+onclick="aiInfo()"
+>
+Bruk AI
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   AI
+========================= */
+
+function aiInfo(){
+
+alert(
+"🤖 AI-funksjonen din er klar i backend.\n\n" +
+"Neste steg er å koble den inn i " +
+"jobb- og tilbudsskjemaene."
+);
 
 }
 
 
 /* =========================
    JOBBER
-   ========================= */
+========================= */
 
-function showJobs(){
+function jobs(){
 
-  document.getElementById("app").innerHTML=`
+app.innerHTML=`
 
-    <div class="actions"
-         style="justify-content:space-between">
+<div class="actions"
+style="justify-content:space-between">
 
-      <div>
+<div>
 
-        <h2>📢 Jobber</h2>
+<h2>
+📢 Jobber
+</h2>
 
-        <p class="muted">
-          Finn jobber som trenger hjelp.
-        </p>
+<p class="muted">
+Finn jobber som kunder har lagt ut.
+</p>
 
-      </div>
+</div>
 
-      <button
-        class="btn primary"
-        onclick="openJobForm()"
-      >
-        📢 Legg ut jobb
-      </button>
+<button
+class="btn primary"
+onclick="jobForm()"
+>
+📢 Legg ut jobb
+</button>
 
-    </div>
-
-
-    <div class="card">
-
-      <input
-        id="jobSearch"
-        placeholder="Søk etter maling, flytting, Oslo..."
-        oninput="renderJobs()"
-      >
-
-    </div>
+</div>
 
 
-    <div
-      id="jobList"
-      class="grid"
-      style="margin-top:16px"
-    ></div>
+<div class="card">
 
-  `;
+<input
+id="search"
+placeholder="Søk etter maling, rørlegger, Oslo..."
+oninput="renderJobs()"
+>
 
-  renderJobs();
+</div>
+
+
+<div
+id="list"
+class="grid"
+style="margin-top:16px"
+></div>
+
+`;
+
+renderJobs();
 
 }
 
 
 function renderJobs(){
 
-  const list =
-    document.getElementById("jobList");
+const list =
+document.getElementById("list");
 
-  if(!list) return;
-
-
-  const search =
-    (
-      document.getElementById("jobSearch")?.value || ""
-    ).toLowerCase();
+if(!list)return;
 
 
-  const filtered =
-    jobs.filter(function(job){
-
-      return (
-        job.title +
-        " " +
-        job.location +
-        " " +
-        job.category +
-        " " +
-        job.description
-      )
-      .toLowerCase()
-      .includes(search);
-
-    });
+const q =
+(
+document.getElementById("search")?.value || ""
+).toLowerCase();
 
 
-  if(filtered.length===0){
+const filtered =
+jobsData.filter(function(job){
 
-    list.innerHTML=`
+return (
 
-      <div class="card empty">
+job.title +
+" " +
+job.location +
+" " +
+job.category +
+" " +
+job.description
 
-        Ingen jobber funnet ennå.
+)
+.toLowerCase()
+.includes(q);
 
-      </div>
-
-    `;
-
-    return;
-
-  }
+});
 
 
-  list.innerHTML =
-    filtered.map(function(job){
+if(!filtered.length){
 
-      return `
+list.innerHTML=`
 
-        <article class="card jobCard">
+<div class="card empty">
 
-          <h3>
-            🏠 ${escapeHTML(job.title)}
-          </h3>
+Ingen jobber funnet ennå.
 
-          <div class="meta">
-            📍 ${escapeHTML(job.location)}
-            ·
-            📅 ${escapeHTML(job.date)}
-          </div>
+</div>
 
-          <div>
+`;
 
-            <span class="tag">
-              ${escapeHTML(job.category)}
-            </span>
+return;
 
-          </div>
+}
 
-          <p>
-            ${escapeHTML(job.description)}
-          </p>
 
-          <button
-            class="btn primary"
-            onclick="openJob('${job.id}')"
-          >
-            Se jobb
-          </button>
+list.innerHTML =
+filtered.map(function(job){
 
-        </article>
+return `
 
-      `;
+<article class="card job">
 
-    }).join("");
+<h3>
+🏠 ${e(job.title)}
+</h3>
+
+<div class="meta">
+
+📍 ${e(job.location)}
+
+·
+
+📅 ${e(job.date || "Fleksibelt")}
+
+</div>
+
+<span class="tag">
+${e(job.category || "Annet")}
+</span>
+
+<p>
+${e(job.description)}
+</p>
+
+<button
+class="btn primary"
+onclick="viewJob('${job.id}')"
+>
+Se jobb
+</button>
+
+</article>
+
+`;
+
+}).join("");
 
 }
 
 
 /* =========================
-   LEGG UT JOBB
-   ========================= */
+   JOBB-SKJEMA
+========================= */
 
-function openJobForm(){
+function jobForm(){
 
-  if(!currentUser){
+if(!user){
 
-    openLogin("For å legge ut en jobb må du opprette konto eller logge inn.");
+login();
 
-    return;
+return;
 
-  }
+}
 
 
-  document.getElementById("modal").innerHTML=`
+modal.innerHTML=`
 
-    <button
-      class="close"
-      onclick="closeModal()"
-    >
-      ×
-    </button>
+<button
+class="close"
+onclick="closeM()"
+>
+×
+</button>
 
-    <h2>📢 Legg ut en jobb</h2>
+<h2>
+📢 Legg ut en jobb
+</h2>
 
-    <p class="muted">
-      Beskriv hva du trenger hjelp med.
-    </p>
+<p class="muted">
+Beskriv hva du trenger hjelp med.
+</p>
 
 
-    <form id="jobForm">
+<form id="jobForm">
 
-      <div class="formGrid">
+<div class="formgrid">
 
-        <div>
 
-          <label>
-            Hva trenger du hjelp med?
-          </label>
+<div>
 
-          <input
-            id="jobTitle"
-            placeholder="F.eks. Male stue og gang"
-            required
-          >
+<label>
+Hva trenger du hjelp med?
+</label>
 
-        </div>
+<input
+id="jobTitle"
+placeholder="F.eks. Male stue og gang"
+required
+>
 
+</div>
 
-        <div>
 
-          <label>
-            Hvor?
-          </label>
+<div>
 
-          <input
-            id="jobLocation"
-            placeholder="F.eks. Oslo"
-            required
-          >
+<label>
+Hvor?
+</label>
 
-        </div>
+<input
+id="jobLocation"
+placeholder="F.eks. Oslo"
+required
+>
 
+</div>
 
-        <div>
 
-          <label>
-            Kategori
-          </label>
+<div>
 
-          <select id="jobCategory">
+<label>
+Kategori
+</label>
 
-            <option>Maling</option>
-            <option>Elektriker</option>
-            <option>Rørlegger</option>
-            <option>Renhold</option>
-            <option>Flytting</option>
-            <option>Bygg</option>
-            <option>Hage</option>
-            <option>Annet</option>
+<select id="jobCategory">
 
-          </select>
+<option>Maling</option>
+<option>Elektriker</option>
+<option>Rørlegger</option>
+<option>Renhold</option>
+<option>Flytting</option>
+<option>Bygg</option>
+<option>Hage</option>
+<option>Annet</option>
 
-        </div>
+</select>
 
+</div>
 
-        <div>
 
-          <label>
-            Når?
-          </label>
+<div>
 
-          <input
-            id="jobDate"
-            placeholder="F.eks. Så snart som mulig"
-          >
+<label>
+Når?
+</label>
 
-        </div>
+<input
+id="jobDate"
+placeholder="Så snart som mulig"
+>
 
+</div>
 
-        <div class="full">
 
-          <label>
-            Beskriv jobben
-          </label>
+<div class="full">
 
-          <textarea
-            id="jobDescription"
-            rows="5"
-            placeholder="Fortell hva som skal gjøres..."
-            required
-          ></textarea>
+<label>
+Beskriv jobben
+</label>
 
-        </div>
+<textarea
+id="jobDescription"
+rows="5"
+placeholder="Hva skal gjøres?"
+required
+></textarea>
 
-      </div>
+</div>
 
 
-      <button
-        class="btn primary"
-        type="submit"
-      >
-        📢 Publiser jobb
-      </button>
+</div>
 
-    </form>
 
-  `;
+<button
+class="btn primary"
+type="submit"
+>
+📢 Publiser jobb
+</button>
 
+</form>
 
-  document
-    .getElementById("jobForm")
-    .onsubmit=function(event){
+`;
 
-      event.preventDefault();
 
+document
+.getElementById("jobForm")
+.onsubmit=function(event){
 
-      const job={
+event.preventDefault();
 
-        id:
-          Date.now().toString(),
 
-        owner:
-          currentUser.id,
+const job={
 
-        title:
-          document.getElementById("jobTitle").value,
+id:
+Date.now().toString(),
 
-        location:
-          document.getElementById("jobLocation").value,
+owner:
+user.id,
 
-        category:
-          document.getElementById("jobCategory").value,
+title:
+document.getElementById("jobTitle").value,
 
-        date:
-          document.getElementById("jobDate").value,
+location:
+document.getElementById("jobLocation").value,
 
-        description:
-          document.getElementById("jobDescription").value,
+category:
+document.getElementById("jobCategory").value,
 
-        created:
-          new Date().toISOString()
+date:
+document.getElementById("jobDate").value,
 
-      };
+description:
+document.getElementById("jobDescription").value,
 
+created:
+new Date().toISOString()
 
-      jobs.unshift(job);
+};
 
 
-      localStorage.setItem(
-        "tilbudsaiJobs",
-        JSON.stringify(jobs)
-      );
+jobsData.unshift(job);
 
 
-      closeModal();
+localStorage.setItem(
+"tilbudsaiJobs",
+JSON.stringify(jobsData)
+);
 
-      showJobs();
 
-    };
+closeM();
 
+jobs();
 
-  openModal();
+};
+
+openM();
 
 }
 
 
 /* =========================
-   SE JOBB
-   ========================= */
+   VIS JOBB
+========================= */
 
-function openJob(id){
+function viewJob(id){
 
-  const job =
-    jobs.find(
-      function(x){
-        return x.id===id;
-      }
-    );
+const job =
+jobsData.find(
+function(x){
+return x.id===id;
+}
+);
 
-
-  if(!job) return;
-
-
-  const owner =
-    profiles.find(
-      function(p){
-        return p.id===job.owner;
-      }
-    );
+if(!job)return;
 
 
-  document.getElementById("modal").innerHTML=`
+modal.innerHTML=`
 
-    <button
-      class="close"
-      onclick="closeModal()"
-    >
-      ×
-    </button>
+<button
+class="close"
+onclick="closeM()"
+>
+×
+</button>
 
-    <h2>
-      🏠 ${escapeHTML(job.title)}
-    </h2>
+<h2>
+🏠 ${e(job.title)}
+</h2>
 
-    <p class="meta">
-      📍 ${escapeHTML(job.location)}
-      ·
-      📅 ${escapeHTML(job.date)}
-    </p>
+<p class="muted">
+📍 ${e(job.location)}
+·
+📅 ${e(job.date || "Fleksibelt")}
+</p>
 
-    <span class="tag">
-      ${escapeHTML(job.category)}
-    </span>
+<span class="tag">
+${e(job.category)}
+</span>
 
-    <p>
-      ${escapeHTML(job.description)}
-    </p>
+<p>
+${e(job.description)}
+</p>
 
-    <hr>
+<hr>
 
-    <h3>
-      💬 Interessert i jobben?
-    </h3>
+<h3>
+💬 Interessert i jobben?
+</h3>
 
-    ${
-      currentUser
+${
+user
 
-      ?
+?
 
-      `
+`
 
-      <textarea
-        id="interestMessage"
-        rows="4"
-        placeholder="Hei! Jeg er interessert i å hjelpe med denne jobben..."
-      ></textarea>
+<textarea
+id="interestMessage"
+rows="4"
+placeholder="Hei! Jeg er interessert i å hjelpe med denne jobben..."
+></textarea>
 
-      <button
-        class="btn primary"
-        onclick="sendMessage(
-          '${job.owner}',
-          '${job.id}'
-        )"
-      >
-        📨 Send melding til kunden
-      </button>
+<button
+class="btn primary"
+onclick="sendMessage(
+'${job.owner}',
+'${job.id}'
+)"
+>
+📨 Kontakt kunden
+</button>
 
-      `
+`
 
-      :
+:
 
-      `
+`
 
-      <button
-        class="btn primary"
-        onclick="openLogin('Logg inn for å kontakte kunden.')"
-      >
-        🔐 Logg inn for å kontakte kunden
-      </button>
+<button
+class="btn primary"
+onclick="login()"
+>
+🔐 Logg inn for å kontakte kunden
+</button>
 
-      `
+`
 
-    }
+}
 
-  `;
+`;
 
-
-  openModal();
+openM();
 
 }
 
 
 /* =========================
-   TJENESTELEVERANDØRER
-   ========================= */
+   TJENESTER
+========================= */
 
-function showProviders(){
+function providers(){
 
-  document.getElementById("app").innerHTML=`
+app.innerHTML=`
 
-    <h2>👷 Finn tjenesteleverandører</h2>
+<h2>
+👷 Finn tjenesteleverandører
+</h2>
 
-    <p class="muted">
-      Finn folk og bedrifter som tilbyr tjenester.
-    </p>
-
-
-    <div class="card">
-
-      <input
-        id="providerSearch"
-        placeholder="Søk etter maler, elektriker, Oslo..."
-        oninput="renderProviders()"
-      >
-
-    </div>
+<p class="muted">
+Finn folk og bedrifter som tilbyr tjenester.
+</p>
 
 
-    <div
-      id="providerList"
-      class="grid"
-      style="margin-top:16px"
-    ></div>
+<div class="card">
 
-  `;
+<input
+id="providerSearch"
+placeholder="Søk etter maler, elektriker, Oslo..."
+oninput="renderProviders()"
+>
 
-  renderProviders();
+</div>
+
+
+<div
+id="providerList"
+class="grid"
+style="margin-top:16px"
+></div>
+
+`;
+
+renderProviders();
 
 }
 
 
 function renderProviders(){
 
-  const list =
-    document.getElementById("providerList");
+const list =
+document.getElementById("providerList");
 
-  if(!list) return;
-
-
-  const search =
-    (
-      document.getElementById("providerSearch")?.value || ""
-    ).toLowerCase();
+if(!list)return;
 
 
-  const providersList =
-    profiles.filter(function(profile){
-
-      return (
-        profile.role==="provider" &&
-        (
-          profile.name +
-          " " +
-          profile.company +
-          " " +
-          profile.location +
-          " " +
-          profile.services +
-          " " +
-          profile.description
-        )
-        .toLowerCase()
-        .includes(search)
-      );
-
-    });
+const q =
+(
+document.getElementById("providerSearch")?.value || ""
+).toLowerCase();
 
 
-  if(!providersList.length){
+const providerList =
+profiles.filter(function(p){
 
-    list.innerHTML=`
+return (
 
-      <div class="card empty">
+p.role==="provider"
 
-        Ingen tjenesteleverandører funnet ennå.
+&&
 
-      </div>
+(
+p.name +
+" " +
+p.company +
+" " +
+p.location +
+" " +
+p.services +
+" " +
+p.description
+)
 
-    `;
+.toLowerCase()
+.includes(q)
 
-    return;
+);
 
-  }
+});
 
 
-  list.innerHTML =
-    providersList.map(function(profile){
+if(!providerList.length){
 
-      return `
+list.innerHTML=`
 
-        <article class="card">
+<div class="card empty">
 
-          <div class="profileHeader">
+Ingen tjenesteleverandører funnet ennå.
 
-            <div class="avatar">
-              👷
-            </div>
+<br><br>
 
-            <div>
+Opprett leverandørprofil for å bli synlig her.
 
-              <h3 style="margin-bottom:3px">
-                ${escapeHTML(profile.name)}
-              </h3>
+</div>
 
-              <div class="muted">
-                ${escapeHTML(profile.company || "")}
-              </div>
+`;
 
-            </div>
+return;
 
-          </div>
+}
 
-          <p>
-            📍 ${escapeHTML(profile.location)}
-          </p>
 
-          <p>
-            ${escapeHTML(profile.description || "Tilbyr tjenester på TilbudsAI.")}
-          </p>
+list.innerHTML =
+providerList.map(function(p){
 
-          <div>
+return `
 
-            ${
-              (profile.services || "")
-              .split(",")
-              .filter(Boolean)
-              .map(function(service){
+<article class="card">
 
-                return `
-                  <span class="tag">
-                    ${escapeHTML(service.trim())}
-                  </span>
-                `;
+<h3>
+👷 ${e(p.name)}
+</h3>
 
-              })
-              .join("")
+<strong>
+${e(p.company || "Tjenesteleverandør")}
+</strong>
 
-            }
+<p>
+📍 ${e(p.location)}
+</p>
 
-          </div>
+<p>
+${e(
+p.description ||
+"Tilbyr tjenester via TilbudsAI."
+)}
+</p>
 
-          <button
-            class="btn primary"
-            onclick="contactProvider('${profile.id}')"
-          >
-            💬 Kontakt
-          </button>
+<div>
 
-        </article>
+${
+(p.services || "")
+.split(",")
+.filter(Boolean)
+.map(function(service){
 
-      `;
+return `
 
-    }).join("");
+<span class="tag">
+${e(service.trim())}
+</span>
+
+`;
+
+})
+.join("")
+}
+
+</div>
+
+<button
+class="btn primary"
+onclick="contactProvider('${p.id}')"
+>
+💬 Kontakt
+</button>
+
+</article>
+
+`;
+
+}).join("");
 
 }
 
 
 /* =========================
-   KONTAKT LEVERANDØR
-   ========================= */
+   KONTAKT
+========================= */
 
 function contactProvider(id){
 
-  if(!currentUser){
+if(!user){
 
-    openLogin("Logg inn for å kontakte en tjenesteleverandør.");
+login();
 
-    return;
+return;
 
-  }
-
-
-  document.getElementById("modal").innerHTML=`
-
-    <button
-      class="close"
-      onclick="closeModal()"
-    >
-      ×
-    </button>
-
-    <h2>💬 Send melding</h2>
-
-    <textarea
-      id="providerMessage"
-      rows="5"
-      placeholder="Skriv meldingen din..."
-    ></textarea>
-
-    <button
-      class="btn primary"
-      onclick="sendMessage('${id}',null)"
-    >
-      📨 Send melding
-    </button>
-
-  `;
+}
 
 
-  openModal();
+modal.innerHTML=`
+
+<button
+class="close"
+onclick="closeM()"
+>
+×
+</button>
+
+<h2>
+💬 Send melding
+</h2>
+
+<textarea
+id="providerMessage"
+rows="5"
+placeholder="Skriv meldingen din..."
+></textarea>
+
+<button
+class="btn primary"
+onclick="sendMessage('${id}',null)"
+>
+📨 Send melding
+</button>
+
+`;
+
+openM();
 
 }
 
 
 /* =========================
    MELDINGER
-   ========================= */
+========================= */
 
 function sendMessage(receiver,jobId){
 
-  const field =
-    document.getElementById(
-      jobId
-        ? "interestMessage"
-        : "providerMessage"
-    );
+const field =
+jobId
+
+?
+
+document.getElementById(
+"interestMessage"
+)
+
+:
+
+document.getElementById(
+"providerMessage"
+);
 
 
-  const text =
-    field?.value.trim();
+const text =
+field?.value.trim();
 
 
-  if(!text){
+if(!text){
 
-    alert("Skriv en melding først.");
+alert(
+"Skriv en melding først."
+);
 
-    return;
-
-  }
-
-
-  conversations.push({
-
-    id:
-      Date.now().toString(),
-
-    sender:
-      currentUser.id,
-
-    receiver:
-      receiver,
-
-    job:
-      jobId,
-
-    text:
-      text,
-
-    time:
-      new Date().toISOString()
-
-  });
-
-
-  localStorage.setItem(
-    "tilbudsaiMessages",
-    JSON.stringify(conversations)
-  );
-
-
-  closeModal();
-
-  alert("✅ Meldingen er sendt!");
-
-  showMessages();
+return;
 
 }
 
 
-function showMessages(){
+messagesData.push({
 
-  if(!currentUser){
+id:
+Date.now().toString(),
 
-    openLogin("Logg inn for å se meldingene dine.");
+sender:
+user.id,
 
-    return;
+receiver:
+receiver,
 
-  }
+job:
+jobId,
 
+text:
+text,
 
-  document.getElementById("app").innerHTML=`
+time:
+new Date().toISOString()
 
-    <h2>💬 Meldinger</h2>
-
-    <p class="muted">
-      Her kan kunder og tjenesteleverandører kommunisere.
-    </p>
-
-    <div
-      id="messageArea"
-    ></div>
-
-  `;
+});
 
 
-  renderMessages();
+localStorage.setItem(
+"tilbudsaiMessages",
+JSON.stringify(messagesData)
+);
+
+
+closeM();
+
+alert(
+"✅ Meldingen er sendt!"
+);
+
+messages();
+
+}
+
+
+function messages(){
+
+if(!user){
+
+login();
+
+return;
+
+}
+
+
+app.innerHTML=`
+
+<h2>
+💬 Meldinger
+</h2>
+
+<p class="muted">
+Kommuniser med kunder og tjenesteleverandører.
+</p>
+
+<div id="messageArea"></div>
+
+`;
+
+renderMessages();
 
 }
 
 
 function renderMessages(){
 
-  const area =
-    document.getElementById("messageArea");
+const area =
+document.getElementById("messageArea");
 
-  if(!area) return;
-
-
-  const mine =
-    conversations.filter(function(message){
-
-      return (
-        message.sender===currentUser.id ||
-        message.receiver===currentUser.id
-      );
-
-    });
+if(!area)return;
 
 
-  if(!mine.length){
+const mine =
+messagesData.filter(function(message){
 
-    area.innerHTML=`
+return (
 
-      <div class="card empty">
+message.sender===user.id ||
 
-        Ingen meldinger ennå.
+message.receiver===user.id
 
-        <br><br>
+);
 
-        Finn en jobb eller tjenesteleverandør
-        for å starte en samtale.
-
-      </div>
-
-    `;
-
-    return;
-
-  }
+});
 
 
-  const grouped={};
+if(!mine.length){
+
+area.innerHTML=`
+
+<div class="card empty">
+
+Ingen meldinger ennå.
+
+<br><br>
+
+Finn en jobb eller tjenesteleverandør
+for å starte en samtale.
+
+</div>
+
+`;
+
+return;
+
+}
 
 
-  mine.forEach(function(message){
-
-    const other =
-      message.sender===currentUser.id
-        ? message.receiver
-        : message.sender;
+const grouped={};
 
 
-    if(!grouped[other]){
-      grouped[other]=[];
-    }
+mine.forEach(function(message){
+
+const other =
+message.sender===user.id
+? message.receiver
+: message.sender;
 
 
-    grouped[other].push(message);
-
-  });
-
-
-  area.innerHTML =
-    Object.keys(grouped)
-    .map(function(other){
-
-      const otherProfile =
-        profiles.find(
-          function(p){
-            return p.id===other;
-          }
-        );
+if(!grouped[other]){
+grouped[other]=[];
+}
 
 
-      return `
+grouped[other].push(message);
 
-        <div class="card"
-             style="margin-bottom:16px">
-
-          <h3>
-            💬 ${
-              escapeHTML(
-                otherProfile?.name ||
-                "Bruker"
-              )
-            }
-          </h3>
-
-          <div class="messageList">
-
-            ${
-              grouped[other]
-              .map(function(message){
-
-                return `
-
-                  <div class="
-                    message
-                    ${
-                      message.sender===currentUser.id
-                        ? "mine"
-                        : ""
-                    }
-                  ">
-
-                    ${escapeHTML(message.text)}
-
-                  </div>
-
-                `;
-
-              })
-              .join("")
-
-            }
-
-          </div>
+});
 
 
-          <textarea
-            id="reply_${other}"
-            rows="2"
-            placeholder="Skriv et svar..."
-          ></textarea>
+area.innerHTML =
+Object.keys(grouped)
+.map(function(other){
+
+const otherProfile =
+profiles.find(
+function(p){
+return p.id===other;
+}
+);
 
 
-          <button
-            class="btn primary"
-            onclick="reply('${other}')"
-          >
-            Send
-          </button>
+return `
 
-        </div>
+<div
+class="card"
+style="margin-bottom:16px"
+>
 
-      `;
+<h3>
+💬 ${
+e(
+otherProfile?.name ||
+"Bruker"
+)
+}
+</h3>
 
-    })
-    .join("");
+
+<div class="messages">
+
+${
+grouped[other]
+.map(function(message){
+
+return `
+
+<div
+class="
+bubble
+${
+message.sender===user.id
+? "mine"
+: ""
+}
+"
+>
+
+${e(message.text)}
+
+</div>
+
+`;
+
+})
+.join("")
+}
+
+</div>
+
+
+<textarea
+id="reply_${other}"
+rows="2"
+placeholder="Skriv et svar..."
+></textarea>
+
+
+<button
+class="btn primary"
+onclick="reply('${other}')"
+>
+Send
+</button>
+
+</div>
+
+`;
+
+})
+.join("");
 
 }
 
 
 function reply(receiver){
 
-  const field =
-    document.getElementById(
-      "reply_"+receiver
-    );
+const field =
+document.getElementById(
+"reply_"+receiver
+);
 
 
-  const text =
-    field?.value.trim();
+const text =
+field?.value.trim();
 
 
-  if(!text){
-    return;
-  }
+if(!text)return;
 
 
-  conversations.push({
+messagesData.push({
 
-    id:
-      Date.now().toString(),
+id:
+Date.now().toString(),
 
-    sender:
-      currentUser.id,
+sender:
+user.id,
 
-    receiver:
-      receiver,
+receiver:
+receiver,
 
-    job:
-      null,
+job:null,
 
-    text:
-      text,
+text:
+text,
 
-    time:
-      new Date().toISOString()
+time:
+new Date().toISOString()
 
-  });
-
-
-  localStorage.setItem(
-    "tilbudsaiMessages",
-    JSON.stringify(conversations)
-  );
+});
 
 
-  showMessages();
+localStorage.setItem(
+"tilbudsaiMessages",
+JSON.stringify(messagesData)
+);
+
+
+messages();
 
 }
 
 
 /* =========================
-   KONTO
-   ========================= */
+   PROFIL
+========================= */
 
-function showAccount(){
+function account(){
 
-  if(!currentUser){
+if(!user){
 
-    openLogin(
-      "Opprett konto eller logg inn for å bruke TilbudsAI."
-    );
+login();
 
-    return;
+return;
 
-  }
+}
 
 
-  const profile =
-    profiles.find(
-      function(p){
-        return p.id===currentUser.id;
-      }
-    );
+const p =
+profiles.find(
+function(x){
+return x.id===user.id;
+}
+) || {};
 
 
-  document.getElementById("modal").innerHTML=`
+modal.innerHTML=`
 
-    <button
-      class="close"
-      onclick="closeModal()"
-    >
-      ×
-    </button>
+<button
+class="close"
+onclick="closeM()"
+>
+×
+</button>
 
-    <h2>👤 Min profil</h2>
+<h2>
+👤 Min profil
+</h2>
 
-    <form id="profileForm">
 
-      <label>
-        Jeg er
-      </label>
+<form id="profileForm">
 
-      <select id="role">
 
-        <option
-          value="customer"
-          ${profile?.role==="customer"?"selected":""}
-        >
-          🏠 Kunde
-        </option>
+<label>
+Jeg er
+</label>
 
-        <option
-          value="provider"
-          ${profile?.role==="provider"?"selected":""}
-        >
-          👷 Tjenesteleverandør
-        </option>
+<select id="role">
 
-      </select>
+<option
+value="customer"
+${p.role==="customer"?"selected":""}
+>
+🏠 Kunde
+</option>
 
+<option
+value="provider"
+${p.role==="provider"?"selected":""}
+>
+👷 Tjenesteleverandør
+</option>
 
-      <label>
-        Navn
-      </label>
+</select>
 
-      <input
-        id="name"
-        value="${escapeHTML(profile?.name)}"
-        required
-      >
 
+<label>
+Navn
+</label>
 
-      <label>
-        Firma
-      </label>
+<input
+id="name"
+value="${e(p.name)}"
+required
+>
 
-      <input
-        id="company"
-        value="${escapeHTML(profile?.company)}"
-        placeholder="Firmanavn hvis du har"
-      >
 
+<label>
+Firma
+</label>
 
-      <label>
-        Sted
-      </label>
+<input
+id="company"
+value="${e(p.company)}"
+placeholder="Firmanavn"
+>
 
-      <input
-        id="location"
-        value="${escapeHTML(profile?.location)}"
-        placeholder="Oslo"
-      >
 
+<label>
+Sted
+</label>
 
-      <label>
-        Telefon
-      </label>
+<input
+id="location"
+value="${e(p.location)}"
+placeholder="Oslo"
+>
 
-      <input
-        id="phone"
-        value="${escapeHTML(profile?.phone)}"
-        placeholder="Telefonnummer"
-      >
 
+<label>
+Telefon
+</label>
 
-      <label>
-        Hvilke tjenester tilbyr du?
-      </label>
+<input
+id="phone"
+value="${e(p.phone)}"
+placeholder="Telefonnummer"
+>
 
-      <input
-        id="services"
-        value="${escapeHTML(profile?.services)}"
-        placeholder="Maling, snekring, flytting"
-      >
 
+<label>
+Tjenester
+</label>
 
-      <label>
-        Om deg
-      </label>
+<input
+id="services"
+value="${e(p.services)}"
+placeholder="Maling, snekring, flytting"
+>
 
-      <textarea
-        id="description"
-        rows="4"
-        placeholder="Fortell litt om deg..."
-      >${escapeHTML(profile?.description)}</textarea>
 
+<label>
+Om deg
+</label>
 
-      <button
-        class="btn primary"
-        type="submit"
-      >
-        💾 Lagre profil
-      </button>
+<textarea
+id="description"
+rows="4"
+placeholder="Fortell litt om deg..."
+>${e(p.description)}</textarea>
 
-    </form>
 
+<button
+class="btn primary"
+type="submit"
+>
+💾 Lagre profil
+</button>
 
-    <button
-      class="btn light"
-      style="margin-top:10px"
-      onclick="logout()"
-    >
-      Logg ut
-    </button>
+</form>
 
-  `;
 
+<button
+class="btn soft"
+style="margin-top:10px"
+onclick="logout()"
+>
+Logg ut
+</button>
 
-  document
-    .getElementById("profileForm")
-    .onsubmit=function(event){
+`;
 
-      event.preventDefault();
 
+document
+.getElementById("profileForm")
+.onsubmit=function(event){
 
-      const newProfile={
+event.preventDefault();
 
-        id:
-          currentUser.id,
 
-        role:
-          document.getElementById("role").value,
+const newProfile={
 
-        name:
-          document.getElementById("name").value,
+id:
+user.id,
 
-        company:
-          document.getElementById("company").value,
+role:
+document.getElementById("role").value,
 
-        location:
-          document.getElementById("location").value,
+name:
+document.getElementById("name").value,
 
-        phone:
-          document.getElementById("phone").value,
+company:
+document.getElementById("company").value,
 
-        services:
-          document.getElementById("services").value,
+location:
+document.getElementById("location").value,
 
-        description:
-          document.getElementById("description").value
+phone:
+document.getElementById("phone").value,
 
-      };
+services:
+document.getElementById("services").value,
 
+description:
+document.getElementById("description").value
 
-      const index =
-        profiles.findIndex(
-          function(p){
-            return p.id===currentUser.id;
-          }
-        );
+};
 
 
-      if(index>=0){
+const index =
+profiles.findIndex(
+function(p){
+return p.id===user.id;
+}
+);
 
-        profiles[index]=newProfile;
 
-      }else{
+if(index>=0){
 
-        profiles.push(newProfile);
+profiles[index]=newProfile;
 
-      }
+}else{
 
+profiles.push(newProfile);
 
-      localStorage.setItem(
-        "tilbudsaiProfiles",
-        JSON.stringify(profiles)
-      );
+}
 
 
-      closeModal();
+localStorage.setItem(
+"tilbudsaiProfiles",
+JSON.stringify(profiles)
+);
 
-      alert("✅ Profilen er lagret!");
 
-    };
+closeM();
 
+alert(
+"✅ Profilen er lagret!"
+);
 
-  openModal();
+};
+
+
+openM();
 
 }
 
 
 /* =========================
-   LOGIN
-   ========================= */
+   LOGIN / KONTO
+========================= */
 
-function openLogin(message=""){
+function login(){
 
-  document.getElementById("modal").innerHTML=`
+modal.innerHTML=`
 
-    <button
-      class="close"
-      onclick="closeModal()"
-    >
-      ×
-    </button>
+<button
+class="close"
+onclick="closeM()"
+>
+×
+</button>
 
-    <h2>👤 TilbudsAI-konto</h2>
+<h2>
+👤 Velkommen til TilbudsAI
+</h2>
 
-    <p class="muted">
-      ${escapeHTML(message)}
-    </p>
-
-    <label>
-      Navn
-    </label>
-
-    <input
-      id="loginName"
-      placeholder="Ditt navn"
-    >
+<p class="muted">
+Opprett en enkel konto for å legge ut jobber,
+lage profil og kontakte andre.
+</p>
 
 
-    <label>
-      E-post
-    </label>
+<label>
+Navn
+</label>
 
-    <input
-      id="loginEmail"
-      type="email"
-      placeholder="din@email.no"
-    >
-
-
-    <button
-      class="btn primary"
-      onclick="createAccount()"
-    >
-      Opprett konto
-    </button>
-
-  `;
+<input
+id="loginName"
+placeholder="Ditt navn"
+>
 
 
-  openModal();
+<label>
+E-post
+</label>
+
+<input
+id="loginEmail"
+type="email"
+placeholder="din@email.no"
+>
+
+
+<button
+class="btn primary"
+onclick="createAccount()"
+>
+Opprett konto
+</button>
+
+`;
+
+openM();
 
 }
 
 
 function createAccount(){
 
-  const name =
-    document.getElementById("loginName")
-      .value.trim();
+const name =
+document.getElementById("loginName")
+.value.trim();
 
 
-  const email =
-    document.getElementById("loginEmail")
-      .value.trim();
+const email =
+document.getElementById("loginEmail")
+.value.trim();
 
 
-  if(!name || !email){
+if(!name || !email){
 
-    alert(
-      "Fyll inn navn og e-post."
-    );
+alert(
+"Fyll inn navn og e-post."
+);
 
-    return;
+return;
 
-  }
-
-
-  currentUser={
-
-    id:
-      "user_"+Date.now(),
-
-    name:
-      name,
-
-    email:
-      email
-
-  };
+}
 
 
-  localStorage.setItem(
-    "tilbudsaiUser",
-    JSON.stringify(currentUser)
-  );
+user={
+
+id:
+"user_"+Date.now(),
+
+name:
+name,
+
+email:
+email
+
+};
 
 
-  closeModal();
+localStorage.setItem(
+"tilbudsaiUser",
+JSON.stringify(user)
+);
 
-  alert(
-    "✅ Konto opprettet!"
-  );
 
-  showAccount();
+closeM();
+
+alert(
+"✅ Konto opprettet!"
+);
+
+account();
 
 }
 
 
 function logout(){
 
-  currentUser=null;
+user=null;
 
-  localStorage.removeItem(
-    "tilbudsaiUser"
-  );
+localStorage.removeItem(
+"tilbudsaiUser"
+);
 
-  closeModal();
+closeM();
 
-  showHome();
+home();
 
 }
 
 
 /* =========================
    START
-   ========================= */
+========================= */
 
-showHome();
+home();
 
 </script>
 
