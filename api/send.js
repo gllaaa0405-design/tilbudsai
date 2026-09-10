@@ -36,7 +36,7 @@ export default async function handler(request, response) {
         },
 
         body: JSON.stringify({
-          from: "TilbudsAI <onboarding@resend.dev>",
+          from: "TilbudsAI <tilbud@tilbudsai.no>",
           to: [customerEmail],
           subject: `Tilbud fra TilbudsAI – ${jobType || "jobb"}`,
 
