@@ -795,16 +795,22 @@ async function sendQuote() {
 function openAccount() {
   const choice = prompt(
     "Velkommen til TilbudsAI!\n\n" +
-    "Skriv 1 hvis du tilbyr tjenester 🔨\n" +
-    "Skriv 2 hvis du trenger en tjeneste 🏠"
+    "🔨 Skriv 1 hvis du tilbyr tjenester\n" +
+    "🏠 Skriv 2 hvis du trenger en tjeneste"
   );
 
   if (choice === "1") {
-    alert("🔨 Du har valgt: Jeg tilbyr tjenester");
+    alert(
+      "🔨 Tjenesteleverandør\n\n" +
+      "Her skal du kunne opprette en profil og motta jobbforespørsler."
+    );
   }
 
   if (choice === "2") {
-    alert("🏠 Du har valgt: Jeg trenger en tjeneste");
+    alert(
+      "🏠 Kunde\n\n" +
+      "Her skal du kunne finne tjenester og sende jobbforespørsler."
+    );
   }
 }
   </script>
