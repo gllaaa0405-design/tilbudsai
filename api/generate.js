@@ -15,13 +15,18 @@ export default async function handler(request, response) {
       hours,
       hourly,
       materials
-    } = request.body;
+    } = request.body || {};
 
+    if (!process.env.OPENAI_API_KEY) {
+      return response.status(500).json({
+        error: "OPENAI_API_KEY mangler i Vercel"
+      });
+    }
 
     const prompt = `
 Du er TilbudsAI, en profesjonell tilbudsassistent for norske håndverkere.
 
-Lag en kort, profesjonell og hyggelig tilbudstekst basert på informasjonen under.
+Lag en kort, profesjonell og hyggelig tilbudstekst på norsk.
 
 Kunde: ${customer || "Kunden"}
 Type jobb: ${jobType || "Annet"}
@@ -34,72 +39,71 @@ Skriv teksten med disse tre delene:
 
 1. Beskrivelse av arbeidet
 2. Hva tilbudet inkluderer
-3. En kort og profesjonell avslutning til kunden
+3. Kort profesjonell avslutning
 
 VIKTIG:
-- Ikke skriv noen priser.
+- Ikke skriv priser.
 - Ikke skriv totalsum.
 - Ikke skriv MVA.
-- Ikke beregn eller gjenta timepris.
-- Ikke finn på ekstra arbeid eller materialer.
-- Prisene vises separat i tilbudet.
+- Ikke skriv timepris.
+- Ikke finn på arbeid eller materialer.
+- Svar kun med selve tilbudsteksten.
 - Svar på norsk.
 `;
-
 
     const openaiResponse = await fetch(
       "https://api.openai.com/v1/responses",
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
         },
-
         body: JSON.stringify({
-model: "gpt-5.6-luna",
+          model: "gpt-5.6-luna",
           input: prompt
         })
       }
     );
 
-
     const data = await openaiResponse.json();
-
 
     if (!openaiResponse.ok) {
 
-      console.error(data);
+      console.error("OpenAI error:", data);
 
       return response.status(500).json({
-        error: "OpenAI request failed"
+        error:
+          data?.error?.message ||
+          "OpenAI request failed"
       });
-
     }
-
 
     const text =
       data.output
         ?.flatMap(item => item.content || [])
         ?.filter(item => item.type === "output_text")
         ?.map(item => item.text)
-        ?.join("\n") || "";
+        ?.join("\n")
+        ?.trim() || "";
 
+    if (!text) {
+      return response.status(500).json({
+        error: "AI returnerte ingen tekst"
+      });
+    }
 
     return response.status(200).json({
       text
     });
 
-
   } catch (error) {
 
-    console.error(error);
+    console.error("Server error:", error);
 
     return response.status(500).json({
-      error: "Server error"
+      error: error.message || "Server error"
     });
 
   }
-
 }
