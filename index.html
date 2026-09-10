@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>TilbudsAI</title>
 
   <style>
@@ -40,13 +41,17 @@
       background: #ffffff22;
       padding: 9px 15px;
       border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .profile:hover {
+      background: #ffffff33;
     }
 
     .container {
       max-width: 1000px;
       margin: 35px auto;
       padding: 0 20px;
-      cursor: pointer;
     }
 
     .welcome {
@@ -148,6 +153,12 @@
       font-size: 25px;
     }
 
+    .quote-meta {
+      margin-top: 12px;
+      color: #667085;
+      line-height: 1.7;
+    }
+
     .section {
       margin-bottom: 20px;
     }
@@ -223,12 +234,144 @@
       color: #667085;
     }
 
+    /* KONTOVINDU */
+
+    .account-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 35, 64, 0.55);
+      z-index: 1000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .account-box {
+      width: 100%;
+      max-width: 650px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      position: relative;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    }
+
+    .account-close {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      border: none;
+      background: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #667085;
+    }
+
+    .account-title {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .account-subtitle {
+      color: #667085;
+      margin-bottom: 25px;
+    }
+
+    .role-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .role-button {
+      border: 2px solid #eef2f6;
+      background: white;
+      padding: 22px 15px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .role-button:hover {
+      border-color: #20bd72;
+      background: #f5fff9;
+    }
+
+    .account-form {
+      display: none;
+    }
+
+    .account-form h3 {
+      margin-bottom: 20px;
+    }
+
+    .save-profile {
+      width: 100%;
+      border: none;
+      background: #20bd72;
+      color: white;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .save-profile:hover {
+      opacity: 0.9;
+    }
+
+    .saved-profile {
+      display: none;
+      background: #f5f7fa;
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .saved-profile h3 {
+      margin-bottom: 15px;
+    }
+
+    .saved-profile p {
+      margin-bottom: 8px;
+    }
+
+    .change-profile {
+      margin-top: 15px;
+      border: none;
+      background: #0d2340;
+      color: white;
+      padding: 11px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .logout-profile {
+      margin-top: 10px;
+      margin-left: 8px;
+      border: none;
+      background: #eef2f6;
+      color: #10233f;
+      padding: 11px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
     @media (max-width: 700px) {
       .grid {
         grid-template-columns: 1fr;
       }
 
       .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .role-buttons {
         grid-template-columns: 1fr;
       }
 
@@ -247,6 +390,11 @@
       .welcome h1 {
         font-size: 27px;
       }
+
+      .account-box {
+        margin: 10px auto;
+        padding: 22px;
+      }
     }
 
     @media print {
@@ -255,7 +403,9 @@
       .form-card,
       .recent,
       .actions,
-      .success {
+      .success,
+      .account-overlay,
+      #customerEmail {
         display: none !important;
       }
 
@@ -278,141 +428,164 @@
         display: block !important;
       }
     }
-    @media print {
-  body {
-    background: white !important;
-    padding: 0 !important;
-  }
-
-  .container {
-    max-width: 100% !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-
-  button,
-  input,
-  select,
-  textarea,
-  .form-section {
-    display: none !important;
-  }
-
-  .quote-section {
-    display: block !important;
-    box-shadow: none !important;
-    border: none !important;
-    padding: 0 !important;
-  }
-
-  .quote-section h2 {
-    font-size: 28px !important;
-    margin-bottom: 25px !important;
-  }
-
-  .quote-section p {
-    line-height: 1.6 !important;
-  }
-
-  .price-row {
-    font-size: 16px !important;
-  }
-
-  .total {
-    font-size: 22px !important;
-    font-weight: bold !important;
-  }
-
-  #success {
-    display: none !important;
-  }
-}
   </style>
 </head>
 
 <body>
 
+  <!-- HEADER -->
+
   <header>
     <div class="logo">🔨 Tilbuds<span>AI</span></div>
-    <div class="profile" onclick="openAccount()">Min konto</div>
+
+    <div
+      class="profile"
+      onclick="openAccount()"
+    >
+      Min konto
+    </div>
   </header>
-  
+
+
+  <!-- HOVEDINNHOLD -->
+
   <main class="container">
 
     <div class="welcome">
       <h1>Lag profesjonelle tilbud på sekunder</h1>
-      <p>Fyll inn jobben – TilbudsAI skriver tilbudet for deg.</p>
+      <p>
+        Fyll inn jobben – TilbudsAI skriver tilbudet for deg.
+      </p>
     </div>
+
+
+    <!-- NYTT TILBUD -->
 
     <div class="card form-card">
 
       <h2>Nytt tilbud</h2>
+
       <p class="subtitle">
         Skriv inn informasjonen om kunden og jobben.
       </p>
 
       <div class="field">
-        <label for="customer">Kundenavn</label>
+
+        <label for="customer">
+          Kundenavn
+        </label>
+
         <input
           id="customer"
           type="text"
           placeholder="F.eks. Ola Hansen"
         >
+
       </div>
 
+
       <div class="field">
-        <label for="jobType">Type jobb</label>
+
+        <label for="jobType">
+          Type jobb
+        </label>
+
         <select id="jobType">
-          <option>Malerarbeid</option>
-          <option>Snekkerarbeid</option>
-          <option>Elektrikerarbeid</option>
-          <option>Rørleggerarbeid</option>
-          <option>Gartnerarbeid</option>
-          <option>Annet</option>
+
+          <option>
+            Malerarbeid
+          </option>
+
+          <option>
+            Snekkerarbeid
+          </option>
+
+          <option>
+            Elektrikerarbeid
+          </option>
+
+          <option>
+            Rørleggerarbeid
+          </option>
+
+          <option>
+            Gartnerarbeid
+          </option>
+
+          <option>
+            Annet
+          </option>
+
         </select>
+
       </div>
 
+
       <div class="field">
-        <label for="job">Beskrivelse av jobben</label>
+
+        <label for="job">
+          Beskrivelse av jobben
+        </label>
+
         <textarea
           id="job"
           placeholder="F.eks. Male stue og gang, ca. 55 m², to strøk."
         ></textarea>
+
       </div>
+
 
       <div class="grid">
 
         <div class="field">
-          <label for="hours">Timer</label>
+
+          <label for="hours">
+            Timer
+          </label>
+
           <input
             id="hours"
             type="number"
             min="0"
             placeholder="12"
           >
+
         </div>
 
+
         <div class="field">
-          <label for="hourly">Timepris (kr)</label>
+
+          <label for="hourly">
+            Timepris (kr)
+          </label>
+
           <input
             id="hourly"
             type="number"
             min="0"
             placeholder="750"
           >
+
         </div>
 
+
         <div class="field">
-          <label for="materials">Materialer (kr)</label>
+
+          <label for="materials">
+            Materialer (kr)
+          </label>
+
           <input
             id="materials"
             type="number"
             min="0"
             placeholder="2500"
           >
+
         </div>
 
       </div>
+
 
       <button
         class="generate"
@@ -423,70 +596,173 @@
 
     </div>
 
-    <div class="card quote" id="result">
+
+    <!-- TILBUD -->
+
+    <div
+      class="card quote"
+      id="result"
+    >
 
       <div class="quote-header">
-        <h2>📄 Tilbud</h2>
+
+        <h2>
+          📄 Tilbud
+        </h2>
+
         <div class="quote-meta">
-  <strong>Tilbudsnummer:</strong> <span id="quoteNumber"></span><br>
-  <strong>Dato:</strong> <span id="quoteDate"></span>
-</div>
+
+          <strong>
+            Tilbudsnummer:
+          </strong>
+
+          <span id="quoteNumber"></span>
+
+          <br>
+
+          <strong>
+            Dato:
+          </strong>
+
+          <span id="quoteDate"></span>
+
+        </div>
+
       </div>
 
+
       <div class="section">
-        <strong>Kunde</strong>
+
+        <strong>
+          Kunde
+        </strong>
+
         <span id="quoteCustomer"></span>
+
       </div>
-<div class="section">
-  <strong>Kundens e-post</strong>
-  <input
-    type="email"
-    id="customerEmail"
-    placeholder="kundens@email.no"
-  >
-</div>
+
+
       <div class="section">
-        <strong>Type jobb</strong>
+
+        <strong>
+          Type jobb
+        </strong>
+
         <span id="quoteType"></span>
+
       </div>
 
+
       <div class="section">
-        <strong>Arbeidsbeskrivelse</strong>
+
+        <strong>
+          Arbeidsbeskrivelse
+        </strong>
+
         <span id="quoteJob"></span>
+
       </div>
 
+
       <div class="section">
-        <strong>Arbeid</strong>
-        <div class="price-row">
-          <span>Arbeid</span>
-          <span id="workPrice">0 kr</span>
-        </div>
+
+        <strong>
+          Kundens e-post
+        </strong>
+
+        <input
+          type="email"
+          id="customerEmail"
+          placeholder="kundens@email.no"
+        >
+
       </div>
 
+
       <div class="section">
-        <strong>Materialer</strong>
+
+        <strong>
+          Arbeid
+        </strong>
+
         <div class="price-row">
-          <span>Materialer</span>
-          <span id="materialPrice">0 kr</span>
+
+          <span>
+            Arbeid
+          </span>
+
+          <span id="workPrice">
+            0 kr
+          </span>
+
         </div>
+
       </div>
 
+
       <div class="section">
-        <div class="price-row">
-          <span>Sum eks. MVA</span>
-          <span id="beforeVat">0 kr</span>
-        </div>
+
+        <strong>
+          Materialer
+        </strong>
 
         <div class="price-row">
-          <span>MVA 25 %</span>
-          <span id="vat">0 kr</span>
+
+          <span>
+            Materialer
+          </span>
+
+          <span id="materialPrice">
+            0 kr
+          </span>
+
         </div>
+
+      </div>
+
+
+      <div class="section">
+
+        <div class="price-row">
+
+          <span>
+            Sum eks. MVA
+          </span>
+
+          <span id="beforeVat">
+            0 kr
+          </span>
+
+        </div>
+
+
+        <div class="price-row">
+
+          <span>
+            MVA 25 %
+          </span>
+
+          <span id="vat">
+            0 kr
+          </span>
+
+        </div>
+
 
         <div class="total">
-          <span>Total inkl. MVA</span>
-          <span id="total">0 kr</span>
+
+          <span>
+            Total inkl. MVA
+          </span>
+
+          <span id="total">
+            0 kr
+          </span>
+
         </div>
+
       </div>
+
 
       <div class="actions">
 
@@ -497,6 +773,7 @@
           📤 Send tilbud
         </button>
 
+
         <button
           class="action-button pdf"
           onclick="savePDF()"
@@ -506,77 +783,394 @@
 
       </div>
 
-      <div class="success" id="success">
+
+      <div
+        class="success"
+        id="success"
+      >
         ✅ Tilbudet er klart til å sendes!
       </div>
 
     </div>
 
+
+    <!-- SISTE TILBUD -->
+
     <div class="card recent">
 
-      <h2>Mine siste tilbud</h2>
-      <p class="subtitle">Dine siste tilbud vises her.</p>
+      <h2>
+        Mine siste tilbud
+      </h2>
+
+      <p class="subtitle">
+        Dine siste tilbud vises her.
+      </p>
 
       <div class="recent-item">
-        <span>Ingen tilbud ennå</span>
-        <span class="empty">–</span>
+
+        <span>
+          Ingen tilbud ennå
+        </span>
+
+        <span class="empty">
+          –
+        </span>
+
       </div>
 
     </div>
 
   </main>
 
+
+  <!-- KONTO -->
+
+  <div
+    class="account-overlay"
+    id="accountOverlay"
+    onclick="closeAccountOutside(event)"
+  >
+
+    <div class="account-box">
+
+      <button
+        class="account-close"
+        onclick="closeAccount()"
+      >
+        ×
+      </button>
+
+
+      <h2 class="account-title">
+        Min konto
+      </h2>
+
+      <p class="account-subtitle">
+        Velg hvordan du vil bruke TilbudsAI.
+      </p>
+
+
+      <!-- VALG AV ROLLE -->
+
+      <div
+        class="role-buttons"
+        id="roleButtons"
+      >
+
+        <button
+          class="role-button"
+          onclick="showProviderForm()"
+        >
+          🔨<br>
+          Jeg tilbyr tjenester
+        </button>
+
+
+        <button
+          class="role-button"
+          onclick="showCustomerForm()"
+        >
+          🏠<br>
+          Jeg trenger en tjeneste
+        </button>
+
+      </div>
+
+
+      <!-- TJENESTELEVERANDØR -->
+
+      <div
+        class="account-form"
+        id="providerForm"
+      >
+
+        <h3>
+          🔨 Tjenesteleverandør
+        </h3>
+
+
+        <div class="field">
+
+          <label for="providerName">
+            Navn
+          </label>
+
+          <input
+            id="providerName"
+            type="text"
+            placeholder="Ditt navn"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="providerCompany">
+            Bedrift
+          </label>
+
+          <input
+            id="providerCompany"
+            type="text"
+            placeholder="Bedriftsnavn"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="providerLocation">
+            Hvor holder du til?
+          </label>
+
+          <input
+            id="providerLocation"
+            type="text"
+            placeholder="F.eks. Oslo"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="providerServices">
+            Hvilke tjenester tilbyr du?
+          </label>
+
+          <textarea
+            id="providerServices"
+            placeholder="F.eks. maling, sparkling og tapetsering"
+          ></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="providerPhone">
+            Telefonnummer
+          </label>
+
+          <input
+            id="providerPhone"
+            type="tel"
+            placeholder="Telefonnummer"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="providerEmail">
+            E-post
+          </label>
+
+          <input
+            id="providerEmail"
+            type="email"
+            placeholder="din@email.no"
+          >
+
+        </div>
+
+
+        <button
+          class="save-profile"
+          onclick="saveProviderProfile()"
+        >
+          ✅ Lagre tjenesteprofil
+        </button>
+
+      </div>
+
+
+      <!-- KUNDE -->
+
+      <div
+        class="account-form"
+        id="customerForm"
+      >
+
+        <h3>
+          🏠 Kunde
+        </h3>
+
+
+        <div class="field">
+
+          <label for="buyerName">
+            Navn
+          </label>
+
+          <input
+            id="buyerName"
+            type="text"
+            placeholder="Ditt navn"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="buyerLocation">
+            Hvor bor du?
+          </label>
+
+          <input
+            id="buyerLocation"
+            type="text"
+            placeholder="F.eks. Oslo"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="buyerService">
+            Hva slags tjeneste trenger du?
+          </label>
+
+          <textarea
+            id="buyerService"
+            placeholder="F.eks. male stuen og gangen"
+          ></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="buyerEmail">
+            E-post
+          </label>
+
+          <input
+            id="buyerEmail"
+            type="email"
+            placeholder="din@email.no"
+          >
+
+        </div>
+
+
+        <button
+          class="save-profile"
+          onclick="saveCustomerProfile()"
+        >
+          ✅ Lagre kundeprofil
+        </button>
+
+      </div>
+
+
+      <!-- LAGRET PROFIL -->
+
+      <div
+        class="saved-profile"
+        id="savedProfile"
+      >
+
+        <h3>
+          Din profil
+        </h3>
+
+        <div id="savedProfileContent"></div>
+
+
+        <button
+          class="change-profile"
+          onclick="changeProfile()"
+        >
+          ✏️ Endre profil
+        </button>
+
+
+        <button
+          class="logout-profile"
+          onclick="deleteProfile()"
+        >
+          Slett profil
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
   <script>
 
+    /* =========================
+       PENGER
+    ========================= */
+
     function money(number) {
+
       return new Intl.NumberFormat("nb-NO", {
         style: "currency",
         currency: "NOK",
         maximumFractionDigits: 0
       }).format(number);
+
     }
 
+
+    /* =========================
+       LAG TILBUD
+    ========================= */
 
     async function generateQuote() {
 
       const customer =
         document.getElementById("customer").value.trim()
         || "Kunden";
-const quoteNumber =
-  "TA-" + Date.now().toString().slice(-6);
 
-const quoteDate =
-  new Date().toLocaleDateString("nb-NO");
 
-document.getElementById("quoteNumber").innerText =
-  quoteNumber;
-
-document.getElementById("quoteDate").innerText =
-  quoteDate;
       const jobType =
         document.getElementById("jobType").value;
+
 
       const job =
         document.getElementById("job").value.trim()
         || "Arbeidet utføres i henhold til avtale.";
 
+
       const hours =
-        Number(document.getElementById("hours").value) || 0;
+        Number(document.getElementById("hours").value)
+        || 0;
+
 
       const hourly =
-        Number(document.getElementById("hourly").value) || 0;
+        Number(document.getElementById("hourly").value)
+        || 0;
+
 
       const materials =
-        Number(document.getElementById("materials").value) || 0;
+        Number(document.getElementById("materials").value)
+        || 0;
 
 
-      const work = hours * hourly;
+      const work =
+        hours * hourly;
 
-      const beforeVat = work + materials;
 
-      const vat = beforeVat * 0.25;
+      const beforeVat =
+        work + materials;
 
-      const total = beforeVat + vat;
+
+      const vat =
+        beforeVat * 0.25;
+
+
+      const total =
+        beforeVat + vat;
 
 
       const button =
@@ -586,7 +1180,9 @@ document.getElementById("quoteDate").innerText =
       button.innerText =
         "🤖 Lager tilbud...";
 
-      button.disabled = true;
+
+      button.disabled =
+        true;
 
 
       try {
@@ -625,61 +1221,116 @@ document.getElementById("quoteDate").innerText =
         }
 
 
+        /* TILBUDSNUMMER */
+
+        const quoteNumber =
+          "TA-" +
+          Date.now()
+            .toString()
+            .slice(-6);
+
+
+        /* DATO */
+
+        const quoteDate =
+          new Date()
+            .toLocaleDateString("nb-NO");
+
+
+        document.getElementById(
+          "quoteNumber"
+        ).innerText =
+          quoteNumber;
+
+
+        document.getElementById(
+          "quoteDate"
+        ).innerText =
+          quoteDate;
+
+
+        /* KUNDE */
+
         document.getElementById(
           "quoteCustomer"
-        ).innerText = customer;
+        ).innerText =
+          customer;
 
+
+        /* JOBBTYPE */
 
         document.getElementById(
           "quoteType"
-        ).innerText = jobType;
+        ).innerText =
+          jobType;
 
+
+        /* BESKRIVELSE */
 
         const quoteJob =
-          document.getElementById("quoteJob");
+          document.getElementById(
+            "quoteJob"
+          );
+
 
         quoteJob.style.whiteSpace =
           "pre-line";
 
+
         quoteJob.innerText =
           job +
-          "\n\n🤖 AI-generert tilbudstekst:\n\n" +
-          (data.text || "Ingen AI-tekst mottatt.");
+          "\n\n" +
+          "🤖 AI-generert tilbudstekst:\n\n" +
+          (
+            data.text ||
+            "Ingen AI-tekst mottatt."
+          );
 
+
+        /* PRISER */
 
         document.getElementById(
           "workPrice"
-        ).innerText = money(work);
+        ).innerText =
+          money(work);
 
 
         document.getElementById(
           "materialPrice"
-        ).innerText = money(materials);
+        ).innerText =
+          money(materials);
 
 
         document.getElementById(
           "beforeVat"
-        ).innerText = money(beforeVat);
+        ).innerText =
+          money(beforeVat);
 
 
         document.getElementById(
           "vat"
-        ).innerText = money(vat);
+        ).innerText =
+          money(vat);
 
 
         document.getElementById(
           "total"
-        ).innerText = money(total);
+        ).innerText =
+          money(total);
 
+
+        /* VIS TILBUD */
 
         document.getElementById(
           "result"
-        ).style.display = "block";
+        ).style.display =
+          "block";
 
 
         document.getElementById(
           "success"
-        ).style.display = "none";
+        ).style.display =
+          "none";
 
 
         document.getElementById(
@@ -693,159 +1344,717 @@ document.getElementById("quoteDate").innerText =
 
         console.error(error);
 
+
         alert(
           "Kunne ikke koble til AI akkurat nå. Prøv igjen."
         );
-
 
       } finally {
 
         button.innerText =
           "🤖 Lag profesjonelt tilbud";
 
-        button.disabled = false;
+
+        button.disabled =
+          false;
 
       }
 
     }
 
 
-async function sendQuote() {
+    /* =========================
+       SEND TILBUD PÅ E-POST
+    ========================= */
 
-  const customerEmail =
-    document.getElementById("customerEmail").value.trim();
+    async function sendQuote() {
 
-  if (!customerEmail) {
-    alert("Skriv inn kundens e-postadresse først.");
-    return;
-  }
+      const customerEmail =
+        document
+          .getElementById("customerEmail")
+          .value
+          .trim();
 
-  const customer =
-    document.getElementById("customer").value.trim() || "Kunden";
 
-  const jobType =
-    document.getElementById("jobType").value;
+      if (!customerEmail) {
 
-  const job =
-    document.getElementById("job").value.trim();
+        alert(
+          "Skriv inn kundens e-postadresse først."
+        );
 
-  const hours =
-    Number(document.getElementById("hours").value) || 0;
+        return;
 
-  const hourly =
-    Number(document.getElementById("hourly").value) || 0;
+      }
 
-  const materials =
-    Number(document.getElementById("materials").value) || 0;
 
-  const total =
-    (hours * hourly + materials) * 1.25;
+      const customer =
+        document
+          .getElementById("customer")
+          .value
+          .trim()
+        || "Kunden";
 
-  try {
 
-    const response = await fetch("/api/send", {
+      const jobType =
+        document
+          .getElementById("jobType")
+          .value;
 
-      method: "POST",
 
-      headers: {
-        "Content-Type": "application/json"
-      },
+      const job =
+        document
+          .getElementById("job")
+          .value
+          .trim();
 
-      body: JSON.stringify({
-        customerEmail,
-        customer,
-        jobType,
-        job,
-        hours,
-        hourly,
-        materials,
-        total
-      })
 
-    });
+      const hours =
+        Number(
+          document
+            .getElementById("hours")
+            .value
+        ) || 0;
 
-    const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.error || "Kunne ikke sende");
+      const hourly =
+        Number(
+          document
+            .getElementById("hourly")
+            .value
+        ) || 0;
+
+
+      const materials =
+        Number(
+          document
+            .getElementById("materials")
+            .value
+        ) || 0;
+
+
+      const total =
+        (hours * hourly + materials)
+        * 1.25;
+
+
+      try {
+
+        const response =
+          await fetch("/api/send", {
+
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+              customerEmail,
+              customer,
+              jobType,
+              job,
+              hours,
+              hourly,
+              materials,
+              total
+
+            })
+
+          });
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            "Kunne ikke sende"
+          );
+
+        }
+
+
+        document.getElementById(
+          "success"
+        ).style.display =
+          "block";
+
+
+        document.getElementById(
+          "success"
+        ).innerText =
+          "✅ Tilbudet er sendt på e-post!";
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        alert(
+          "Kunne ikke sende tilbudet akkurat nå. Prøv igjen."
+        );
+
+      }
+
     }
 
-    document.getElementById("success").style.display = "block";
 
-    document.getElementById("success").innerText =
-      "✅ Tilbudet er sendt på e-post!";
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "Kunne ikke sende tilbudet akkurat nå. Prøv igjen."
-    );
-
-  }
-
-}
+    /* =========================
+       PDF
+    ========================= */
 
     function savePDF() {
 
       window.print();
-     } 
 
-function openAccount() {
-
-  const choice = prompt(
-    "Velkommen til TilbudsAI!\n\n" +
-    "🔨 Skriv 1 hvis du tilbyr tjenester\n" +
-    "🏠 Skriv 2 hvis du trenger en tjeneste"
-  );
-
-  if (choice === "1") {
-
-    const name = prompt("Hva heter du?");
-    const company = prompt("Hva heter bedriften din?");
-    const location = prompt("Hvor holder du til?");
-    const services = prompt("Hvilke tjenester tilbyr du?");
-    const phone = prompt("Telefonnummer:");
-    const email = prompt("E-postadresse:");
-
-    if (!name || !company || !email) {
-      alert("⚠️ Du må fylle inn navn, bedrift og e-post.");
-      return;
     }
 
-    alert(
-      "✅ Profil klar!\n\n" +
-      "👤 " + name + "\n" +
-      "🏢 " + company + "\n" +
-      "📍 " + location + "\n" +
-      "🔨 " + services + "\n" +
-      "📞 " + phone + "\n" +
-      "📧 " + email
-    );
-  }
 
-  if (choice === "2") {
+    /* =========================
+       MIN KONTO
+    ========================= */
 
-    const name = prompt("Hva heter du?");
-    const location = prompt("Hvor bor du?");
-    const service = prompt("Hva slags tjeneste trenger du?");
-    const email = prompt("E-postadresse:");
+    function openAccount() {
 
-    if (!name || !email) {
-      alert("⚠️ Du må fylle inn navn og e-post.");
-      return;
+      document.getElementById(
+        "accountOverlay"
+      ).style.display =
+        "block";
+
+
+      loadSavedProfile();
+
     }
 
-    alert(
-      "✅ Kundeprofil klar!\n\n" +
-      "👤 " + name + "\n" +
-      "📍 " + location + "\n" +
-      "🏠 Trenger: " + service + "\n" +
-      "📧 " + email
-    );
-  }
-}
+
+    function closeAccount() {
+
+      document.getElementById(
+        "accountOverlay"
+      ).style.display =
+        "none";
+
+    }
+
+
+    function closeAccountOutside(event) {
+
+      if (
+        event.target.id ===
+        "accountOverlay"
+      ) {
+
+        closeAccount();
+
+      }
+
+    }
+
+
+    /* =========================
+       ROLLEVALG
+    ========================= */
+
+    function showProviderForm() {
+
+      document.getElementById(
+        "roleButtons"
+      ).style.display =
+        "none";
+
+
+      document.getElementById(
+        "providerForm"
+      ).style.display =
+        "block";
+
+
+      document.getElementById(
+        "customerForm"
+      ).style.display =
+        "none";
+
+    }
+
+
+    function showCustomerForm() {
+
+      document.getElementById(
+        "roleButtons"
+      ).style.display =
+        "none";
+
+
+      document.getElementById(
+        "customerForm"
+      ).style.display =
+        "block";
+
+
+      document.getElementById(
+        "providerForm"
+      ).style.display =
+        "none";
+
+    }
+
+
+    /* =========================
+       LAGRE TJENESTELEVERANDØR
+    ========================= */
+
+    function saveProviderProfile() {
+
+      const profile = {
+
+        type: "provider",
+
+        name:
+          document
+            .getElementById("providerName")
+            .value
+            .trim(),
+
+        company:
+          document
+            .getElementById("providerCompany")
+            .value
+            .trim(),
+
+        location:
+          document
+            .getElementById("providerLocation")
+            .value
+            .trim(),
+
+        services:
+          document
+            .getElementById("providerServices")
+            .value
+            .trim(),
+
+        phone:
+          document
+            .getElementById("providerPhone")
+            .value
+            .trim(),
+
+        email:
+          document
+            .getElementById("providerEmail")
+            .value
+            .trim()
+
+      };
+
+
+      if (
+        !profile.name ||
+        !profile.company ||
+        !profile.email
+      ) {
+
+        alert(
+          "⚠️ Du må fylle inn navn, bedrift og e-post."
+        );
+
+        return;
+
+      }
+
+
+      localStorage.setItem(
+        "tilbudsaiProfile",
+        JSON.stringify(profile)
+      );
+
+
+      alert(
+        "✅ Tjenesteprofilen er lagret!"
+      );
+
+
+      loadSavedProfile();
+
+    }
+
+
+    /* =========================
+       LAGRE KUNDE
+    ========================= */
+
+    function saveCustomerProfile() {
+
+      const profile = {
+
+        type: "customer",
+
+        name:
+          document
+            .getElementById("buyerName")
+            .value
+            .trim(),
+
+        location:
+          document
+            .getElementById("buyerLocation")
+            .value
+            .trim(),
+
+        service:
+          document
+            .getElementById("buyerService")
+            .value
+            .trim(),
+
+        email:
+          document
+            .getElementById("buyerEmail")
+            .value
+            .trim()
+
+      };
+
+
+      if (
+        !profile.name ||
+        !profile.email
+      ) {
+
+        alert(
+          "⚠️ Du må fylle inn navn og e-post."
+        );
+
+        return;
+
+      }
+
+
+      localStorage.setItem(
+        "tilbudsaiProfile",
+        JSON.stringify(profile)
+      );
+
+
+      alert(
+        "✅ Kundeprofilen er lagret!"
+      );
+
+
+      loadSavedProfile();
+
+    }
+
+
+    /* =========================
+       VIS LAGRET PROFIL
+    ========================= */
+
+    function loadSavedProfile() {
+
+      const saved =
+        localStorage.getItem(
+          "tilbudsaiProfile"
+        );
+
+
+      if (!saved) {
+
+        document.getElementById(
+          "roleButtons"
+        ).style.display =
+          "grid";
+
+
+        document.getElementById(
+          "providerForm"
+        ).style.display =
+          "none";
+
+
+        document.getElementById(
+          "customerForm"
+        ).style.display =
+          "none";
+
+
+        document.getElementById(
+          "savedProfile"
+        ).style.display =
+          "none";
+
+
+        return;
+
+      }
+
+
+      const profile =
+        JSON.parse(saved);
+
+
+      document.getElementById(
+        "roleButtons"
+      ).style.display =
+        "none";
+
+
+      document.getElementById(
+        "providerForm"
+      ).style.display =
+        "none";
+
+
+      document.getElementById(
+        "customerForm"
+      ).style.display =
+        "none";
+
+
+      document.getElementById(
+        "savedProfile"
+      ).style.display =
+        "block";
+
+
+      let html = "";
+
+
+      if (
+        profile.type ===
+        "provider"
+      ) {
+
+        html =
+
+          "<p>👤 <strong>Navn:</strong> " +
+          escapeHTML(profile.name) +
+          "</p>" +
+
+          "<p>🏢 <strong>Bedrift:</strong> " +
+          escapeHTML(profile.company) +
+          "</p>" +
+
+          "<p>📍 <strong>Sted:</strong> " +
+          escapeHTML(profile.location) +
+          "</p>" +
+
+          "<p>🔨 <strong>Tjenester:</strong> " +
+          escapeHTML(profile.services) +
+          "</p>" +
+
+          "<p>📞 <strong>Telefon:</strong> " +
+          escapeHTML(profile.phone) +
+          "</p>" +
+
+          "<p>📧 <strong>E-post:</strong> " +
+          escapeHTML(profile.email) +
+          "</p>";
+
+      } else {
+
+        html =
+
+          "<p>👤 <strong>Navn:</strong> " +
+          escapeHTML(profile.name) +
+          "</p>" +
+
+          "<p>📍 <strong>Sted:</strong> " +
+          escapeHTML(profile.location) +
+          "</p>" +
+
+          "<p>🏠 <strong>Trenger:</strong> " +
+          escapeHTML(profile.service) +
+          "</p>" +
+
+          "<p>📧 <strong>E-post:</strong> " +
+          escapeHTML(profile.email) +
+          "</p>";
+
+      }
+
+
+      document.getElementById(
+        "savedProfileContent"
+      ).innerHTML =
+        html;
+
+    }
+
+
+    /* =========================
+       ENDRE PROFIL
+    ========================= */
+
+    function changeProfile() {
+
+      const saved =
+        localStorage.getItem(
+          "tilbudsaiProfile"
+        );
+
+
+      if (!saved) {
+        return;
+      }
+
+
+      const profile =
+        JSON.parse(saved);
+
+
+      document.getElementById(
+        "savedProfile"
+      ).style.display =
+        "none";
+
+
+      if (
+        profile.type ===
+        "provider"
+      ) {
+
+        document.getElementById(
+          "roleButtons"
+        ).style.display =
+          "none";
+
+
+        document.getElementById(
+          "providerForm"
+        ).style.display =
+          "block";
+
+
+        document.getElementById(
+          "providerName"
+        ).value =
+          profile.name || "";
+
+
+        document.getElementById(
+          "providerCompany"
+        ).value =
+          profile.company || "";
+
+
+        document.getElementById(
+          "providerLocation"
+        ).value =
+          profile.location || "";
+
+
+        document.getElementById(
+          "providerServices"
+        ).value =
+          profile.services || "";
+
+
+        document.getElementById(
+          "providerPhone"
+        ).value =
+          profile.phone || "";
+
+
+        document.getElementById(
+          "providerEmail"
+        ).value =
+          profile.email || "";
+
+      } else {
+
+        document.getElementById(
+          "roleButtons"
+        ).style.display =
+          "none";
+
+
+        document.getElementById(
+          "customerForm"
+        ).style.display =
+          "block";
+
+
+        document.getElementById(
+          "buyerName"
+        ).value =
+          profile.name || "";
+
+
+        document.getElementById(
+          "buyerLocation"
+        ).value =
+          profile.location || "";
+
+
+        document.getElementById(
+          "buyerService"
+        ).value =
+          profile.service || "";
+
+
+        document.getElementById(
+          "buyerEmail"
+        ).value =
+          profile.email || "";
+
+      }
+
+    }
+
+
+    /* =========================
+       SLETT PROFIL
+    ========================= */
+
+    function deleteProfile() {
+
+      const confirmDelete =
+        confirm(
+          "Er du sikker på at du vil slette profilen?"
+        );
+
+
+      if (!confirmDelete) {
+        return;
+      }
+
+
+      localStorage.removeItem(
+        "tilbudsaiProfile"
+      );
+
+
+      alert(
+        "Profilen er slettet."
+      );
+
+
+      loadSavedProfile();
+
+    }
+
+
+    /* =========================
+       SIKKER TEKST
+    ========================= */
+
+    function escapeHTML(value) {
+
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
   </script>
 
 </body>
