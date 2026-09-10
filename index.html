@@ -791,15 +791,21 @@ async function sendQuote() {
 
       window.print();
 
-    }
 function openAccount() {
-  alert(
+  const choice = prompt(
     "Velkommen til TilbudsAI!\n\n" +
-    "🔨 Jeg tilbyr tjenester\n" +
-    "🏠 Jeg trenger en tjeneste"
+    "Skriv 1 hvis du tilbyr tjenester 🔨\n" +
+    "Skriv 2 hvis du trenger en tjeneste 🏠"
   );
+
+  if (choice === "1") {
+    alert("🔨 Du har valgt: Jeg tilbyr tjenester");
+  }
+
+  if (choice === "2") {
+    alert("🏠 Du har valgt: Jeg trenger en tjeneste");
+  }
 }
-    
   </script>
 
 </body>
