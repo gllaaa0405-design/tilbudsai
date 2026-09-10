@@ -1526,6 +1526,61 @@
        PDF
     ========================= */
 
+    function openJobForm() {
+
+  const title = prompt(
+    "Hva trenger du hjelp med?"
+  );
+
+  if (!title) {
+    return;
+  }
+
+  const location = prompt(
+    "Hvor skal jobben gjøres?"
+  );
+
+  if (!location) {
+    return;
+  }
+
+  const description = prompt(
+    "Beskriv jobben kort:"
+  );
+
+  if (!description) {
+    return;
+  }
+
+  const date = prompt(
+    "Når ønsker du at jobben skal gjøres?"
+  );
+
+  if (!date) {
+    return;
+  }
+
+  const job = {
+    title: title,
+    location: location,
+    description: description,
+    date: date
+  };
+
+  localStorage.setItem(
+    "tilbudsaiJob",
+    JSON.stringify(job)
+  );
+
+  alert(
+    "✅ Jobben er lagt ut!\n\n" +
+    "🏠 " + title + "\n" +
+    "📍 " + location + "\n" +
+    "📝 " + description + "\n" +
+    "📅 " + date
+  );
+}
+    
     function savePDF() {
 
       window.print();
