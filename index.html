@@ -643,6 +643,11 @@ async function runAI(){
     }
 
 
+    window.lastAIText =
+      data.text ||
+      "Ingen tekst mottatt.";
+
+
     result.style.display = "block";
 
     result.innerHTML = `
@@ -651,10 +656,16 @@ async function runAI(){
 
       <br><br>
 
-   ${e(
-  data.text ||
-  "Ingen tekst mottatt."
-)}
+      ${e(window.lastAIText)}
+
+      <br><br>
+
+      <button
+        class="btn dark"
+        onclick="openOfferFromAI()"
+      >
+        📄 Lag komplett tilbud
+      </button>
 
     `;
 
@@ -680,6 +691,365 @@ async function runAI(){
 }
 
 
+/* =========================
+   KOMPLETT TILBUD
+   ========================= */
+
+function openOfferFromAI(){
+
+  const aiText =
+    window.lastAIText ||
+    document.getElementById("aiJob")?.value ||
+    "";
+
+  modal.innerHTML = `
+
+    <button
+      class="close"
+      onclick="closeM()"
+    >
+      ×
+    </button>
+
+    <h2>📄 Lag komplett tilbud</h2>
+
+    <p class="muted">
+      AI-teksten er hentet inn. Fyll inn kunden og prisene.
+    </p>
+
+    <label>
+      Kundens navn
+    </label>
+
+    <input
+      id="offerCustomer"
+      placeholder="F.eks. Ola Nordmann"
+    >
+
+    <label>
+      Kundens e-post
+    </label>
+
+    <input
+      id="offerEmail"
+      type="email"
+      placeholder="kunde@email.no"
+    >
+
+    <label>
+      Type jobb
+    </label>
+
+    <input
+      id="offerJobType"
+      value="Tjeneste"
+    >
+
+    <label>
+      Beskrivelse av arbeidet
+    </label>
+
+    <textarea
+      id="offerDescription"
+      rows="8"
+    >${e(aiText)}</textarea>
+
+    <div class="formgrid">
+
+      <div>
+
+        <label>
+          Timer
+        </label>
+
+        <input
+          id="offerHours"
+          type="number"
+          min="0"
+          value="0"
+          oninput="calculateOffer()"
+        >
+
+      </div>
+
+      <div>
+
+        <label>
+          Timepris
+        </label>
+
+        <input
+          id="offerHourly"
+          type="number"
+          min="0"
+          value="0"
+          oninput="calculateOffer()"
+        >
+
+      </div>
+
+      <div class="full">
+
+        <label>
+          Materialer
+        </label>
+
+        <input
+          id="offerMaterials"
+          type="number"
+          min="0"
+          value="0"
+          oninput="calculateOffer()"
+        >
+
+      </div>
+
+    </div>
+
+    <div
+      class="card"
+      style="margin-top:10px;background:#f4f7fb"
+    >
+
+      <p>
+        Arbeid:
+        <strong id="offerWork">
+          0 kr
+        </strong>
+      </p>
+
+      <p>
+        Materialer:
+        <strong id="offerMaterialTotal">
+          0 kr
+        </strong>
+      </p>
+
+      <p>
+        Eks. MVA:
+        <strong id="offerExVat">
+          0 kr
+        </strong>
+      </p>
+
+      <p>
+        MVA 25 %:
+        <strong id="offerVat">
+          0 kr
+        </strong>
+      </p>
+
+      <h3>
+        Total inkl. MVA:
+        <span id="offerTotal">
+          0 kr
+        </span>
+      </h3>
+
+    </div>
+
+    <br>
+
+    <button
+      class="btn primary"
+      onclick="sendOffer()"
+    >
+      📤 Send tilbud
+    </button>
+
+  `;
+
+  calculateOffer();
+
+  openM();
+
+}
+
+
+function calculateOffer(){
+
+  const hours =
+    Number(
+      document.getElementById("offerHours")?.value || 0
+    );
+
+  const hourly =
+    Number(
+      document.getElementById("offerHourly")?.value || 0
+    );
+
+  const materials =
+    Number(
+      document.getElementById("offerMaterials")?.value || 0
+    );
+
+
+  const work =
+    hours * hourly;
+
+  const exVat =
+    work + materials;
+
+  const vat =
+    exVat * 0.25;
+
+  const total =
+    exVat + vat;
+
+
+  const money =
+    value =>
+      new Intl.NumberFormat("nb-NO")
+        .format(Math.round(value))
+        + " kr";
+
+
+  document.getElementById("offerWork")
+    .innerText = money(work);
+
+  document.getElementById("offerMaterialTotal")
+    .innerText = money(materials);
+
+  document.getElementById("offerExVat")
+    .innerText = money(exVat);
+
+  document.getElementById("offerVat")
+    .innerText = money(vat);
+
+  document.getElementById("offerTotal")
+    .innerText = money(total);
+
+}
+
+
+async function sendOffer(){
+
+  const customer =
+    document
+      .getElementById("offerCustomer")
+      ?.value
+      .trim();
+
+  const customerEmail =
+    document
+      .getElementById("offerEmail")
+      ?.value
+      .trim();
+
+  const jobType =
+    document
+      .getElementById("offerJobType")
+      ?.value
+      .trim();
+
+  const job =
+    document
+      .getElementById("offerDescription")
+      ?.value
+      .trim();
+
+  const hours =
+    Number(
+      document
+        .getElementById("offerHours")
+        ?.value || 0
+    );
+
+  const hourly =
+    Number(
+      document
+        .getElementById("offerHourly")
+        ?.value || 0
+    );
+
+  const materials =
+    Number(
+      document
+        .getElementById("offerMaterials")
+        ?.value || 0
+    );
+
+
+  const total =
+    (hours * hourly + materials) * 1.25;
+
+
+  if(
+    !customer ||
+    !customerEmail ||
+    !job
+  ){
+
+    alert(
+      "Fyll inn kundens navn, e-post og beskrivelse."
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const response =
+      await fetch("/api/send",{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+          customerEmail,
+          customer,
+          jobType,
+          job,
+          hours,
+          hourly,
+          materials,
+          total:Math.round(total)
+
+        })
+
+      });
+
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "Kunne ikke sende tilbudet."
+      );
+
+    }
+
+
+    alert(
+      "✅ Tilbudet er sendt til kunden!"
+    );
+
+
+    closeM();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      error.message ||
+      "Kunne ikke sende tilbudet akkurat nå."
+    );
+
+  }
+
+}
 /* =========================
    JOBBER
 ========================= */
