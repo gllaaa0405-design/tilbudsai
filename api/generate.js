@@ -41,6 +41,13 @@ Skriv teksten med disse tre delene:
 2. Hva tilbudet inkluderer
 3. Kort profesjonell avslutning
 
+FORMAT:
+- Ikke bruk Markdown.
+- Ikke bruk stjerner eller **.
+- Ikke skriv overskriftene med **.
+- Skriv overskriftene som vanlig tekst.
+- Bruk korte avsnitt og punktlister når det passer.
+
 VIKTIG:
 - Ikke skriv priser.
 - Ikke skriv totalsum.
