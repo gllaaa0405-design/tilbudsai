@@ -299,7 +299,11 @@ label{
 <button onclick="messages()">
 💬 Meldinger
 </button>
-
+  
+<button onclick="myOffers()">
+ 📄 Mine tilbud
+</button>
+  
 </nav>
 
 <button
@@ -355,6 +359,11 @@ localStorage.getItem("tilbudsaiJobs") || "[]"
 let messagesData =
 JSON.parse(
 localStorage.getItem("tilbudsaiMessages") || "[]"
+);
+
+  let offersData =
+ JSON.parse(
+ localStorage.getItem("tilbudsaiOffers") || "[]"
 );
 
 
@@ -1030,9 +1039,30 @@ async function sendOffer(){
     }
 
 
-    alert(
-      "✅ Tilbudet er sendt til kunden!"
-    );
+    const offer = {
+  id: Date.now().toString(),
+  customer,
+  customerEmail,
+  jobType,
+  job,
+  hours,
+  hourly,
+  materials,
+  total: Math.round(total),
+  status: "Venter på svar",
+  created: new Date().toISOString()
+};
+
+offersData.unshift(offer);
+
+localStorage.setItem(
+  "tilbudsaiOffers",
+  JSON.stringify(offersData)
+);
+
+alert(
+  "✅ Tilbudet er sendt til kunden!"
+);
 
 
     closeM();
@@ -1050,6 +1080,141 @@ async function sendOffer(){
   }
 
 }
+  /* =========================
+   MINE TILBUD
+   ========================= */
+
+function myOffers(){
+
+  if(!user){
+    login();
+    return;
+  }
+
+  app.innerHTML=`
+
+    <div class="actions"
+      style="justify-content:space-between">
+
+      <div>
+        <h2>📄 Mine tilbud</h2>
+
+        <p class="muted">
+          Hold oversikt over tilbud du har sendt.
+        </p>
+      </div>
+
+      <button
+        class="btn primary"
+        onclick="aiInfo()"
+      >
+        🤖 Lag nytt tilbud
+      </button>
+
+    </div>
+
+    <div
+      id="offersList"
+      style="margin-top:16px"
+    ></div>
+
+  `;
+
+  renderOffers();
+
+}
+
+
+function renderOffers(){
+
+  const list =
+    document.getElementById("offersList");
+
+  if(!list)return;
+
+  if(!offersData.length){
+
+    list.innerHTML=`
+
+      <div class="card empty">
+
+        📄 Du har ikke sendt noen tilbud ennå.
+
+        <br><br>
+
+        <button
+          class="btn primary"
+          onclick="aiInfo()"
+        >
+          🤖 Lag ditt første tilbud
+        </button>
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+  list.innerHTML =
+    offersData.map(function(offer){
+
+      return `
+
+        <article
+          class="card"
+          style="margin-bottom:16px"
+        >
+
+          <div class="actions"
+            style="justify-content:space-between">
+
+            <div>
+
+              <h3>
+                📄 ${e(offer.jobType || "Tilbud")}
+              </h3>
+
+              <div class="meta">
+                👤 ${e(offer.customer)}
+                ·
+                ${e(offer.customerEmail)}
+              </div>
+
+            </div>
+
+            <span class="tag">
+              🟡 ${e(offer.status)}
+            </span>
+
+          </div>
+
+          <p>
+            ${e(offer.job)}
+          </p>
+
+          <p>
+            💰 Total inkl. MVA:
+            <strong>
+              ${new Intl.NumberFormat("nb-NO")
+                .format(offer.total)} kr
+            </strong>
+          </p>
+
+          <div class="meta">
+            Sendt:
+            ${new Date(offer.created)
+              .toLocaleDateString("nb-NO")}
+          </div>
+
+        </article>
+
+      `;
+
+    }).join("");
+
+}
+  
 /* =========================
    JOBBER
 ========================= */
