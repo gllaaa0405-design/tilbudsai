@@ -299,6 +299,10 @@ label{
 <button onclick="messages()">
 💬 Meldinger
 </button>
+
+  <button onclick="businessCopilot()">
+ 🤖 AI Copilot
+</button>
   
 <button onclick="myOffers()">
  📄 Mine tilbud
@@ -1212,6 +1216,293 @@ function renderOffers(){
       `;
 
     }).join("");
+
+}
+
+/* =========================
+   AI BUSINESS COPILOT
+   ========================= */
+
+function businessCopilot(){
+
+  if(!user){
+    login();
+    return;
+  }
+
+  const waiting =
+    offersData.filter(function(offer){
+      return offer.status === "Venter på svar";
+    });
+
+  const won =
+    offersData.filter(function(offer){
+      return offer.status === "Vunnet";
+    });
+
+  const lost =
+    offersData.filter(function(offer){
+      return offer.status === "Tapt";
+    });
+
+  const waitingValue =
+    waiting.reduce(function(sum,offer){
+      return sum + Number(offer.total || 0);
+    },0);
+
+  const wonValue =
+    won.reduce(function(sum,offer){
+      return sum + Number(offer.total || 0);
+    },0);
+
+  const totalValue =
+    offersData.reduce(function(sum,offer){
+      return sum + Number(offer.total || 0);
+    },0);
+
+  const conversionRate =
+    offersData.length
+    ? Math.round(
+        (won.length / offersData.length) * 100
+      )
+    : 0;
+
+  let advice = "";
+
+  if(waiting.length > 0){
+
+    const oldest =
+      waiting
+        .slice()
+        .sort(function(a,b){
+          return new Date(a.created) -
+                 new Date(b.created);
+        })[0];
+
+    advice = `
+      <div class="card"
+        style="
+          margin-top:16px;
+          border:2px solid var(--green);
+        "
+      >
+
+        <h3>🎯 Dette bør du gjøre først</h3>
+
+        <p>
+          Du har
+          <strong>${waiting.length}</strong>
+          tilbud som venter på svar.
+        </p>
+
+        <p>
+          Det tilsvarer
+          <strong>
+            ${new Intl.NumberFormat("nb-NO")
+              .format(waitingValue)} kr
+          </strong>
+          i potensiell omsetning.
+        </p>
+
+        <p>
+          👤 Start med å følge opp
+          <strong>${e(oldest.customer)}</strong>.
+        </p>
+
+        <button
+          class="btn primary"
+          onclick="myOffers()"
+        >
+          📄 Se tilbudene
+        </button>
+
+      </div>
+    `;
+
+  }else if(!offersData.length){
+
+    advice = `
+      <div class="card"
+        style="margin-top:16px"
+      >
+
+        <h3>🚀 La oss komme i gang</h3>
+
+        <p class="muted">
+          Du har ikke sendt noen tilbud ennå.
+          Lag ditt første tilbud med TilbudsAI.
+        </p>
+
+        <button
+          class="btn primary"
+          onclick="aiInfo()"
+        >
+          🤖 Lag første tilbud
+        </button>
+
+      </div>
+    `;
+
+  }else{
+
+    advice = `
+      <div class="card"
+        style="margin-top:16px"
+      >
+
+        <h3>✨ Alt ser bra ut</h3>
+
+        <p>
+          Du har ingen åpne tilbud som trenger
+          umiddelbar oppfølging.
+        </p>
+
+        <button
+          class="btn primary"
+          onclick="aiInfo()"
+        >
+          🤖 Lag nytt tilbud
+        </button>
+
+      </div>
+    `;
+
+  }
+
+
+  modal.innerHTML = `
+
+    <button
+      class="close"
+      onclick="closeM()"
+    >
+      ×
+    </button>
+
+    <h2>🤖 AI Business Copilot</h2>
+
+    <p class="muted">
+      Din personlige oversikt over tilbud,
+      kunder og muligheter.
+    </p>
+
+    <div class="grid">
+
+      <div class="card">
+
+        <h3>🟡 ${waiting.length}</h3>
+
+        <p class="muted">
+          Venter på svar
+        </p>
+
+        <strong>
+          ${new Intl.NumberFormat("nb-NO")
+            .format(waitingValue)} kr
+        </strong>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>🟢 ${won.length}</h3>
+
+        <p class="muted">
+          Vunne jobber
+        </p>
+
+        <strong>
+          ${new Intl.NumberFormat("nb-NO")
+            .format(wonValue)} kr
+        </strong>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>📈 ${conversionRate}%</h3>
+
+        <p class="muted">
+          Trefferprosent
+        </p>
+
+        <strong>
+          ${won.length} av ${offersData.length}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    ${advice}
+
+
+    <div class="card"
+      style="margin-top:16px"
+    >
+
+      <h3>💰 Tilbudsoversikt</h3>
+
+      <p>
+        Totalt sendt:
+        <strong>
+          ${new Intl.NumberFormat("nb-NO")
+            .format(totalValue)} kr
+        </strong>
+      </p>
+
+      <p>
+        🟡 Potensielt:
+        <strong>
+          ${new Intl.NumberFormat("nb-NO")
+            .format(waitingValue)} kr
+        </strong>
+      </p>
+
+      <p>
+        🟢 Vunnet:
+        <strong>
+          ${new Intl.NumberFormat("nb-NO")
+            .format(wonValue)} kr
+        </strong>
+      </p>
+
+    </div>
+
+
+    <div class="card"
+      style="
+        margin-top:16px;
+        background:#f4f7fb;
+      "
+    >
+
+      <h3>🧠 TilbudsAI-tipset</h3>
+
+      <p class="muted">
+
+        ${
+          waiting.length >= 3
+          ?
+          "Du har flere tilbud som venter. Følg dem opp før du bruker tid på nye leads."
+          :
+          won.length > 0
+          ?
+          "Fortsett å bruke samme type tilbud som har gitt deg vunne jobber."
+          :
+          "Jo flere gode tilbud du sender, desto mer data kan TilbudsAI bruke til å hjelpe deg."
+        }
+
+      </p>
+
+    </div>
+
+  `;
+
+  openM();
 
 }
   
