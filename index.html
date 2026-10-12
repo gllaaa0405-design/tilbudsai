@@ -590,6 +590,53 @@
       `;
 
       results.innerHTML = html;
+      
+      const destinationQuery = encodeURIComponent(destination);
+
+      html += `
+        <section style="margin-top:30px">
+          <h2 class="section-heading">Bestill reisen din</h2>
+          <p class="subheading">
+            Gå videre til nettsidene for å søke etter fly, hotell og opplevelser.
+          </p>
+
+          <div style="display:grid;gap:12px">
+            <a href="https://www.google.com/travel/flights?q=${destinationQuery}"
+               target="_blank" rel="noopener noreferrer"
+               style="display:block;padding:17px;background:#153c32;color:white;
+               text-decoration:none;border-radius:9px;font-weight:bold">
+              ✈️ Finn flybilletter →
+            </a>
+
+            <a href="https://www.booking.com/searchresults.html?ss=${destinationQuery}"
+               target="_blank" rel="noopener noreferrer"
+               style="display:block;padding:17px;background:#fff;border:1px solid #e7e4db;
+               color:#153c32;text-decoration:none;border-radius:9px;font-weight:bold">
+              🏨 Finn hotell →
+            </a>
+
+            <a href="https://www.getyourguide.com/s/?q=${destinationQuery}"
+               target="_blank" rel="noopener noreferrer"
+               style="display:block;padding:17px;background:#fff;border:1px solid #e7e4db;
+               color:#153c32;text-decoration:none;border-radius:9px;font-weight:bold">
+              🎟️ Finn aktiviteter →
+            </a>
+
+            <a href="https://www.google.com/maps/search/restaurants+in+${destinationQuery}"
+               target="_blank" rel="noopener noreferrer"
+               style="display:block;padding:17px;background:#fff;border:1px solid #e7e4db;
+               color:#153c32;text-decoration:none;border-radius:9px;font-weight:bold">
+              🍽️ Finn restauranter →
+            </a>
+          </div>
+
+          <p class="small-note">
+            Du sendes til eksterne nettsider. Priser og tilgjengelighet
+            må bekreftes hos leverandøren.
+          </p>
+        </section>
+      `;
+
       results.classList.remove("hidden");
       results.scrollIntoView({ behavior: "smooth", block: "start" });
     });
