@@ -1,2834 +1,599 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="no">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TilbudsAI – tjenester og jobber</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#153c32">
+  <title>TilbudsAI – Din personlige reiseplanlegger</title>
+  <style>
+    :root {
+      --green: #153c32;
+      --green-light: #245847;
+      --cream: #f8f6f0;
+      --gold: #c5a56b;
+      --text: #242b26;
+      --muted: #73786f;
+      --white: #ffffff;
+      --border: #e7e4db;
+    }
 
-<style>
-:root{
-  --navy:#09264a;
-  --green:#18bd73;
-  --bg:#f4f7fb;
-  --muted:#61738d;
-  --border:#e2e9f1;
-}
+    * { box-sizing: border-box; }
 
-*{box-sizing:border-box}
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--cream);
+    }
 
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,sans-serif;
-  background:var(--bg);
-  color:#102a43;
-}
+    button, input, select { font: inherit; }
 
-header{
-  background:#fff;
-  border-bottom:1px solid var(--border);
-  position:sticky;
-  top:0;
-  z-index:10;
-}
+    header {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+      background: white;
+      border-bottom: 1px solid var(--border);
+    }
 
-.nav{
-  max-width:1150px;
-  margin:auto;
-  padding:15px 18px;
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--green);
+    }
 
-.logo{
-  font-size:24px;
-  font-weight:900;
-  color:var(--navy);
-  margin-right:auto;
-}
+    .logo span { color: var(--gold); }
 
-.logo span{
-  color:var(--green);
-}
+    .nav-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-nav{
-  display:flex;
-  gap:4px;
-}
+    .hero {
+      min-height: 450px;
+      padding: 76px 20px 100px;
+      text-align: center;
+      color: white;
+      background:
+        linear-gradient(90deg, rgba(13, 42, 34, .86), rgba(13, 42, 34, .45)),
+        url("https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=2000&q=85")
+        center/cover;
+    }
 
-nav button,
-.profile{
-  border:0;
-  background:transparent;
-  padding:10px 12px;
-  font-weight:800;
-  cursor:pointer;
-  color:var(--navy);
-}
+    .eyebrow {
+      color: #ead7ad;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
 
-.profile{
-  background:var(--navy);
-  color:white;
-  border-radius:11px;
-}
+    h1 {
+      max-width: 800px;
+      margin: 22px auto 18px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 6vw, 66px);
+      line-height: 1.08;
+      font-weight: normal;
+    }
 
-main{
-  max-width:1150px;
-  margin:auto;
-  padding:25px 18px 70px;
-}
+    .hero p {
+      max-width: 590px;
+      margin: 0 auto;
+      line-height: 1.8;
+      color: #f1eee6;
+      font-size: 16px;
+    }
 
-.hero,
-.card{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:25px;
-  box-shadow:0 8px 28px #102a4310;
-}
+    .main {
+      width: min(1000px, 92%);
+      margin: -55px auto 70px;
+      position: relative;
+    }
 
-.hero{
-  padding:42px 30px;
-  margin-bottom:20px;
-}
+    .planner {
+      background: white;
+      border-radius: 18px;
+      padding: 35px;
+      box-shadow: 0 16px 50px rgba(31, 44, 34, .11);
+    }
 
-.hero h1{
-  font-size:clamp(34px,6vw,58px);
-  line-height:1.02;
-  margin:0;
-  color:var(--navy);
-}
+    .section-heading {
+      margin: 0 0 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      font-weight: normal;
+    }
 
-.hero p{
-  font-size:19px;
-  color:var(--muted);
-  max-width:720px;
-}
+    .subheading {
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
 
-.actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
 
-.btn{
-  border:0;
-  border-radius:11px;
-  padding:12px 17px;
-  font-weight:850;
-  cursor:pointer;
-}
+    .field { min-width: 0; }
 
-.primary{
-  background:var(--green);
-  color:white;
-}
+    label {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 13px;
+      font-weight: bold;
+    }
 
-.dark{
-  background:var(--navy);
-  color:white;
-}
+    input, select {
+      width: 100%;
+      min-height: 49px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #fff;
+      padding: 0 13px;
+      color: var(--text);
+      outline: none;
+    }
 
-.soft{
-  background:#edf2f7;
-  color:var(--navy);
-}
+    input:focus, select:focus {
+      border-color: var(--green-light);
+      box-shadow: 0 0 0 3px rgba(36, 88, 71, .1);
+    }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-}
+    .full { grid-column: 1 / -1; }
 
-.muted{
-  color:var(--muted);
-}
+    .toggle-row {
+      display: flex;
+      gap: 10px;
+    }
 
-input,
-textarea,
-select{
-  width:100%;
-  padding:13px;
-  border:1px solid #d6e0ea;
-  border-radius:10px;
-  font:inherit;
-  margin:6px 0 14px;
-}
+    .toggle-option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: normal;
+    }
 
-label{
-  font-weight:800;
-  font-size:13px;
-}
+    .toggle-option input {
+      width: 16px;
+      min-height: auto;
+      accent-color: var(--green);
+    }
 
-.tag{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:99px;
-  background:#e9f8f1;
-  color:#087b4c;
-  margin:3px;
-  font-size:12px;
-  font-weight:800;
-}
+    .primary-btn {
+      width: 100%;
+      margin-top: 27px;
+      padding: 17px;
+      border: 0;
+      border-radius: 9px;
+      color: white;
+      background: var(--green);
+      font-weight: bold;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
 
-.job{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
+    .primary-btn:hover {
+      background: var(--green-light);
+      transform: translateY(-1px);
+    }
 
-.meta{
-  font-size:13px;
-  color:var(--muted);
-}
+    .small-note {
+      margin: 13px 0 0;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
 
-.empty{
-  text-align:center;
-  color:var(--muted);
-  padding:30px;
-}
+    #results { margin-top: 35px; }
 
-.overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#061a2aaa;
-  z-index:30;
-  padding:18px;
-  overflow:auto;
-}
+    .results-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
 
-.modal{
-  max-width:720px;
-  background:white;
-  border-radius:20px;
-  padding:24px;
-  margin:35px auto;
-  position:relative;
-}
+    .results-top h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      font-weight: normal;
+    }
 
-.close{
-  position:absolute;
-  right:15px;
-  top:12px;
-  border:0;
-  border-radius:50%;
-  width:36px;
-  height:36px;
-  font-size:22px;
-  cursor:pointer;
-}
+    .budget-card {
+      padding: 25px;
+      border-radius: 13px;
+      background: var(--green);
+      color: white;
+      margin-bottom: 20px;
+    }
 
-.formgrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
+    .budget-card small { color: #d8e1d9; }
 
-.full{
-  grid-column:1/-1;
-}
+    .budget-total {
+      margin: 9px 0 20px;
+      font-size: 35px;
+      font-weight: bold;
+    }
 
-.messages{
-  max-height:360px;
-  overflow:auto;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:10px;
-}
+    .budget-lines {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
 
-.bubble{
-  background:#eef3f8;
-  padding:10px 12px;
-  border-radius:12px;
-  margin:7px;
-  max-width:82%;
-}
+    .budget-line {
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,.2);
+      font-size: 13px;
+    }
 
-.mine{
-  margin-left:auto;
-  background:#dff6eb;
-}
+    .budget-line strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 17px;
+    }
 
-@media(max-width:750px){
+    .day-card {
+      margin-bottom: 12px;
+      padding: 22px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
 
-  .grid,
-  .formgrid{
-    grid-template-columns:1fr;
-  }
+    .day-card h3 {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-size: 17px;
+    }
 
-  .full{
-    grid-column:auto;
-  }
+    .day-card p {
+      margin: 7px 0;
+      color: #555d55;
+      font-size: 14px;
+      line-height: 1.6;
+    }
 
-  nav button{
-    display:none;
-  }
+    .tag {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 5px 9px;
+      border-radius: 20px;
+      background: #f3eee2;
+      color: #76603a;
+      font-size: 11px;
+    }
 
-  .hero{
-    padding:30px 20px;
-  }
-}
-</style>
+    .notice {
+      padding: 14px;
+      border-radius: 9px;
+      background: #f7f4ec;
+      color: #6c6556;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .hidden { display: none; }
+
+    footer {
+      padding: 30px 20px;
+      text-align: center;
+      background: white;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    footer strong { color: var(--green); }
+
+    @media (max-width: 620px) {
+      header { padding: 0 5%; }
+      .hero { padding: 60px 20px 90px; }
+      .planner { padding: 23px 18px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .full { grid-column: auto; }
+      .budget-lines { grid-template-columns: 1fr 1fr; }
+      .nav-label { font-size: 11px; }
+      .results-top h2 { font-size: 24px; }
+    }
+  </style>
 </head>
 
 <body>
-
-<header>
-
-<div class="nav">
-
-<div class="logo">
-🔨 Tilbuds<span>AI</span>
-</div>
-
-<nav>
-
-<button onclick="home()">
-🏠 Forside
-</button>
-
-<button onclick="jobs()">
-📢 Jobber
-</button>
-
-<button onclick="providers()">
-👷 Tjenester
-</button>
-
-<button onclick="messages()">
-💬 Meldinger
-</button>
-
-  <button onclick="businessCopilot()">
- 🤖 AI Copilot
-</button>
-  
-<button onclick="myOffers()">
- 📄 Mine tilbud
-</button>
-  
-</nav>
-
-<button
-class="profile"
-onclick="account()"
->
-👤 Min profil
-</button>
-
-</div>
-
-</header>
-
-
-<main id="app"></main>
-
-
-<div
-class="overlay"
-id="ov"
-onclick="if(event.target===this)closeM()"
->
-
-<div
-class="modal"
-id="modal"
-></div>
-
-</div>
-
-
-<script>
-
-/* =========================
-   LOKAL DEMO-DATABASE
-========================= */
-
-let user =
-JSON.parse(
-localStorage.getItem("tilbudsaiUser") || "null"
-);
-
-let profiles =
-JSON.parse(
-localStorage.getItem("tilbudsaiProfiles") || "[]"
-);
-
-let jobsData =
-JSON.parse(
-localStorage.getItem("tilbudsaiJobs") || "[]"
-);
-
-let messagesData =
-JSON.parse(
-localStorage.getItem("tilbudsaiMessages") || "[]"
-);
-
-  let offersData =
- JSON.parse(
- localStorage.getItem("tilbudsaiOffers") || "[]"
-);
-
-
-/* =========================
-   APP
-========================= */
-
-const app =
-document.getElementById("app");
-
-const ov =
-document.getElementById("ov");
-
-const modal =
-document.getElementById("modal");
-
-
-/* =========================
-   SIKKER TEKST
-========================= */
-
-function e(value){
-
-return String(value ?? "")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-
-/* =========================
-   MODAL
-========================= */
-
-function openM(){
-
-ov.style.display="block";
-
-}
-
-function closeM(){
-
-ov.style.display="none";
-
-modal.innerHTML="";
-
-}
-
-
-/* =========================
-   FORSIDE
-========================= */
-
-function home(){
-
-app.innerHTML=`
-
-<section class="hero">
-
-<h1>
-Finn riktig hjelp.
-<br>
-Eller finn nye kunder.
-</h1>
-
-<p>
-TilbudsAI kobler mennesker som trenger
-tjenester med dyktige tjenesteleverandører.
-</p>
-
-<div class="actions">
-
-<button
-class="btn primary"
-onclick="jobForm()"
->
-📢 Jeg trenger en tjeneste
-</button>
-
-<button
-class="btn dark"
-onclick="providers()"
->
-👷 Jeg tilbyr tjenester
-</button>
-
-<button
-class="btn soft"
-onclick="jobs()"
->
-🔎 Finn jobber
-</button>
-
-</div>
-
-</section>
-
-
-<div class="grid">
-
-<div class="card">
-
-<h2>🏠 Kunde</h2>
-
-<p>
-Legg ut en jobb, motta henvendelser
-og velg riktig leverandør.
-</p>
-
-<button
-class="btn primary"
-onclick="jobForm()"
->
-Legg ut jobb
-</button>
-
-</div>
-
-
-<div class="card">
-
-<h2>👷 Tjenesteleverandør</h2>
-
-<p>
-Lag profil, vis tjenestene dine
-og finn nye kunder.
-</p>
-
-<button
-class="btn dark"
-onclick="account()"
->
-Lag profil
-</button>
-
-</div>
-
-
-<div class="card">
-
-<h2>🤖 TilbudsAI</h2>
-
-<p>
-AI skal hjelpe med annonser,
-tilbud og profesjonell tekst.
-</p>
-
-<button
-class="btn soft"
-onclick="aiInfo()"
->
-Bruk AI
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-
-/* =========================
-   AI
-========================= */
-
-function aiInfo(){
-
-  modal.innerHTML = `
-
-    <button
-      class="close"
-      onclick="closeM()"
-    >
-      ×
-    </button>
-
-    <h2>🤖 TilbudsAI</h2>
-
-    <p class="muted">
-      Skriv kort hva jobben gjelder, så skriver AI-en
-      en profesjonell tekst for deg.
+  <header>
+    <div class="logo">Tilbuds<span>AI</span></div>
+    <div class="nav-label">Din reise. Ditt budsjett.</div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">Reis smartere</div>
+    <h1>Drøm deg bort.<br>Vi planlegger resten.</h1>
+    <p>
+      Fortell oss hvor du vil reise og hvor mye du vil bruke.
+      Få et personlig forslag til reiserute, aktiviteter og budsjett.
     </p>
-
-    <label>
-      Hva skal gjøres?
-    </label>
-
-    <textarea
-      id="aiJob"
-      rows="6"
-      placeholder="F.eks. Male stue og gang, ca. 55 m², to strøk."
-    ></textarea>
-
-    <button
-      class="btn primary"
-      id="aiButton"
-      onclick="runAI()"
-    >
-      🤖 Lag tekst med AI
-    </button>
-
-    <div
-      id="aiResult"
-      style="
-        margin-top:20px;
-        padding:16px;
-        background:#f4f7fb;
-        border-radius:12px;
-        display:none;
-        white-space:pre-line;
-      "
-    ></div>
-
-  `;
-
-  openM();
-
-}
-
-
-async function runAI(){
-
-  const text =
-    document
-      .getElementById("aiJob")
-      .value
-      .trim();
-
-  if(!text){
-
-    alert("Skriv først hva jobben gjelder.");
-
-    return;
-
-  }
-
-  const button =
-    document.getElementById("aiButton");
-
-  const result =
-    document.getElementById("aiResult");
-
-  button.disabled = true;
-  button.innerText = "🤖 AI skriver...";
-
-  try{
-
-    const response =
-      await fetch("/api/generate",{
-
-        method:"POST",
-
-        headers:{
-          "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify({
-
-          customer:"Kunden",
-          jobType:"Tjeneste",
-          job:text,
-          hours:0,
-          hourly:0,
-          materials:0
-
-        })
-
-      });
-
-
-    const data =
-      await response.json();
-
-
-    if(!response.ok){
-
-      throw new Error(
-        data.error || "AI-feil"
-      );
-
-    }
-
-
-    window.lastAIText =
-      data.text ||
-      "Ingen tekst mottatt.";
-
-
-    result.style.display = "block";
-
-    result.innerHTML = `
-
-      <strong>🤖 AI-generert tekst</strong>
-
-      <br><br>
-
-      ${e(window.lastAIText)}
-
-      <br><br>
-
-      <button
-        class="btn dark"
-        onclick="openOfferFromAI()"
-      >
-        📄 Lag komplett tilbud
-      </button>
-
-    `;
-
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(
-      "Kunne ikke koble til AI akkurat nå. Prøv igjen."
-    );
-
-
-  }finally{
-
-    button.disabled = false;
-
-    button.innerText =
-      "🤖 Lag tekst med AI";
-
-  }
-
-}
-
-
-/* =========================
-   KOMPLETT TILBUD
-   ========================= */
-
-function openOfferFromAI(){
-
-  const aiText =
-    window.lastAIText ||
-    document.getElementById("aiJob")?.value ||
-    "";
-
-  modal.innerHTML = `
-
-    <button
-      class="close"
-      onclick="closeM()"
-    >
-      ×
-    </button>
-
-    <h2>📄 Lag komplett tilbud</h2>
-
-    <p class="muted">
-      AI-teksten er hentet inn. Fyll inn kunden og prisene.
-    </p>
-
-    <label>
-      Kundens navn
-    </label>
-
-    <input
-      id="offerCustomer"
-      placeholder="F.eks. Ola Nordmann"
-    >
-
-    <label>
-      Kundens e-post
-    </label>
-
-    <input
-      id="offerEmail"
-      type="email"
-      placeholder="kunde@email.no"
-    >
-
-    <label>
-      Type jobb
-    </label>
-
-    <input
-      id="offerJobType"
-      value="Tjeneste"
-    >
-
-    <label>
-      Beskrivelse av arbeidet
-    </label>
-
-    <textarea
-      id="offerDescription"
-      rows="8"
-    >${e(aiText)}</textarea>
-
-    <div class="formgrid">
-
-      <div>
-
-        <label>
-          Timer
-        </label>
-
-        <input
-          id="offerHours"
-          type="number"
-          min="0"
-          value="0"
-          oninput="calculateOffer()"
-        >
-
-      </div>
-
-      <div>
-
-        <label>
-          Timepris
-        </label>
-
-        <input
-          id="offerHourly"
-          type="number"
-          min="0"
-          value="0"
-          oninput="calculateOffer()"
-        >
-
-      </div>
-
-      <div class="full">
-
-        <label>
-          Materialer
-        </label>
-
-        <input
-          id="offerMaterials"
-          type="number"
-          min="0"
-          value="0"
-          oninput="calculateOffer()"
-        >
-
-      </div>
-
-    </div>
-
-    <div
-      class="card"
-      style="margin-top:10px;background:#f4f7fb"
-    >
-
-      <p>
-        Arbeid:
-        <strong id="offerWork">
-          0 kr
-        </strong>
+  </section>
+
+  <main class="main">
+    <section class="planner">
+      <h2 class="section-heading">Planlegg din neste reise</h2>
+      <p class="subheading">
+        Start med noen få detaljer, så lager vi et forslag som passer deg.
       </p>
 
-      <p>
-        Materialer:
-        <strong id="offerMaterialTotal">
-          0 kr
-        </strong>
-      </p>
-
-      <p>
-        Eks. MVA:
-        <strong id="offerExVat">
-          0 kr
-        </strong>
-      </p>
-
-      <p>
-        MVA 25 %:
-        <strong id="offerVat">
-          0 kr
-        </strong>
-      </p>
-
-      <h3>
-        Total inkl. MVA:
-        <span id="offerTotal">
-          0 kr
-        </span>
-      </h3>
-
-    </div>
-
-    <br>
-
-    <button
-      class="btn primary"
-      onclick="sendOffer()"
-    >
-      📤 Send tilbud
-    </button>
-
-  `;
-
-  calculateOffer();
-
-  openM();
-
-}
-
-
-function calculateOffer(){
-
-  const hours =
-    Number(
-      document.getElementById("offerHours")?.value || 0
-    );
-
-  const hourly =
-    Number(
-      document.getElementById("offerHourly")?.value || 0
-    );
-
-  const materials =
-    Number(
-      document.getElementById("offerMaterials")?.value || 0
-    );
-
-
-  const work =
-    hours * hourly;
-
-  const exVat =
-    work + materials;
-
-  const vat =
-    exVat * 0.25;
-
-  const total =
-    exVat + vat;
-
-
-  const money =
-    value =>
-      new Intl.NumberFormat("nb-NO")
-        .format(Math.round(value))
-        + " kr";
-
-
-  document.getElementById("offerWork")
-    .innerText = money(work);
-
-  document.getElementById("offerMaterialTotal")
-    .innerText = money(materials);
-
-  document.getElementById("offerExVat")
-    .innerText = money(exVat);
-
-  document.getElementById("offerVat")
-    .innerText = money(vat);
-
-  document.getElementById("offerTotal")
-    .innerText = money(total);
-
-}
-
-
-async function sendOffer(){
-
-  const customer =
-    document
-      .getElementById("offerCustomer")
-      ?.value
-      .trim();
-
-  const customerEmail =
-    document
-      .getElementById("offerEmail")
-      ?.value
-      .trim();
-
-  const jobType =
-    document
-      .getElementById("offerJobType")
-      ?.value
-      .trim();
-
-  const job =
-    document
-      .getElementById("offerDescription")
-      ?.value
-      .trim();
-
-  const hours =
-    Number(
-      document
-        .getElementById("offerHours")
-        ?.value || 0
-    );
-
-  const hourly =
-    Number(
-      document
-        .getElementById("offerHourly")
-        ?.value || 0
-    );
-
-  const materials =
-    Number(
-      document
-        .getElementById("offerMaterials")
-        ?.value || 0
-    );
-
-
-  const total =
-    (hours * hourly + materials) * 1.25;
-
-
-  if(
-    !customer ||
-    !customerEmail ||
-    !job
-  ){
-
-    alert(
-      "Fyll inn kundens navn, e-post og beskrivelse."
-    );
-
-    return;
-
-  }
-
-
-  try{
-
-    const response =
-      await fetch("/api/send",{
-
-        method:"POST",
-
-        headers:{
-          "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify({
-
-          customerEmail,
-          customer,
-          jobType,
-          job,
-          hours,
-          hourly,
-          materials,
-          total:Math.round(total)
-
-        })
-
-      });
-
-
-    const data =
-      await response.json();
-
-
-    if(!response.ok){
-
-      throw new Error(
-        data.error ||
-        "Kunne ikke sende tilbudet."
-      );
-
-    }
-
-
-    const offer = {
-  id: Date.now().toString(),
-  customer,
-  customerEmail,
-  jobType,
-  job,
-  hours,
-  hourly,
-  materials,
-  total: Math.round(total),
-  status: "Venter på svar",
-  created: new Date().toISOString()
-};
-
-offersData.unshift(offer);
-
-localStorage.setItem(
-  "tilbudsaiOffers",
-  JSON.stringify(offersData)
-);
-
-alert(
-  "✅ Tilbudet er sendt til kunden!"
-);
-
-
-    closeM();
-
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(
-      error.message ||
-      "Kunne ikke sende tilbudet akkurat nå."
-    );
-
-  }
-
-}
-  /* =========================
-   MINE TILBUD
-   ========================= */
-
-function myOffers(){
-
-  if(!user){
-    login();
-    return;
-  }
-
-  app.innerHTML=`
-
-    <div class="actions"
-      style="justify-content:space-between">
-
-      <div>
-        <h2>📄 Mine tilbud</h2>
-
-        <p class="muted">
-          Hold oversikt over tilbud du har sendt.
-        </p>
-      </div>
-
-      <button
-        class="btn primary"
-        onclick="aiInfo()"
-      >
-        🤖 Lag nytt tilbud
-      </button>
-
-    </div>
-
-    <div
-      id="offersList"
-      style="margin-top:16px"
-    ></div>
-
-  `;
-
-  renderOffers();
-
-}
-
-
-function renderOffers(){
-
-  const list =
-    document.getElementById("offersList");
-
-  if(!list)return;
-
-  if(!offersData.length){
-
-    list.innerHTML=`
-
-      <div class="card empty">
-
-        📄 Du har ikke sendt noen tilbud ennå.
-
-        <br><br>
-
-        <button
-          class="btn primary"
-          onclick="aiInfo()"
-        >
-          🤖 Lag ditt første tilbud
-        </button>
-
-      </div>
-
-    `;
-
-    return;
-  }
-
-  list.innerHTML =
-    offersData.map(function(offer){
-
-      return `
-
-        <article
-          class="card"
-          style="margin-bottom:16px"
-        >
-
-          <div class="actions"
-            style="justify-content:space-between">
-
-            <div>
-
-              <h3>
-                📄 ${e(offer.jobType || "Tilbud")}
-              </h3>
-
-              <div class="meta">
-                👤 ${e(offer.customer)}
-                ·
-                ${e(offer.customerEmail)}
-              </div>
-
+      <form id="travelForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="destination">Hvor vil du reise?</label>
+            <input id="destination" name="destination"
+              placeholder="F.eks. Malta, Dubai eller Roma" required>
+          </div>
+
+          <div class="field">
+            <label for="budget">Totalt budsjett (NOK)</label>
+            <input id="budget" name="budget" type="number"
+              min="1000" max="1000000" step="500"
+              placeholder="15000" required>
+          </div>
+
+          <div class="field">
+            <label for="days">Hvor lenge vil du være borte?</label>
+            <select id="days" name="days">
+              <option value="3">3 dager</option>
+              <option value="5">5 dager</option>
+              <option value="7" selected>7 dager</option>
+              <option value="10">10 dager</option>
+              <option value="14">14 dager</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="people">Antall reisende</label>
+            <select id="people" name="people">
+              <option value="1">1 person</option>
+              <option value="2" selected>2 personer</option>
+              <option value="3">3 personer</option>
+              <option value="4">4 personer</option>
+              <option value="5">5 personer</option>
+              <option value="6">6 personer</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="style">Hvordan vil du reise?</label>
+            <select id="style" name="style">
+              <option value="balanced">En god blanding av alt</option>
+              <option value="budget">Budsjettvennlig</option>
+              <option value="luxury">Luksus og velvære</option>
+              <option value="adventure">Eventyr og aktiviteter</option>
+              <option value="relax">Avslapning og strand</option>
+              <option value="culture">Kultur, mat og sightseeing</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label>Skal flybilletter inkluderes i budsjettet?</label>
+            <div class="toggle-row">
+              <label class="toggle-option">
+                <input type="radio" name="flights" value="yes" checked>
+                Ja, inkludert
+              </label>
+              <label class="toggle-option">
+                <input type="radio" name="flights" value="no">
+                Nei, allerede betalt
+              </label>
             </div>
-
-            <span class="tag">
-              🟡 ${e(offer.status)}
-            </span>
-
           </div>
+        </div>
 
-          <p>
-            ${e(offer.job)}
-          </p>
+        <button class="primary-btn" type="submit">
+          Lag reiseplanen min →
+        </button>
+        <p class="small-note">
+          Du får et foreløpig forslag. Prisene er estimater, ikke bekreftede tilbud.
+        </p>
+      </form>
 
-          <p>
-            💰 Total inkl. MVA:
-            <strong>
-              ${new Intl.NumberFormat("nb-NO")
-                .format(offer.total)} kr
-            </strong>
-          </p>
+      <section id="results" class="hidden" aria-live="polite"></section>
+    </section>
+  </main>
 
-          <div class="meta">
-            Sendt:
-            ${new Date(offer.created)
-              .toLocaleDateString("nb-NO")}
+  <footer>
+    <strong>TilbudsAI</strong> · Planlegg smartere, opplev mer.
+    <br><br>
+    Reisebudsjett og forslag må kontrolleres før bestilling.
+  </footer>
+
+  <script>
+    const form = document.getElementById("travelForm");
+    const results = document.getElementById("results");
+
+    const formatNOK = amount =>
+      new Intl.NumberFormat("nb-NO", {
+        style: "currency",
+        currency: "NOK",
+        maximumFractionDigits: 0
+      }).format(amount);
+
+    const activities = {
+      balanced: [
+        ["Utforsk området", "Gå en tur i sentrum og finn en hyggelig lokal restaurant."],
+        ["Opplevelser", "Sett av dagen til et kjent landemerke og en lokal aktivitet."],
+        ["Strand og avslapning", "Bruk dagen på en strand, park eller et rolig område."],
+        ["Lokal kultur", "Utforsk markeder, historiske steder og lokale matretter."],
+        ["En liten utflukt", "Undersøk en dagstur eller et område utenfor sentrum."],
+        ["Tid til deg selv", "Velg en kafé, spa-opplevelse eller en rolig ettermiddag."],
+        ["Siste oppdagelser", "Handle suvenirer og besøk et sted du ikke har rukket ennå."]
+      ],
+      budget: [
+        ["Bli kjent med byen", "Utforsk sentrum til fots og finn rimelige spisesteder."],
+        ["Gratis severdigheter", "Se etter parker, utsiktspunkter og gratis attraksjoner."],
+        ["Lokal mat", "Prøv lokale retter på markeder og rimelige restauranter."],
+        ["Kultur på budsjett", "Se etter gratis museer eller rabatterte inngangsbilletter."],
+        ["Utforsk nærområdet", "Bruk kollektivtransport til en rimelig utflukt."],
+        ["Rolig dag", "Ta med mat til en park eller strand."],
+        ["Siste stopp", "Bruk resten av dagen på favorittstedene dine."]
+      ],
+      luxury: [
+        ["Velkommen", "Nyt en god middag og utforsk området rundt hotellet."],
+        ["Velvære", "Vurder spa, massasje eller en avslappende hotellopplevelse."],
+        ["Eksklusiv opplevelse", "Undersøk en privat tur eller en guidet aktivitet."],
+        ["Matopplevelse", "Reserver bord på en restaurant du har lyst til å prøve."],
+        ["Utforsk med stil", "Velg en komfortabel utflukt eller en båttur."],
+        ["Rolig luksus", "Sett av tid til basseng, strand eller spa."],
+        ["Avslutning", "Nyt en siste middag og en rolig kveld."]
+      ],
+      adventure: [
+        ["Utforsk", "Finn en guidet bytur eller en spennende utendørsaktivitet."],
+        ["Ut på tur", "Undersøk lokale turstier eller en naturopplevelse."],
+        ["Vann og aktivitet", "Se etter kajakk, snorkling eller andre lokale aktiviteter."],
+        ["Kultur og action", "Kombiner et landemerke med en aktiv opplevelse."],
+        ["Dagstur", "Planlegg en tur til et naturområde eller en nærliggende by."],
+        ["Prøv noe nytt", "Undersøk en aktivitet du ikke har prøvd før."],
+        ["Favorittaktivitet", "Gjenta favoritten eller utforsk et nytt område."]
+      ],
+      relax: [
+        ["Myk start", "Finn en rolig kafé og nyt området i ditt eget tempo."],
+        ["Stranddag", "Sett av god tid til strand, sol og bading hvis været tillater det."],
+        ["Velvære", "Vurder spa eller en avslappende behandling."],
+        ["Lokal nytelse", "Prøv en hyggelig restaurant og ta en rolig kveldstur."],
+        ["Rolig utforskning", "Besøk en park, promenade eller et vakkert utsiktspunkt."],
+        ["Fri dag", "Hold planen åpen og velg det du har mest lyst til."],
+        ["Avslutning", "Nyt en siste stranddag eller en avslappende middag."]
+      ],
+      culture: [
+        ["Historisk sentrum", "Utforsk gamlebyen og de viktigste historiske områdene."],
+        ["Museer", "Velg et museum eller en guidet kulturvandring."],
+        ["Smak på stedet", "Oppdag lokale retter og tradisjonelle markeder."],
+        ["Arkitektur", "Besøk kjente bygninger, kirker eller historiske landemerker."],
+        ["Lokal utflukt", "Undersøk en nærliggende by eller et kultursted."],
+        ["Mat og kunst", "Se etter matkurs, gallerier eller kulturelle arrangementer."],
+        ["Favoritter", "Bruk dagen på stedene du likte best."]
+      ]
+    };
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const destination = document.getElementById("destination").value.trim();
+      const budget = Number(document.getElementById("budget").value);
+      const days = Number(document.getElementById("days").value);
+      const people = Number(document.getElementById("people").value);
+      const style = document.getElementById("style").value;
+      const flights = form.querySelector('input[name="flights"]:checked').value;
+
+      if (!destination || !Number.isFinite(budget) || budget < 1000) {
+        alert("Skriv inn et reisemål og et budsjett på minst 1 000 kr.");
+        return;
+      }
+
+      const flightShare = flights === "yes" ? 0.25 : 0;
+      const hotelShare = 0.30;
+      const foodShare = 0.20;
+      const activityShare = 0.15;
+      const transportShare = 0.07;
+      const reserveShare = 1 - flightShare - hotelShare - foodShare -
+        activityShare - transportShare;
+
+      const categories = [
+        ["Fly", flightShare],
+        ["Overnatting", hotelShare],
+        ["Mat og drikke", foodShare],
+        ["Aktiviteter", activityShare],
+        ["Lokal transport", transportShare],
+        ["Reserve", reserveShare]
+      ];
+
+      const perPerson = budget / people;
+      const daily = budget / days;
+      const plan = activities[style] || activities.balanced;
+
+      let html = `
+        <div class="results-top">
+          <h2>Din reiseoversikt</h2>
+        </div>
+        <div class="budget-card">
+          <small>Planlagt totalbudsjett · ${people} reisende</small>
+          <div class="budget-total">${formatNOK(budget)}</div>
+          <div class="budget-lines">
+            <div class="budget-line">Per person
+              <strong>${formatNOK(perPerson)}</strong>
+            </div>
+            <div class="budget-line">Per dag, hele gruppen
+              <strong>${formatNOK(daily)}</strong>
+            </div>
           </div>
-
-        </article>
-
+        </div>
+        <h2 class="section-heading">Budsjettfordeling</h2>
+        <p class="subheading">
+          Et illustrerende utgangspunkt for ${destination}.
+          Juster for faktiske priser og behov.
+        </p>
       `;
 
-    }).join("");
+      categories.forEach(([name, share]) => {
+        html += `
+          <div class="day-card">
+            <p><strong>${name}</strong> · ${formatNOK(budget * share)}</p>
+          </div>
+        `;
+      });
 
-}
+      html += `
+        <h2 class="section-heading" style="margin-top:30px">
+          Forslag til reiserute
+        </h2>
+        <p class="subheading">
+          ${days} dager i ${destination} · Reisestil: ${
+            document.getElementById("style").selectedOptions[0].text
+          }
+        </p>
+      `;
 
-/* =========================
-   AI BUSINESS COPILOT
-   ========================= */
+      for (let i = 0; i < days; i++) {
+        const item = plan[i % plan.length];
+        html += `
+          <article class="day-card">
+            <span class="tag">Dag ${i + 1}</span>
+            <h3>${item[0]}</h3>
+            <p>${item[1]}</p>
+            <p><strong>Tips:</strong> Sjekk åpningstider, transport og priser
+            før du drar.</p>
+          </article>
+        `;
+      }
 
-function businessCopilot(){
+      html += `
+        <div class="notice">
+          <strong>Viktig:</strong> Dette er en tidlig prototype.
+          Reiseruten er et generelt forslag, og budsjettandelene er ikke
+          basert på live priser eller bekreftede fly- og hotelltilbud.
+          TilbudsAI har ennå ikke koblet denne siden til en AI-tjeneste
+          eller bestillingsleverandører.
+        </div>
+      `;
 
-  if(!user){
-    login();
-    return;
-  }
-
-  const waiting =
-    offersData.filter(function(offer){
-      return offer.status === "Venter på svar";
+      results.innerHTML = html;
+      results.classList.remove("hidden");
+      results.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-
-  const won =
-    offersData.filter(function(offer){
-      return offer.status === "Vunnet";
-    });
-
-  const lost =
-    offersData.filter(function(offer){
-      return offer.status === "Tapt";
-    });
-
-  const waitingValue =
-    waiting.reduce(function(sum,offer){
-      return sum + Number(offer.total || 0);
-    },0);
-
-  const wonValue =
-    won.reduce(function(sum,offer){
-      return sum + Number(offer.total || 0);
-    },0);
-
-  const totalValue =
-    offersData.reduce(function(sum,offer){
-      return sum + Number(offer.total || 0);
-    },0);
-
-  const conversionRate =
-    offersData.length
-    ? Math.round(
-        (won.length / offersData.length) * 100
-      )
-    : 0;
-
-  let advice = "";
-
-  if(waiting.length > 0){
-
-    const oldest =
-      waiting
-        .slice()
-        .sort(function(a,b){
-          return new Date(a.created) -
-                 new Date(b.created);
-        })[0];
-
-    advice = `
-      <div class="card"
-        style="
-          margin-top:16px;
-          border:2px solid var(--green);
-        "
-      >
-
-        <h3>🎯 Dette bør du gjøre først</h3>
-
-        <p>
-          Du har
-          <strong>${waiting.length}</strong>
-          tilbud som venter på svar.
-        </p>
-
-        <p>
-          Det tilsvarer
-          <strong>
-            ${new Intl.NumberFormat("nb-NO")
-              .format(waitingValue)} kr
-          </strong>
-          i potensiell omsetning.
-        </p>
-
-        <p>
-          👤 Start med å følge opp
-          <strong>${e(oldest.customer)}</strong>.
-        </p>
-
-        <button
-          class="btn primary"
-          onclick="myOffers()"
-        >
-          📄 Se tilbudene
-        </button>
-
-      </div>
-    `;
-
-  }else if(!offersData.length){
-
-    advice = `
-      <div class="card"
-        style="margin-top:16px"
-      >
-
-        <h3>🚀 La oss komme i gang</h3>
-
-        <p class="muted">
-          Du har ikke sendt noen tilbud ennå.
-          Lag ditt første tilbud med TilbudsAI.
-        </p>
-
-        <button
-          class="btn primary"
-          onclick="aiInfo()"
-        >
-          🤖 Lag første tilbud
-        </button>
-
-      </div>
-    `;
-
-  }else{
-
-    advice = `
-      <div class="card"
-        style="margin-top:16px"
-      >
-
-        <h3>✨ Alt ser bra ut</h3>
-
-        <p>
-          Du har ingen åpne tilbud som trenger
-          umiddelbar oppfølging.
-        </p>
-
-        <button
-          class="btn primary"
-          onclick="aiInfo()"
-        >
-          🤖 Lag nytt tilbud
-        </button>
-
-      </div>
-    `;
-
-  }
-
-
-  modal.innerHTML = `
-
-    <button
-      class="close"
-      onclick="closeM()"
-    >
-      ×
-    </button>
-
-    <h2>🤖 AI Business Copilot</h2>
-
-    <p class="muted">
-      Din personlige oversikt over tilbud,
-      kunder og muligheter.
-    </p>
-
-    <div class="grid">
-
-      <div class="card">
-
-        <h3>🟡 ${waiting.length}</h3>
-
-        <p class="muted">
-          Venter på svar
-        </p>
-
-        <strong>
-          ${new Intl.NumberFormat("nb-NO")
-            .format(waitingValue)} kr
-        </strong>
-
-      </div>
-
-
-      <div class="card">
-
-        <h3>🟢 ${won.length}</h3>
-
-        <p class="muted">
-          Vunne jobber
-        </p>
-
-        <strong>
-          ${new Intl.NumberFormat("nb-NO")
-            .format(wonValue)} kr
-        </strong>
-
-      </div>
-
-
-      <div class="card">
-
-        <h3>📈 ${conversionRate}%</h3>
-
-        <p class="muted">
-          Trefferprosent
-        </p>
-
-        <strong>
-          ${won.length} av ${offersData.length}
-        </strong>
-
-      </div>
-
-    </div>
-
-
-    ${advice}
-
-
-    <div class="card"
-      style="margin-top:16px"
-    >
-
-      <h3>💰 Tilbudsoversikt</h3>
-
-      <p>
-        Totalt sendt:
-        <strong>
-          ${new Intl.NumberFormat("nb-NO")
-            .format(totalValue)} kr
-        </strong>
-      </p>
-
-      <p>
-        🟡 Potensielt:
-        <strong>
-          ${new Intl.NumberFormat("nb-NO")
-            .format(waitingValue)} kr
-        </strong>
-      </p>
-
-      <p>
-        🟢 Vunnet:
-        <strong>
-          ${new Intl.NumberFormat("nb-NO")
-            .format(wonValue)} kr
-        </strong>
-      </p>
-
-    </div>
-
-
-    <div class="card"
-      style="
-        margin-top:16px;
-        background:#f4f7fb;
-      "
-    >
-
-      <h3>🧠 TilbudsAI-tipset</h3>
-
-      <p class="muted">
-
-        ${
-          waiting.length >= 3
-          ?
-          "Du har flere tilbud som venter. Følg dem opp før du bruker tid på nye leads."
-          :
-          won.length > 0
-          ?
-          "Fortsett å bruke samme type tilbud som har gitt deg vunne jobber."
-          :
-          "Jo flere gode tilbud du sender, desto mer data kan TilbudsAI bruke til å hjelpe deg."
-        }
-
-      </p>
-
-    </div>
-
-  `;
-
-  openM();
-
-}
-  
-/* =========================
-   JOBBER
-========================= */
-
-function jobs(){
-
-app.innerHTML=`
-
-<div class="actions"
-style="justify-content:space-between">
-
-<div>
-
-<h2>
-📢 Jobber
-</h2>
-
-<p class="muted">
-Finn jobber som kunder har lagt ut.
-</p>
-
-</div>
-
-<button
-class="btn primary"
-onclick="jobForm()"
->
-📢 Legg ut jobb
-</button>
-
-</div>
-
-
-<div class="card">
-
-<input
-id="search"
-placeholder="Søk etter maling, rørlegger, Oslo..."
-oninput="renderJobs()"
->
-
-</div>
-
-
-<div
-id="list"
-class="grid"
-style="margin-top:16px"
-></div>
-
-`;
-
-renderJobs();
-
-}
-
-
-function renderJobs(){
-
-const list =
-document.getElementById("list");
-
-if(!list)return;
-
-
-const q =
-(
-document.getElementById("search")?.value || ""
-).toLowerCase();
-
-
-const filtered =
-jobsData.filter(function(job){
-
-return (
-
-job.title +
-" " +
-job.location +
-" " +
-job.category +
-" " +
-job.description
-
-)
-.toLowerCase()
-.includes(q);
-
-});
-
-
-if(!filtered.length){
-
-list.innerHTML=`
-
-<div class="card empty">
-
-Ingen jobber funnet ennå.
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-list.innerHTML =
-filtered.map(function(job){
-
-return `
-
-<article class="card job">
-
-<h3>
-🏠 ${e(job.title)}
-</h3>
-
-<div class="meta">
-
-📍 ${e(job.location)}
-
-·
-
-📅 ${e(job.date || "Fleksibelt")}
-
-</div>
-
-<span class="tag">
-${e(job.category || "Annet")}
-</span>
-
-<p>
-${e(job.description)}
-</p>
-
-<button
-class="btn primary"
-onclick="viewJob('${job.id}')"
->
-Se jobb
-</button>
-
-</article>
-
-`;
-
-}).join("");
-
-}
-
-
-/* =========================
-   JOBB-SKJEMA
-========================= */
-
-function jobForm(){
-
-if(!user){
-
-login();
-
-return;
-
-}
-
-
-modal.innerHTML=`
-
-<button
-class="close"
-onclick="closeM()"
->
-×
-</button>
-
-<h2>
-📢 Legg ut en jobb
-</h2>
-
-<p class="muted">
-Beskriv hva du trenger hjelp med.
-</p>
-
-
-<form id="jobForm">
-
-<div class="formgrid">
-
-
-<div>
-
-<label>
-Hva trenger du hjelp med?
-</label>
-
-<input
-id="jobTitle"
-placeholder="F.eks. Male stue og gang"
-required
->
-
-</div>
-
-
-<div>
-
-<label>
-Hvor?
-</label>
-
-<input
-id="jobLocation"
-placeholder="F.eks. Oslo"
-required
->
-
-</div>
-
-
-<div>
-
-<label>
-Kategori
-</label>
-
-<select id="jobCategory">
-
-<option>Maling</option>
-<option>Elektriker</option>
-<option>Rørlegger</option>
-<option>Renhold</option>
-<option>Flytting</option>
-<option>Bygg</option>
-<option>Hage</option>
-<option>Annet</option>
-
-</select>
-
-</div>
-
-
-<div>
-
-<label>
-Når?
-</label>
-
-<input
-id="jobDate"
-placeholder="Så snart som mulig"
->
-
-</div>
-
-
-<div class="full">
-
-<label>
-Beskriv jobben
-</label>
-
-<textarea
-id="jobDescription"
-rows="5"
-placeholder="Hva skal gjøres?"
-required
-></textarea>
-
-</div>
-
-
-</div>
-
-
-<button
-class="btn primary"
-type="submit"
->
-📢 Publiser jobb
-</button>
-
-</form>
-
-`;
-
-
-document
-.getElementById("jobForm")
-.onsubmit=function(event){
-
-event.preventDefault();
-
-
-const job={
-
-id:
-Date.now().toString(),
-
-owner:
-user.id,
-
-title:
-document.getElementById("jobTitle").value,
-
-location:
-document.getElementById("jobLocation").value,
-
-category:
-document.getElementById("jobCategory").value,
-
-date:
-document.getElementById("jobDate").value,
-
-description:
-document.getElementById("jobDescription").value,
-
-created:
-new Date().toISOString()
-
-};
-
-
-jobsData.unshift(job);
-
-
-localStorage.setItem(
-"tilbudsaiJobs",
-JSON.stringify(jobsData)
-);
-
-
-closeM();
-
-jobs();
-
-};
-
-openM();
-
-}
-
-
-/* =========================
-   VIS JOBB
-========================= */
-
-function viewJob(id){
-
-const job =
-jobsData.find(
-function(x){
-return x.id===id;
-}
-);
-
-if(!job)return;
-
-
-modal.innerHTML=`
-
-<button
-class="close"
-onclick="closeM()"
->
-×
-</button>
-
-<h2>
-🏠 ${e(job.title)}
-</h2>
-
-<p class="muted">
-📍 ${e(job.location)}
-·
-📅 ${e(job.date || "Fleksibelt")}
-</p>
-
-<span class="tag">
-${e(job.category)}
-</span>
-
-<p>
-${e(job.description)}
-</p>
-
-<hr>
-
-<h3>
-💬 Interessert i jobben?
-</h3>
-
-${
-user
-
-?
-
-`
-
-<textarea
-id="interestMessage"
-rows="4"
-placeholder="Hei! Jeg er interessert i å hjelpe med denne jobben..."
-></textarea>
-
-<button
-class="btn primary"
-onclick="sendMessage(
-'${job.owner}',
-'${job.id}'
-)"
->
-📨 Kontakt kunden
-</button>
-
-`
-
-:
-
-`
-
-<button
-class="btn primary"
-onclick="login()"
->
-🔐 Logg inn for å kontakte kunden
-</button>
-
-`
-
-}
-
-`;
-
-openM();
-
-}
-
-
-/* =========================
-   TJENESTER
-========================= */
-
-function providers(){
-
-app.innerHTML=`
-
-<h2>
-👷 Finn tjenesteleverandører
-</h2>
-
-<p class="muted">
-Finn folk og bedrifter som tilbyr tjenester.
-</p>
-
-
-<div class="card">
-
-<input
-id="providerSearch"
-placeholder="Søk etter maler, elektriker, Oslo..."
-oninput="renderProviders()"
->
-
-</div>
-
-
-<div
-id="providerList"
-class="grid"
-style="margin-top:16px"
-></div>
-
-`;
-
-renderProviders();
-
-}
-
-
-function renderProviders(){
-
-const list =
-document.getElementById("providerList");
-
-if(!list)return;
-
-
-const q =
-(
-document.getElementById("providerSearch")?.value || ""
-).toLowerCase();
-
-
-const providerList =
-profiles.filter(function(p){
-
-return (
-
-p.role==="provider"
-
-&&
-
-(
-p.name +
-" " +
-p.company +
-" " +
-p.location +
-" " +
-p.services +
-" " +
-p.description
-)
-
-.toLowerCase()
-.includes(q)
-
-);
-
-});
-
-
-if(!providerList.length){
-
-list.innerHTML=`
-
-<div class="card empty">
-
-Ingen tjenesteleverandører funnet ennå.
-
-<br><br>
-
-Opprett leverandørprofil for å bli synlig her.
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-list.innerHTML =
-providerList.map(function(p){
-
-return `
-
-<article class="card">
-
-<h3>
-👷 ${e(p.name)}
-</h3>
-
-<strong>
-${e(p.company || "Tjenesteleverandør")}
-</strong>
-
-<p>
-📍 ${e(p.location)}
-</p>
-
-<p>
-${e(
-p.description ||
-"Tilbyr tjenester via TilbudsAI."
-)}
-</p>
-
-<div>
-
-${
-(p.services || "")
-.split(",")
-.filter(Boolean)
-.map(function(service){
-
-return `
-
-<span class="tag">
-${e(service.trim())}
-</span>
-
-`;
-
-})
-.join("")
-}
-
-</div>
-
-<button
-class="btn primary"
-onclick="contactProvider('${p.id}')"
->
-💬 Kontakt
-</button>
-
-</article>
-
-`;
-
-}).join("");
-
-}
-
-
-/* =========================
-   KONTAKT
-========================= */
-
-function contactProvider(id){
-
-if(!user){
-
-login();
-
-return;
-
-}
-
-
-modal.innerHTML=`
-
-<button
-class="close"
-onclick="closeM()"
->
-×
-</button>
-
-<h2>
-💬 Send melding
-</h2>
-
-<textarea
-id="providerMessage"
-rows="5"
-placeholder="Skriv meldingen din..."
-></textarea>
-
-<button
-class="btn primary"
-onclick="sendMessage('${id}',null)"
->
-📨 Send melding
-</button>
-
-`;
-
-openM();
-
-}
-
-
-/* =========================
-   MELDINGER
-========================= */
-
-function sendMessage(receiver,jobId){
-
-const field =
-jobId
-
-?
-
-document.getElementById(
-"interestMessage"
-)
-
-:
-
-document.getElementById(
-"providerMessage"
-);
-
-
-const text =
-field?.value.trim();
-
-
-if(!text){
-
-alert(
-"Skriv en melding først."
-);
-
-return;
-
-}
-
-
-messagesData.push({
-
-id:
-Date.now().toString(),
-
-sender:
-user.id,
-
-receiver:
-receiver,
-
-job:
-jobId,
-
-text:
-text,
-
-time:
-new Date().toISOString()
-
-});
-
-
-localStorage.setItem(
-"tilbudsaiMessages",
-JSON.stringify(messagesData)
-);
-
-
-closeM();
-
-alert(
-"✅ Meldingen er sendt!"
-);
-
-messages();
-
-}
-
-
-function messages(){
-
-if(!user){
-
-login();
-
-return;
-
-}
-
-
-app.innerHTML=`
-
-<h2>
-💬 Meldinger
-</h2>
-
-<p class="muted">
-Kommuniser med kunder og tjenesteleverandører.
-</p>
-
-<div id="messageArea"></div>
-
-`;
-
-renderMessages();
-
-}
-
-
-function renderMessages(){
-
-const area =
-document.getElementById("messageArea");
-
-if(!area)return;
-
-
-const mine =
-messagesData.filter(function(message){
-
-return (
-
-message.sender===user.id ||
-
-message.receiver===user.id
-
-);
-
-});
-
-
-if(!mine.length){
-
-area.innerHTML=`
-
-<div class="card empty">
-
-Ingen meldinger ennå.
-
-<br><br>
-
-Finn en jobb eller tjenesteleverandør
-for å starte en samtale.
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-const grouped={};
-
-
-mine.forEach(function(message){
-
-const other =
-message.sender===user.id
-? message.receiver
-: message.sender;
-
-
-if(!grouped[other]){
-grouped[other]=[];
-}
-
-
-grouped[other].push(message);
-
-});
-
-
-area.innerHTML =
-Object.keys(grouped)
-.map(function(other){
-
-const otherProfile =
-profiles.find(
-function(p){
-return p.id===other;
-}
-);
-
-
-return `
-
-<div
-class="card"
-style="margin-bottom:16px"
->
-
-<h3>
-💬 ${
-e(
-otherProfile?.name ||
-"Bruker"
-)
-}
-</h3>
-
-
-<div class="messages">
-
-${
-grouped[other]
-.map(function(message){
-
-return `
-
-<div
-class="
-bubble
-${
-message.sender===user.id
-? "mine"
-: ""
-}
-"
->
-
-${e(message.text)}
-
-</div>
-
-`;
-
-})
-.join("")
-}
-
-</div>
-
-
-<textarea
-id="reply_${other}"
-rows="2"
-placeholder="Skriv et svar..."
-></textarea>
-
-
-<button
-class="btn primary"
-onclick="reply('${other}')"
->
-Send
-</button>
-
-</div>
-
-`;
-
-})
-.join("");
-
-}
-
-
-function reply(receiver){
-
-const field =
-document.getElementById(
-"reply_"+receiver
-);
-
-
-const text =
-field?.value.trim();
-
-
-if(!text)return;
-
-
-messagesData.push({
-
-id:
-Date.now().toString(),
-
-sender:
-user.id,
-
-receiver:
-receiver,
-
-job:null,
-
-text:
-text,
-
-time:
-new Date().toISOString()
-
-});
-
-
-localStorage.setItem(
-"tilbudsaiMessages",
-JSON.stringify(messagesData)
-);
-
-
-messages();
-
-}
-
-
-/* =========================
-   PROFIL
-========================= */
-
-function account(){
-
-if(!user){
-
-login();
-
-return;
-
-}
-
-
-const p =
-profiles.find(
-function(x){
-return x.id===user.id;
-}
-) || {};
-
-
-modal.innerHTML=`
-
-<button
-class="close"
-onclick="closeM()"
->
-×
-</button>
-
-<h2>
-👤 Min profil
-</h2>
-
-
-<form id="profileForm">
-
-
-<label>
-Jeg er
-</label>
-
-<select id="role">
-
-<option
-value="customer"
-${p.role==="customer"?"selected":""}
->
-🏠 Kunde
-</option>
-
-<option
-value="provider"
-${p.role==="provider"?"selected":""}
->
-👷 Tjenesteleverandør
-</option>
-
-</select>
-
-
-<label>
-Navn
-</label>
-
-<input
-id="name"
-value="${e(p.name)}"
-required
->
-
-
-<label>
-Firma
-</label>
-
-<input
-id="company"
-value="${e(p.company)}"
-placeholder="Firmanavn"
->
-
-
-<label>
-Sted
-</label>
-
-<input
-id="location"
-value="${e(p.location)}"
-placeholder="Oslo"
->
-
-
-<label>
-Telefon
-</label>
-
-<input
-id="phone"
-value="${e(p.phone)}"
-placeholder="Telefonnummer"
->
-
-
-<label>
-Tjenester
-</label>
-
-<input
-id="services"
-value="${e(p.services)}"
-placeholder="Maling, snekring, flytting"
->
-
-
-<label>
-Om deg
-</label>
-
-<textarea
-id="description"
-rows="4"
-placeholder="Fortell litt om deg..."
->${e(p.description)}</textarea>
-
-
-<button
-class="btn primary"
-type="submit"
->
-💾 Lagre profil
-</button>
-
-</form>
-
-
-<button
-class="btn soft"
-style="margin-top:10px"
-onclick="logout()"
->
-Logg ut
-</button>
-
-`;
-
-
-document
-.getElementById("profileForm")
-.onsubmit=function(event){
-
-event.preventDefault();
-
-
-const newProfile={
-
-id:
-user.id,
-
-role:
-document.getElementById("role").value,
-
-name:
-document.getElementById("name").value,
-
-company:
-document.getElementById("company").value,
-
-location:
-document.getElementById("location").value,
-
-phone:
-document.getElementById("phone").value,
-
-services:
-document.getElementById("services").value,
-
-description:
-document.getElementById("description").value
-
-};
-
-
-const index =
-profiles.findIndex(
-function(p){
-return p.id===user.id;
-}
-);
-
-
-if(index>=0){
-
-profiles[index]=newProfile;
-
-}else{
-
-profiles.push(newProfile);
-
-}
-
-
-localStorage.setItem(
-"tilbudsaiProfiles",
-JSON.stringify(profiles)
-);
-
-
-closeM();
-
-alert(
-"✅ Profilen er lagret!"
-);
-
-};
-
-
-openM();
-
-}
-
-
-/* =========================
-   LOGIN / KONTO
-========================= */
-
-function login(){
-
-modal.innerHTML=`
-
-<button
-class="close"
-onclick="closeM()"
->
-×
-</button>
-
-<h2>
-👤 Velkommen til TilbudsAI
-</h2>
-
-<p class="muted">
-Opprett en enkel konto for å legge ut jobber,
-lage profil og kontakte andre.
-</p>
-
-
-<label>
-Navn
-</label>
-
-<input
-id="loginName"
-placeholder="Ditt navn"
->
-
-
-<label>
-E-post
-</label>
-
-<input
-id="loginEmail"
-type="email"
-placeholder="din@email.no"
->
-
-
-<button
-class="btn primary"
-onclick="createAccount()"
->
-Opprett konto
-</button>
-
-`;
-
-openM();
-
-}
-
-
-function createAccount(){
-
-const name =
-document.getElementById("loginName")
-.value.trim();
-
-
-const email =
-document.getElementById("loginEmail")
-.value.trim();
-
-
-if(!name || !email){
-
-alert(
-"Fyll inn navn og e-post."
-);
-
-return;
-
-}
-
-
-user={
-
-id:
-"user_"+Date.now(),
-
-name:
-name,
-
-email:
-email
-
-};
-
-
-localStorage.setItem(
-"tilbudsaiUser",
-JSON.stringify(user)
-);
-
-
-closeM();
-
-alert(
-"✅ Konto opprettet!"
-);
-
-account();
-
-}
-
-
-function logout(){
-
-user=null;
-
-localStorage.removeItem(
-"tilbudsaiUser"
-);
-
-closeM();
-
-home();
-
-}
-
-
-/* =========================
-   START
-========================= */
-
-home();
-
-</script>
-
+  </script>
 </body>
 </html>
