@@ -526,8 +526,11 @@ form.addEventListener("submit", async function(event) {
     const data = await response.json();
 
     if (!response.ok || !data.success) {
-      throw new Error(data.error || "Kunne ikke lage reiseplanen.");
-    }
+     throw new Error(
+  data.details
+    ? `${data.error}: ${data.details}`
+    : data.error || "Kunne ikke lage reiseplanen."
+);
 
     const escapeHTML = (value) => String(value).replace(/[&<>"']/g, char => ({
       "&": "&amp;",
