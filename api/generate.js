@@ -86,11 +86,13 @@ budsjettet uten at du forklarer hvorfor.
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("OpenAI API error:", data);
-      return res.status(502).json({
-        error: "AI-tjenesten svarte med en feil. Kontroller API-tilgang og fakturering."
-      });
-    }
+  console.error("OpenAI API error:", data);
+
+  return res.status(502).json({
+    error: "OpenAI API error",
+    details: data.error?.message || JSON.stringify(data)
+  });
+}
 
     const answer =
       data.output
