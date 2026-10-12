@@ -487,159 +487,113 @@
         ["Favoritter", "Bruk dagen på stedene du likte best."]
       ]
     };
+    
+form.addEventListener("submit", async function(event) {
+  event.preventDefault();
 
-    form.addEventListener("submit", function(event) {
-      event.preventDefault();
+  const destination = document.getElementById("destination").value.trim();
+  const budget = Number(document.getElementById("budget").value);
+  const days = Number(document.getElementById("days").value);
+  const people = Number(document.getElementById("people").value);
+  const style = document.getElementById("style").value;
+  const flights = form.querySelector('input[name="flights"]:checked').value;
 
-      const destination = document.getElementById("destination").value.trim();
-      const budget = Number(document.getElementById("budget").value);
-      const days = Number(document.getElementById("days").value);
-      const people = Number(document.getElementById("people").value);
-      const style = document.getElementById("style").value;
-      const flights = form.querySelector('input[name="flights"]:checked').value;
+  if (!destination || !Number.isFinite(budget) || budget < 1000 ||
+      !Number.isFinite(days) || days < 1 ||
+      !Number.isFinite(people) || people < 1) {
+    alert("Sjekk reisemål, budsjett, antall dager og antall reisende.");
+    return;
+  }
 
-      if (!destination || !Number.isFinite(budget) || budget < 1000) {
-        alert("Skriv inn et reisemål og et budsjett på minst 1 000 kr.");
-        return;
-      }
+  results.classList.remove("hidden");
+  results.innerHTML = "<p>Lager din personlige reiseplan med AI ...</p>";
+  results.scrollIntoView({ behavior: "smooth", block: "start" });
 
-      const flightShare = flights === "yes" ? 0.25 : 0;
-      const hotelShare = 0.30;
-      const foodShare = 0.20;
-      const activityShare = 0.15;
-      const transportShare = 0.07;
-      const reserveShare = 1 - flightShare - hotelShare - foodShare -
-        activityShare - transportShare;
-
-      const categories = [
-        ["Fly", flightShare],
-        ["Overnatting", hotelShare],
-        ["Mat og drikke", foodShare],
-        ["Aktiviteter", activityShare],
-        ["Lokal transport", transportShare],
-        ["Reserve", reserveShare]
-      ];
-
-      const perPerson = budget / people;
-      const daily = budget / days;
-      const plan = activities[style] || activities.balanced;
-
-      let html = `
-        <div class="results-top">
-          <h2>Din reiseoversikt</h2>
-        </div>
-        <div class="budget-card">
-          <small>Planlagt totalbudsjett · ${people} reisende</small>
-          <div class="budget-total">${formatNOK(budget)}</div>
-          <div class="budget-lines">
-            <div class="budget-line">Per person
-              <strong>${formatNOK(perPerson)}</strong>
-            </div>
-            <div class="budget-line">Per dag, hele gruppen
-              <strong>${formatNOK(daily)}</strong>
-            </div>
-          </div>
-        </div>
-        <h2 class="section-heading">Budsjettfordeling</h2>
-        <p class="subheading">
-          Et illustrerende utgangspunkt for ${destination}.
-          Juster for faktiske priser og behov.
-        </p>
-      `;
-
-      categories.forEach(([name, share]) => {
-        html += `
-          <div class="day-card">
-            <p><strong>${name}</strong> · ${formatNOK(budget * share)}</p>
-          </div>
-        `;
-      });
-
-      html += `
-        <h2 class="section-heading" style="margin-top:30px">
-          Forslag til reiserute
-        </h2>
-        <p class="subheading">
-          ${days} dager i ${destination} · Reisestil: ${
-            document.getElementById("style").selectedOptions[0].text
-          }
-        </p>
-      `;
-
-      for (let i = 0; i < days; i++) {
-        const item = plan[i % plan.length];
-        html += `
-          <article class="day-card">
-            <span class="tag">Dag ${i + 1}</span>
-            <h3>${item[0]}</h3>
-            <p>${item[1]}</p>
-            <p><strong>Tips:</strong> Sjekk åpningstider, transport og priser
-            før du drar.</p>
-          </article>
-        `;
-      }
-
-      html += `
-        <div class="notice">
-          <strong>Viktig:</strong> Dette er en tidlig prototype.
-          Reiseruten er et generelt forslag, og budsjettandelene er ikke
-          basert på live priser eller bekreftede fly- og hotelltilbud.
-          TilbudsAI har ennå ikke koblet denne siden til en AI-tjeneste
-          eller bestillingsleverandører.
-        </div>
-      `;
-
-      results.innerHTML = html;
-      
-      const destinationQuery = encodeURIComponent(destination);
-
-      html += `
-        <section style="margin-top:30px">
-          <h2 class="section-heading">Bestill reisen din</h2>
-          <p class="subheading">
-            Gå videre til nettsidene for å søke etter fly, hotell og opplevelser.
-          </p>
-
-          <div style="display:grid;gap:12px">
-            <a href="https://www.google.com/travel/flights?q=${destinationQuery}"
-               target="_blank" rel="noopener noreferrer"
-               style="display:block;padding:17px;background:#153c32;color:white;
-               text-decoration:none;border-radius:9px;font-weight:bold">
-              ✈️ Finn flybilletter →
-            </a>
-
-            <a href="https://www.booking.com/searchresults.html?ss=${destinationQuery}"
-               target="_blank" rel="noopener noreferrer"
-               style="display:block;padding:17px;background:#fff;border:1px solid #e7e4db;
-               color:#153c32;text-decoration:none;border-radius:9px;font-weight:bold">
-              🏨 Finn hotell →
-            </a>
-
-            <a href="https://www.getyourguide.com/s/?q=${destinationQuery}"
-               target="_blank" rel="noopener noreferrer"
-               style="display:block;padding:17px;background:#fff;border:1px solid #e7e4db;
-               color:#153c32;text-decoration:none;border-radius:9px;font-weight:bold">
-              🎟️ Finn aktiviteter →
-            </a>
-
-            <a href="https://www.google.com/maps/search/restaurants+in+${destinationQuery}"
-               target="_blank" rel="noopener noreferrer"
-               style="display:block;padding:17px;background:#fff;border:1px solid #e7e4db;
-               color:#153c32;text-decoration:none;border-radius:9px;font-weight:bold">
-              🍽️ Finn restauranter →
-            </a>
-          </div>
-
-          <p class="small-note">
-            Du sendes til eksterne nettsider. Priser og tilgjengelighet
-            må bekreftes hos leverandøren.
-          </p>
-        </section>
-      `;
-
-      results.classList.remove("hidden");
-      results.scrollIntoView({ behavior: "smooth", block: "start" });
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        destination,
+        budget,
+        days,
+        travelers: people,
+        style,
+        flightsIncluded: flights === "yes"
+      })
     });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || "Kunne ikke lage reiseplanen.");
+    }
+
+    const escapeHTML = (value) => String(value).replace(/[&<>"']/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[char]));
+
+    const destinationQuery = encodeURIComponent(destination);
+    const safeDestination = escapeHTML(destination);
+    const safePlan = escapeHTML(data.plan || "Ingen reiseplan ble returnert.");
+
+    results.innerHTML = `
+      <div class="results-top">
+        <h2>Din AI-reiseplan</h2>
+      </div>
+
+      <div class="budget-card">
+        <small>Planlagt totalbudsjett · ${people} reisende</small>
+        <div class="budget-total">${formatNOK(budget)}</div>
+        <div class="budget-lines">
+          <div class="budget-line">Per person
+            <strong>${formatNOK(budget / people)}</strong>
+          </div>
+          <div class="budget-line">Per dag, hele gruppen
+            <strong>${formatNOK(budget / days)}</strong>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-heading">Reiseruten din</h2>
+      <p class="subheading">${days} dager i ${safeDestination}</p>
+      <div class="day-card" style="white-space:pre-wrap;line-height:1.7">${safePlan}</div>
+
+      <h2 class="section-heading" style="margin-top:30px">Utforsk og bestill</h2>
+      <div style="display:grid;gap:12px">
+        <a href="https://www.google.com/travel/flights?q=${destinationQuery}"
+          target="_blank" rel="noopener noreferrer">✈️ Finn flybilletter →</a>
+        <a href="https://www.booking.com/searchresults.html?ss=${destinationQuery}"
+          target="_blank" rel="noopener noreferrer">🏨 Finn hotell →</a>
+        <a href="https://www.getyourguide.com/s/?q=${destinationQuery}"
+          target="_blank" rel="noopener noreferrer">🎟️ Finn aktiviteter →</a>
+        <a href="https://www.google.com/maps/search/restaurants+in+${destinationQuery}"
+          target="_blank" rel="noopener noreferrer">🍽️ Finn restauranter →</a>
+      </div>
+
+      <p class="small-note">
+        AI-forslagene er ikke bekreftede bestillinger eller live-priser.
+        Kontroller pris, åpningstider og tilgjengelighet hos leverandørene.
+      </p>
+    `;
+
+    results.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  } catch (error) {
+    results.innerHTML = `
+      <div class="day-card">
+        <h2>Kunne ikke lage reiseplanen</h2>
+        <p>${String(error.message || "Ukjent feil").replace(/[&<>"]/g, c =>
+          ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</p>
+        <p>Prøv igjen litt senere. Hvis feilen fortsetter, sjekker vi API-et.</p>
+      </div>
+    `;
+  }
+});
   </script>
 </body>
 </html>
