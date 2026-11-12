@@ -4,7 +4,7 @@ export default async function handler(req, res) {
       success: false,
       error: "Bruk POST for å lage en reiseplan."
     });
-  }
+  } 
 
   const apiKey = process.env.OPENAI_KEY_NEW;
 
