@@ -1,6 +1,7 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
+      success: false,
       error: "Bruk POST for å lage en reiseplan."
     });
   }
@@ -9,6 +10,7 @@ export default async function handler(req, res) {
 
   if (!apiKey) {
     return res.status(500).json({
+      success: false,
       error: "OpenAI API-nøkkelen mangler i Vercel."
     });
   }
@@ -26,9 +28,30 @@ export default async function handler(req, res) {
       flightsIncluded
     } = req.body || {};
 
-    if (!destination || !budget || !days || !travelers) {
+    const cleanDestination =
+      typeof destination === "string"
+        ? destination.trim().slice(0, 120)
+        : "";
+
+    const numericBudget = Number(budget);
+    const numericDays = Number(days);
+    const numericTravelers = Number(travelers);
+
+    if (
+      !cleanDestination ||
+      !Number.isFinite(numericBudget) ||
+      numericBudget < 1000 ||
+      numericBudget > 1000000 ||
+      !Number.isInteger(numericDays) ||
+      numericDays < 1 ||
+      numericDays > 30 ||
+      !Number.isInteger(numericTravelers) ||
+      numericTravelers < 1 ||
+      numericTravelers > 20
+    ) {
       return res.status(400).json({
-        error: "Fyll inn reisemål, budsjett, antall dager og reisende."
+        success: false,
+        error: "Kontroller reisemål, budsjett, antall dager og reisende."
       });
     }
 
@@ -37,10 +60,10 @@ Du er TilbudsAI, en hjelpsom AI-reiseplanlegger.
 Svar på norsk, med tydelige overskrifter og en praktisk reiseplan.
 
 Lag en reiseplan basert på:
-- Reisemål: ${destination}
-- Totalbudsjett i NOK: ${budget}
-- Antall dager: ${days}
-- Antall reisende: ${travelers}
+- Reisemål: ${cleanDestination}
+- Totalbudsjett i NOK: ${numericBudget}
+- Antall dager: ${numericDays}
+- Antall reisende: ${numericTravelers}
 - Avreiseflyplass: ${departureAirport || "Ikke oppgitt"}
 - Utreisedato: ${departureDate || "Ikke oppgitt"}
 - Hjemreisedato: ${returnDate || "Ikke oppgitt"}
@@ -54,9 +77,9 @@ Inkluder:
 4. Forslag til mat og restauranter.
 5. Forslag til hotellområder og overnatting.
 6. Transporttips.
-7. Lenker til flysøk, hotell, aktiviteter og kart.
+7. Søkelenker til fly, hotell, aktiviteter og kart.
 
-Bruk disse søkelenkene:
+Bruk disse søkesidene:
 - Fly: https://www.google.com/travel/flights
 - Hotell: https://www.booking.com/
 - Aktiviteter: https://www.getyourguide.com/
@@ -64,11 +87,10 @@ Bruk disse søkelenkene:
 
 Ikke finn på bekreftede flypriser, hotellpriser, ledige rom
 eller tilgjengelighet. Opplys tydelig når priser bare er anslag.
-Budsjettet skal være realistisk, og totalen skal ikke overskride
-budsjettet uten at du forklarer hvorfor.
+Budsjettet skal være realistisk.
 `;
 
-    const response = await fetch(
+    const openaiResponse = await fetch(
       "https://api.openai.com/v1/responses",
       {
         method: "POST",
@@ -83,18 +105,19 @@ budsjettet uten at du forklarer hvorfor.
       }
     );
 
-    const data = await response.json();
+    const data = await openaiResponse.json();
 
-    if (!response.ok) {
-  console.error("OpenAI API error:", data);
+    if (!openaiResponse.ok) {
+      console.error("OpenAI API-feil:", data.error?.message || data);
 
-  return res.status(502).json({
-    error: "OpenAI API error",
-    details: data.error?.message || JSON.stringify(data)
-  });
-}
+      return res.status(502).json({
+        success: false,
+        error: "OpenAI API-feil."
+      });
+    }
 
     const answer =
+      data.output_text ||
       data.output
         ?.flatMap(item => item.content || [])
         .find(item => item.type === "output_text")
@@ -102,7 +125,8 @@ budsjettet uten at du forklarer hvorfor.
 
     if (!answer) {
       return res.status(502).json({
-        error: "AI-en returnerte ikke en reiseplan. Prøv igjen."
+        success: false,
+        error: "AI-en returnerte ikke en reiseplan."
       });
     }
 
@@ -110,9 +134,12 @@ budsjettet uten at du forklarer hvorfor.
       success: true,
       plan: answer
     });
+
   } catch (error) {
     console.error("Travel planner error:", error);
+
     return res.status(500).json({
+      success: false,
       error: "Noe gikk galt. Prøv igjen."
     });
   }
