@@ -1,9 +1,15 @@
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
       error: "Ugyldig forespørsel."
+    });
+  }
+
+  if (!process.env.OPENAI_KEY_NEW) {
+    return res.status(500).json({
+      success: false,
+      error: "OpenAI API-nøkkelen mangler i Vercel."
     });
   }
 
@@ -18,19 +24,19 @@ export default async function handler(req, res) {
     }
 
     const conversation = messages
-      .filter(
-        (message) =>
-          ["user", "assistant"].includes(message.role) &&
-          typeof message.content === "string"
+      .filter(message =>
+        message &&
+        ["user", "assistant"].includes(message.role) &&
+        typeof message.content === "string"
       )
       .slice(-20)
-      .map((message) => ({
+      .map(message => ({
         role: message.role,
         content: message.content.slice(0, 4000)
       }));
 
     if (
-      conversation.length === 0 ||
+      !conversation.length ||
       conversation[conversation.length - 1].role !== "user"
     ) {
       return res.status(400).json({
@@ -64,7 +70,7 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("OpenAI-feil:", data.error?.message);
+      console.error("OpenAI chat-feil:", data.error?.message || data);
 
       return res.status(502).json({
         success: false,
@@ -83,6 +89,7 @@ export default async function handler(req, res) {
       success: true,
       reply: data.output_text
     });
+
   } catch (error) {
     console.error("Chat-feil:", error.message);
 
