@@ -1,27 +1,45 @@
-export default async function handler(request, response) {
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[char]));
+}
 
-  if (request.method !== "POST") {
-    return response.status(405).json({
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      success: false,
       error: "Method not allowed"
     });
   }
 
-  try {
+  if (!process.env.RESEND_API_KEY) {
+    return res.status(500).json({
+      success: false,
+      error: "Resend API-nøkkelen mangler."
+    });
+  }
 
+  try {
     const {
       customerEmail,
       customer,
       jobType,
       job,
       hours,
-      hourly,
       materials,
       total
-    } = request.body;
+    } = req.body || {};
 
-    if (!customerEmail) {
-      return response.status(400).json({
-        error: "Kundens e-post mangler"
+    const email = String(customerEmail || "").trim();
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({
+        success: false,
+        error: "En gyldig kunde-e-post mangler."
       });
     }
 
@@ -29,36 +47,30 @@ export default async function handler(request, response) {
       "https://api.resend.com/emails",
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.RESEND_API_KEY}`
+          Authorization: `Bearer ${process.env.RESEND_API_KEY}`
         },
-
         body: JSON.stringify({
           from: "TilbudsAI <tilbud@tilbudsai.no>",
-          to: [customerEmail],
-          subject: `Tilbud fra TilbudsAI – ${jobType || "jobb"}`,
-
+          to: [email],
+          subject: `Tilbud fra TilbudsAI – ${String(jobType || "jobb").slice(0, 100)}`,
           html: `
             <h2>Tilbud</h2>
-
-            <p>Hei ${customer || "Kunden"},</p>
-
-            <p>Her kommer tilbudet på ${jobType || "arbeidet"}.</p>
+            <p>Hei ${escapeHtml(customer || "Kunden")},</p>
+            <p>Her kommer tilbudet på ${escapeHtml(jobType || "arbeidet")}.</p>
 
             <h3>Beskrivelse av arbeidet</h3>
-            <p>${job || ""}</p>
+            <p>${escapeHtml(job || "")}</p>
 
             <h3>Tilbudet inkluderer</h3>
-            <p>Arbeid: ${hours || 0} timer</p>
-            <p>Materialer: ${materials || 0} kr</p>
+            <p>Arbeid: ${escapeHtml(hours || 0)} timer</p>
+            <p>Materialer: ${escapeHtml(materials || 0)} kr</p>
 
             <h3>Total inkl. MVA</h3>
-            <p><strong>${total || 0} kr</strong></p>
+            <p><strong>${escapeHtml(total || 0)} kr</strong></p>
 
-            <p>Med vennlig hilsen<br>
-            TilbudsAI</p>
+            <p>Med vennlig hilsen<br>TilbudsAI</p>
           `
         })
       }
@@ -67,25 +79,25 @@ export default async function handler(request, response) {
     const data = await emailResponse.json();
 
     if (!emailResponse.ok) {
-      console.error(data);
+      console.error("Resend-feil:", data);
 
-      return response.status(500).json({
-        error: "Kunne ikke sende e-post"
+      return res.status(502).json({
+        success: false,
+        error: "Kunne ikke sende e-post."
       });
     }
 
-    return response.status(200).json({
+    return res.status(200).json({
       success: true,
       data
     });
 
   } catch (error) {
+    console.error("E-postfeil:", error);
 
-    console.error(error);
-
-    return response.status(500).json({
+    return res.status(500).json({
+      success: false,
       error: "Server error"
     });
-
   }
 }
