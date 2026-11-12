@@ -110,10 +110,11 @@ Budsjettet skal være realistisk.
     if (!openaiResponse.ok) {
       console.error("OpenAI API-feil:", data.error?.message || data);
 
-      return res.status(502).json({
-        success: false,
-        error: "OpenAI API-feil."
-      });
+     return res.status(502).json({
+  success: false,
+  error: data.error?.message || "Ukjent OpenAI-feil",
+  code: data.error?.code || null
+});
     }
 
     const answer =
